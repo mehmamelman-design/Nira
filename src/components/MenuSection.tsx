@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { Search, Star, Clock, ShieldCheck, Sparkles, ShoppingBag, ArrowLeft, Flame, FlameKindling, Pencil, Plus } from 'lucide-react';
+import { Search, Star, Clock, ShieldCheck, Sparkles, ShoppingBag, ArrowLeft, Flame, FlameKindling, Pencil, Plus, Trash2 } from 'lucide-react';
 import { MenuItem, CategoryId, CategoryCard } from '../types';
 import { MENU_ITEMS } from '../data/menuData';
 import { ItemCustomizerModal } from './ItemCustomizerModal';
+import { FaqSection } from './FaqSection';
 
 interface MenuSectionProps {
   menuItems?: MenuItem[];
@@ -13,6 +14,7 @@ interface MenuSectionProps {
   onBackToHome?: () => void;
   isAdmin?: boolean;
   onEditMenuItem?: (item: MenuItem) => void;
+  onDeleteMenuItem?: (itemId: string) => void;
   onAddNewMenuItem?: () => void;
   isSetView?: boolean;
   setTitle?: string;
@@ -58,6 +60,7 @@ export const MenuSection: React.FC<MenuSectionProps> = ({
   onBackToHome,
   isAdmin,
   onEditMenuItem,
+  onDeleteMenuItem,
   onAddNewMenuItem,
   isSetView = false,
   setTitle,
@@ -65,6 +68,7 @@ export const MenuSection: React.FC<MenuSectionProps> = ({
   const [activeCategory, setActiveCategory] = useState<CategoryId>(selectedCategory || 'all');
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCustomizerItem, setSelectedCustomizerItem] = useState<MenuItem | null>(null);
+  const [deletingItem, setDeletingItem] = useState<MenuItem | null>(null);
 
   useEffect(() => {
     if (selectedCategory) {
@@ -180,64 +184,72 @@ export const MenuSection: React.FC<MenuSectionProps> = ({
     <div className="min-h-screen bg-[#071710] text-white py-8 sm:py-12 px-4 sm:px-6 lg:px-8 space-y-8 animate-fadeIn">
       <div className="max-w-7xl mx-auto space-y-8">
         
-        {/* Hero Category Banner with Category Image Background */}
-        <div className="relative rounded-3xl overflow-hidden border-2 border-emerald-800/80 shadow-2xl min-h-[200px] sm:min-h-[240px] flex flex-col justify-between p-5 sm:p-8 bg-black transition-all duration-500">
-          {/* Background Image of Selected Category */}
-          <img
-            src={activeCatImage}
-            alt={titleText}
-            className="absolute inset-0 w-full h-full object-cover transition-all duration-700 scale-105"
-          />
-          {/* Dark Gradient Overlays for Readability */}
-          <div className="absolute inset-0 bg-gradient-to-r from-black/95 via-black/80 to-black/60" />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-black/40" />
+        {/* Top Header & Category Hero Banner */}
+        <div className="space-y-4">
+          
+          {/* Expanded Banner Image Section with Back Button directly inside on Top-Left */}
+          <div className="relative w-full h-52 sm:h-64 md:h-72 overflow-hidden rounded-2xl sm:rounded-3xl shadow-2xl bg-zinc-950 flex flex-col justify-between p-4 sm:p-6 transition-all duration-300">
+            {/* Background Image of Selected Category */}
+            <img
+              src={activeCatImage}
+              alt={titleText}
+              className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 hover:scale-105"
+            />
+            {/* Dark Gradients for Text & Button Legibility */}
+            <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/40 to-black/30" />
+            <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-transparent to-transparent" />
 
-          {/* Top Controls inside Banner Header */}
-          <div className="relative z-10 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+            {/* Back Button directly inside on Top-Left of the Photo */}
             {onBackToHome && (
-              <button
-                type="button"
-                onClick={onBackToHome}
-                className="px-5 py-2.5 rounded-2xl bg-black/80 hover:bg-black text-amber-400 border-2 border-amber-400/80 backdrop-blur-md font-black text-xs sm:text-sm flex items-center gap-2 transition-all cursor-pointer shadow-xl hover:scale-105 active:scale-95"
-              >
-                <ArrowLeft className="w-4 h-4 text-amber-400 stroke-[3]" />
-                <span>← Ana Səhifəyə Qayıt</span>
-              </button>
-            )}
-
-            {/* Search Box */}
-            <div className="w-full sm:w-80 relative shrink-0">
-              <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-zinc-300" />
-              <input
-                type="text"
-                placeholder="Yemək axtarın (məs: Pitsa, Dönər)..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-10 pr-8 py-2.5 rounded-2xl bg-black/80 border border-amber-400/60 backdrop-blur-md text-white placeholder-zinc-300 text-xs sm:text-sm focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400 transition-all shadow-inner"
-              />
-              {searchQuery && (
+              <div className="relative z-20 flex items-center justify-between">
                 <button
                   type="button"
-                  onClick={() => setSearchQuery('')}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-amber-400 hover:text-white cursor-pointer"
+                  onClick={onBackToHome}
+                  className="px-2.5 py-1.5 sm:px-3 sm:py-2 rounded-xl bg-black/80 hover:bg-black backdrop-blur-md text-white border border-zinc-700/80 hover:border-zinc-500 font-bold text-[10px] sm:text-xs flex items-center gap-1.5 transition-all cursor-pointer shadow-lg active:scale-95 whitespace-nowrap"
                 >
-                  Təmizlə
+                  <ArrowLeft className="w-3.5 h-3.5 text-white shrink-0" />
+                  <span>Ana Səhifəyə Qayıt</span>
                 </button>
+              </div>
+            )}
+
+            {/* Banner Text Over Image at Bottom */}
+            <div className="relative z-10 space-y-1.5 mt-auto pt-4">
+              <div className="inline-block px-2.5 py-0.5 sm:px-3 sm:py-1 rounded-full bg-white text-black font-extrabold text-[9px] sm:text-[11px] tracking-wider uppercase shadow-md">
+                XÜSUSİ BÖLMƏ TƏAMLARI
+              </div>
+              <h1 className="text-2xl sm:text-3xl md:text-4xl font-black text-white tracking-tight uppercase drop-shadow-lg">
+                {titleText.replace(/[\u{1F300}-\u{1F9FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}\u{1F600}-\u{1F64F}\u{1F680}-\u{1F6FF}\u{1F1E0}-\u{1F1FF}]/gu, '').trim()}
+              </h1>
+              {activeCatDesc && (
+                <p className="text-xs sm:text-sm font-medium text-zinc-200 max-w-2xl drop-shadow leading-snug">
+                  {activeCatDesc}
+                </p>
               )}
             </div>
           </div>
 
-          {/* Banner Title & Description */}
-          <div className="relative z-10 pt-6 space-y-1">
-            <h1 className="text-2xl sm:text-4xl font-black text-white tracking-tight drop-shadow-md">
-              {titleText}
-            </h1>
-            {activeCatDesc && (
-              <p className="text-xs sm:text-sm font-semibold text-emerald-100/90 max-w-2xl drop-shadow">
-                {activeCatDesc}
-              </p>
+          {/* Search Box below the Banner Header */}
+          <div className="relative w-full max-w-xl">
+            <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-zinc-400" />
+            <input
+              type="text"
+              placeholder={`${titleText.replace(/[\u{1F300}-\u{1F9FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}\u{1F600}-\u{1F64F}\u{1F680}-\u{1F6FF}\u{1F1E0}-\u{1F1FF}]/gu, '').trim()} daxilində axtar...`}
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="w-full pl-10 pr-10 py-2.5 sm:py-3 rounded-xl bg-zinc-900/90 border border-zinc-800 text-white placeholder-zinc-400 text-xs sm:text-sm focus:outline-none focus:border-zinc-600 transition-all shadow-inner"
+            />
+            {searchQuery && (
+              <button
+                type="button"
+                onClick={() => setSearchQuery('')}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-amber-400 hover:text-white cursor-pointer"
+              >
+                Təmizlə
+              </button>
             )}
           </div>
+
         </div>
 
         {/* Admin Action Bar for Adding / Editing Food Cards */}
@@ -305,7 +317,7 @@ export const MenuSection: React.FC<MenuSectionProps> = ({
               return (
                 <div
                   key={item.id}
-                  onClick={() => setSelectedCustomizerItem(item)}
+                  onClick={() => !item.isOutOfStock && onAddToCart(item)}
                   className="bg-zinc-900/95 border border-zinc-800/90 hover:border-amber-500/60 rounded-2xl overflow-hidden shadow-lg hover:shadow-xl hover:shadow-amber-500/10 transition-all duration-300 group flex flex-col justify-between cursor-pointer"
                 >
                   {/* Top Image Section */}
@@ -336,19 +348,32 @@ export const MenuSection: React.FC<MenuSectionProps> = ({
                         )}
                       </div>
 
-                      {/* Admin Pencil Edit Button */}
+                      {/* Admin Edit & Delete Buttons */}
                       {isAdmin && (
-                        <button
-                          type="button"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            if (onEditMenuItem) onEditMenuItem(item);
-                          }}
-                          className="absolute top-1.5 right-1.5 z-20 p-1.5 rounded-lg bg-amber-400 text-black hover:bg-amber-300 shadow-lg font-black transition-transform duration-200 hover:scale-110 cursor-pointer flex items-center justify-center"
-                          title={`"${item.name}" məhsulunu redaktə et`}
-                        >
-                          <Pencil className="w-3.5 h-3.5" />
-                        </button>
+                        <div className="absolute top-1.5 right-1.5 z-20 flex items-center gap-1">
+                          <button
+                            type="button"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              if (onEditMenuItem) onEditMenuItem(item);
+                            }}
+                            className="p-1.5 rounded-lg bg-amber-400 text-black hover:bg-amber-300 shadow-lg font-black transition-transform duration-200 hover:scale-110 cursor-pointer flex items-center justify-center"
+                            title={`"${item.name}" məhsulunu redaktə et`}
+                          >
+                            <Pencil className="w-3.5 h-3.5" />
+                          </button>
+                          <button
+                            type="button"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setDeletingItem(item);
+                            }}
+                            className="p-1.5 rounded-lg bg-rose-600 text-white hover:bg-rose-500 shadow-lg font-black transition-transform duration-200 hover:scale-110 cursor-pointer flex items-center justify-center"
+                            title={`"${item.name}" məhsulunu sil`}
+                          >
+                            <Trash2 className="w-3.5 h-3.5" />
+                          </button>
+                        </div>
                       )}
 
                       {/* Out of Stock Badge if applicable */}
@@ -418,7 +443,7 @@ export const MenuSection: React.FC<MenuSectionProps> = ({
                         disabled={item.isOutOfStock}
                         onClick={(e) => {
                           e.stopPropagation();
-                          setSelectedCustomizerItem(item);
+                          onAddToCart(item);
                         }}
                         className="w-full py-1 px-2 rounded-lg bg-amber-400 hover:bg-amber-500 active:scale-[0.98] text-black font-extrabold text-[10px] sm:text-xs transition-all cursor-pointer flex items-center justify-center gap-1 shadow-xs disabled:bg-zinc-700 disabled:text-zinc-500 disabled:cursor-not-allowed whitespace-nowrap"
                       >
@@ -436,6 +461,9 @@ export const MenuSection: React.FC<MenuSectionProps> = ({
 
       </div>
 
+      {/* FAQ Section */}
+      <FaqSection />
+
       {/* Item Customizer Modal */}
       <ItemCustomizerModal
         item={selectedCustomizerItem}
@@ -443,6 +471,42 @@ export const MenuSection: React.FC<MenuSectionProps> = ({
         onAddToCart={onAddToCart}
         hidePrice={isSetView}
       />
+
+      {/* Custom Delete Confirmation Modal */}
+      {deletingItem && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-in fade-in">
+          <div className="bg-[#0b1c15] border border-rose-500/40 rounded-2xl p-6 max-w-sm w-full space-y-4 text-center shadow-2xl">
+            <div className="w-12 h-12 rounded-2xl bg-rose-500/20 text-rose-400 border border-rose-500/30 flex items-center justify-center mx-auto">
+              <Trash2 className="w-6 h-6" />
+            </div>
+            <div className="space-y-1">
+              <h3 className="text-base font-black text-white">Məhsul Silinsin?</h3>
+              <p className="text-xs text-zinc-300">
+                "<span className="text-amber-300 font-bold">{deletingItem.name}</span>" məhsulunu bazadan silmək istədiyinizdən əminsiniz?
+              </p>
+            </div>
+            <div className="flex items-center gap-2 pt-2">
+              <button
+                type="button"
+                onClick={() => setDeletingItem(null)}
+                className="flex-1 py-2.5 px-4 rounded-xl bg-zinc-800 hover:bg-zinc-700 text-zinc-300 text-xs font-bold cursor-pointer transition-colors"
+              >
+                Ləğv Et
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  if (onDeleteMenuItem) onDeleteMenuItem(deletingItem.id);
+                  setDeletingItem(null);
+                }}
+                className="flex-1 py-2.5 px-4 rounded-xl bg-rose-600 hover:bg-rose-500 text-white text-xs font-black cursor-pointer transition-colors shadow-lg"
+              >
+                Bəli, Sil
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

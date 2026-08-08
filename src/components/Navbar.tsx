@@ -97,17 +97,11 @@ export const Navbar: React.FC<NavbarProps> = ({
                 className="flex items-center group focus:outline-none cursor-pointer"
                 aria-label="Ana Səhifə"
               >
-                {siteConfig?.logoUrl ? (
-                  <img
-                    src={siteConfig.logoUrl}
-                    alt={siteConfig.siteName || "Alov Fast Food Logo"}
-                    className="h-[60px] sm:h-[72px] w-auto object-contain max-w-[240px] group-hover:scale-105 transition-transform duration-300"
-                  />
-                ) : (
-                  <div className="w-[60px] h-[60px] sm:w-[72px] sm:h-[72px] rounded-2xl bg-white flex items-center justify-center text-emerald-950 shadow-lg group-hover:scale-105 transition-transform duration-300 shrink-0">
-                    <Flame className="w-10 h-10 fill-emerald-950 text-emerald-950" />
-                  </div>
-                )}
+                <img
+                  src={siteConfig?.logoUrl || 'https://res.cloudinary.com/dq8xegykm/image/upload/v1786184761/Ba%C5%9Fl%C4%B1qs%C4%B1z_dizayn-Photoroom_t4omj6.png'}
+                  alt={siteConfig?.siteName || "NIRA-Fest&Food Restorani Logo"}
+                  className="h-[60px] sm:h-[72px] w-auto object-contain max-w-[240px] scale-[1.5] origin-left group-hover:scale-[1.58] transition-transform duration-300"
+                />
               </button>
 
               {isAdmin && (

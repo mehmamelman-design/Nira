@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { X, Sparkles, Upload, Eye, Save, Image, Tag, DollarSign, FileText, Layers, CheckCircle } from 'lucide-react';
+import { X, Sparkles, Upload, Eye, Save, Image, Tag, DollarSign, FileText, Layers, CheckCircle, Trash2 } from 'lucide-react';
 import { MenuItem, CategoryId, HeroConfig } from '../types';
 
 interface AdminEditModalProps {
@@ -11,6 +11,7 @@ interface AdminEditModalProps {
   heroConfig?: HeroConfig;
   onSaveLogo?: (newUrl: string) => Promise<void> | void;
   onSaveMenuItem?: (updatedItem: MenuItem) => Promise<void> | void;
+  onDeleteMenuItem?: (itemId: string) => Promise<void> | void;
   onSaveHero?: (hero: HeroConfig) => Promise<void> | void;
   onShowToast?: (msg: string) => void;
 }
@@ -24,6 +25,7 @@ export const AdminEditModal: React.FC<AdminEditModalProps> = ({
   heroConfig,
   onSaveLogo,
   onSaveMenuItem,
+  onDeleteMenuItem,
   onSaveHero,
   onShowToast
 }) => {
@@ -468,22 +470,38 @@ export const AdminEditModal: React.FC<AdminEditModalProps> = ({
           )}
 
           {/* Modal Actions Footer */}
-          <div className="pt-3 border-t border-white/10 flex items-center gap-3">
-            <button
-              type="button"
-              onClick={onClose}
-              className="py-3 px-5 rounded-2xl bg-zinc-800 hover:bg-zinc-700 text-zinc-300 font-bold text-xs transition-all cursor-pointer"
-            >
-              Ləğv Et
-            </button>
+          <div className="pt-3 border-t border-white/10 flex items-center justify-between gap-2">
+            <div className="flex items-center gap-2">
+              <button
+                type="button"
+                onClick={onClose}
+                className="py-3 px-4 rounded-2xl bg-zinc-800 hover:bg-zinc-700 text-zinc-300 font-bold text-xs transition-all cursor-pointer"
+              >
+                Ləğv Et
+              </button>
+
+              {type === 'menuItem' && menuItem && onDeleteMenuItem && (
+                <button
+                  type="button"
+                  onClick={async () => {
+                    await onDeleteMenuItem(menuItem.id);
+                    onClose();
+                  }}
+                  className="py-3 px-4 rounded-2xl bg-rose-600/90 hover:bg-rose-600 text-white font-bold text-xs flex items-center gap-1.5 transition-all cursor-pointer shadow-lg"
+                >
+                  <Trash2 className="w-3.5 h-3.5" />
+                  <span>Məhsulu Sil</span>
+                </button>
+              )}
+            </div>
 
             <button
               type="submit"
               disabled={isSubmitting}
-              className="flex-1 py-3 px-4 rounded-2xl bg-amber-400 hover:bg-amber-300 text-black font-black text-xs uppercase tracking-wider flex items-center justify-center gap-2 transition-all cursor-pointer shadow-xl disabled:opacity-50"
+              className="py-3 px-5 rounded-2xl bg-amber-400 hover:bg-amber-300 text-black font-black text-xs uppercase tracking-wider flex items-center justify-center gap-2 transition-all cursor-pointer shadow-xl disabled:opacity-50"
             >
               <Save className="w-4 h-4" />
-              <span>YADDA SAXLA & BAZA İLƏ SİNXRONLAŞDIR</span>
+              <span>YADDA SAXLA & SİNXRONLAŞDIR</span>
             </button>
           </div>
 

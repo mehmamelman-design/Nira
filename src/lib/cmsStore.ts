@@ -4,8 +4,8 @@ import { db } from './firebase';
 import { HeroConfig, CategoryCard, MenuItem, Review, GalleryPhoto, SiteConfig } from '../types';
 
 export const DEFAULT_SITE_CONFIG: SiteConfig = {
-  logoUrl: '',
-  siteName: 'Alov Qrill & Fast Food'
+  logoUrl: 'https://res.cloudinary.com/dq8xegykm/image/upload/v1786184761/Ba%C5%9Fl%C4%B1qs%C4%B1z_dizayn-Photoroom_t4omj6.png',
+  siteName: 'NIRA-Fest&Food Restorani'
 };
 import { MENU_ITEMS } from '../data/menuData';
 import { INITIAL_REVIEWS } from '../data/initialData';
@@ -106,19 +106,52 @@ export const DEFAULT_REVIEWS: Review[] = INITIAL_REVIEWS.map((r) => ({
   status: r.status || 'approved'
 }));
 
+// Helpers for localStorage sync as fallback & immediate cache
+function getStoredLocal<T>(key: string, fallback: T): T {
+  try {
+    const item = typeof window !== 'undefined' ? localStorage.getItem(key) : null;
+    if (item) {
+      const parsed = JSON.parse(item);
+      if (Array.isArray(fallback)) {
+        if (Array.isArray(parsed) && parsed.length > 0) return parsed as T;
+      } else if (parsed && typeof parsed === 'object') {
+        return parsed as T;
+      } else if (typeof parsed === 'string' && parsed) {
+        return parsed as T;
+      }
+    }
+  } catch (e) {
+    console.warn(`Error reading ${key} from localStorage:`, e);
+  }
+  return fallback;
+}
+
+function setStoredLocal<T>(key: string, value: T): void {
+  try {
+    if (typeof window !== 'undefined') {
+      localStorage.setItem(key, JSON.stringify(value));
+    }
+  } catch (e) {
+    console.warn(`Error writing ${key} to localStorage:`, e);
+  }
+}
+
 // Real-Time Listeners for Firestore 'config' collection
 export function subscribeToHero(callback: (hero: HeroConfig) => void) {
   const docRef = doc(db, 'config', 'hero');
   return onSnapshot(docRef, (snapshot) => {
     if (snapshot.exists()) {
-      callback(snapshot.data() as HeroConfig);
+      const data = snapshot.data() as HeroConfig;
+      setStoredLocal('alov_hero_config', data);
+      callback(data);
     } else {
-      setDoc(docRef, DEFAULT_HERO).catch(console.error);
-      callback(DEFAULT_HERO);
+      const stored = getStoredLocal('alov_hero_config', DEFAULT_HERO);
+      setDoc(docRef, stored).catch(console.error);
+      callback(stored);
     }
   }, (err) => {
     console.warn('Hero snapshot error:', err);
-    callback(DEFAULT_HERO);
+    callback(getStoredLocal('alov_hero_config', DEFAULT_HERO));
   });
 }
 
@@ -127,21 +160,22 @@ export function subscribeToCategories(callback: (cats: CategoryCard[]) => void) 
   return onSnapshot(docRef, (snapshot) => {
     if (snapshot.exists() && snapshot.data().items) {
       const items = snapshot.data().items as CategoryCard[];
-      const validCategoryIds = ['pizza', 'fastfood', 'pide', 'calzone', 'doner', 'icikil'];
-      const isValid = items.length === 6 && items.every((c) => validCategoryIds.includes(c.id));
-      if (isValid) {
+      if (Array.isArray(items) && items.length > 0) {
+        setStoredLocal('alov_categories_config', items);
         callback(items);
       } else {
-        setDoc(docRef, { items: DEFAULT_CATEGORIES }).catch(console.error);
-        callback(DEFAULT_CATEGORIES);
+        const stored = getStoredLocal('alov_categories_config', DEFAULT_CATEGORIES);
+        setDoc(docRef, { items: stored }).catch(console.error);
+        callback(stored);
       }
     } else {
-      setDoc(docRef, { items: DEFAULT_CATEGORIES }).catch(console.error);
-      callback(DEFAULT_CATEGORIES);
+      const stored = getStoredLocal('alov_categories_config', DEFAULT_CATEGORIES);
+      setDoc(docRef, { items: stored }).catch(console.error);
+      callback(stored);
     }
   }, (err) => {
     console.warn('Categories snapshot error:', err);
-    callback(DEFAULT_CATEGORIES);
+    callback(getStoredLocal('alov_categories_config', DEFAULT_CATEGORIES));
   });
 }
 
@@ -150,21 +184,22 @@ export function subscribeToMenu(callback: (items: MenuItem[]) => void) {
   return onSnapshot(docRef, (snapshot) => {
     if (snapshot.exists() && snapshot.data().items) {
       const items = snapshot.data().items as MenuItem[];
-      const validCategories = ['pizza', 'fastfood', 'pide', 'calzone', 'doner', 'icikil'];
-      const isValid = items.length >= 60 && items.every((i) => validCategories.includes(i.category));
-      if (isValid) {
+      if (Array.isArray(items)) {
+        setStoredLocal('alov_menu_items', items);
         callback(items);
       } else {
-        setDoc(docRef, { items: MENU_ITEMS }).catch(console.error);
-        callback(MENU_ITEMS);
+        const stored = getStoredLocal('alov_menu_items', MENU_ITEMS);
+        setDoc(docRef, { items: stored }).catch(console.error);
+        callback(stored);
       }
     } else {
-      setDoc(docRef, { items: MENU_ITEMS }).catch(console.error);
-      callback(MENU_ITEMS);
+      const stored = getStoredLocal('alov_menu_items', MENU_ITEMS);
+      setDoc(docRef, { items: stored }).catch(console.error);
+      callback(stored);
     }
   }, (err) => {
     console.warn('Menu snapshot error:', err);
-    callback(MENU_ITEMS);
+    callback(getStoredLocal('alov_menu_items', MENU_ITEMS));
   });
 }
 
@@ -173,14 +208,16 @@ export function subscribeToReviews(callback: (reviews: Review[]) => void) {
   return onSnapshot(docRef, (snapshot) => {
     if (snapshot.exists() && snapshot.data().items) {
       const items = snapshot.data().items as Review[];
+      setStoredLocal('alov_reviews_list', items);
       callback(items);
     } else {
-      setDoc(docRef, { items: DEFAULT_REVIEWS }).catch(console.error);
-      callback(DEFAULT_REVIEWS);
+      const stored = getStoredLocal('alov_reviews_list', DEFAULT_REVIEWS);
+      setDoc(docRef, { items: stored }).catch(console.error);
+      callback(stored);
     }
   }, (err) => {
     console.warn('Reviews snapshot error:', err);
-    callback(DEFAULT_REVIEWS);
+    callback(getStoredLocal('alov_reviews_list', DEFAULT_REVIEWS));
   });
 }
 
@@ -189,25 +226,30 @@ export function subscribeToGallery(callback: (photos: GalleryPhoto[]) => void) {
   return onSnapshot(docRef, (snapshot) => {
     if (snapshot.exists() && snapshot.data().items) {
       const items = snapshot.data().items as GalleryPhoto[];
-      if (items.length < DEFAULT_GALLERY.length) {
-        setDoc(docRef, { items: DEFAULT_GALLERY }).catch(console.error);
-        callback(DEFAULT_GALLERY);
-      } else {
+      if (Array.isArray(items) && items.length > 0) {
+        setStoredLocal('alov_gallery_photos', items);
         callback(items);
+      } else {
+        const stored = getStoredLocal('alov_gallery_photos', DEFAULT_GALLERY);
+        setDoc(docRef, { items: stored }).catch(console.error);
+        callback(stored);
       }
     } else {
-      setDoc(docRef, { items: DEFAULT_GALLERY }).catch(console.error);
-      callback(DEFAULT_GALLERY);
+      const stored = getStoredLocal('alov_gallery_photos', DEFAULT_GALLERY);
+      setDoc(docRef, { items: stored }).catch(console.error);
+      callback(stored);
     }
   }, (err) => {
     console.warn('Gallery snapshot error:', err);
-    callback(DEFAULT_GALLERY);
+    callback(getStoredLocal('alov_gallery_photos', DEFAULT_GALLERY));
   });
 }
 
 // React Custom Hooks
 export function useHeroConfig() {
-  const [config, setConfig] = useState<HeroConfig>(DEFAULT_HERO);
+  const [config, setConfig] = useState<HeroConfig>(() =>
+    getStoredLocal('alov_hero_config', DEFAULT_HERO)
+  );
   useEffect(() => {
     const unsub = subscribeToHero(setConfig);
     return () => unsub();
@@ -216,7 +258,9 @@ export function useHeroConfig() {
 }
 
 export function useCategoryCards() {
-  const [categories, setCategories] = useState<CategoryCard[]>(DEFAULT_CATEGORIES);
+  const [categories, setCategories] = useState<CategoryCard[]>(() =>
+    getStoredLocal('alov_categories_config', DEFAULT_CATEGORIES)
+  );
   useEffect(() => {
     const unsub = subscribeToCategories(setCategories);
     return () => unsub();
@@ -225,7 +269,9 @@ export function useCategoryCards() {
 }
 
 export function useMenuItems() {
-  const [items, setItems] = useState<MenuItem[]>(MENU_ITEMS);
+  const [items, setItems] = useState<MenuItem[]>(() =>
+    getStoredLocal('alov_menu_items', MENU_ITEMS)
+  );
   useEffect(() => {
     const unsub = subscribeToMenu(setItems);
     return () => unsub();
@@ -234,7 +280,9 @@ export function useMenuItems() {
 }
 
 export function useReviews() {
-  const [reviews, setReviews] = useState<Review[]>(DEFAULT_REVIEWS);
+  const [reviews, setReviews] = useState<Review[]>(() =>
+    getStoredLocal('alov_reviews_list', DEFAULT_REVIEWS)
+  );
   useEffect(() => {
     const unsub = subscribeToReviews(setReviews);
     return () => unsub();
@@ -243,7 +291,9 @@ export function useReviews() {
 }
 
 export function useGalleryPhotos() {
-  const [photos, setPhotos] = useState<GalleryPhoto[]>(DEFAULT_GALLERY);
+  const [photos, setPhotos] = useState<GalleryPhoto[]>(() =>
+    getStoredLocal('alov_gallery_photos', DEFAULT_GALLERY)
+  );
   useEffect(() => {
     const unsub = subscribeToGallery(setPhotos);
     return () => unsub();
@@ -256,19 +306,39 @@ export function subscribeToSiteConfig(callback: (config: SiteConfig) => void) {
   const docRef = doc(db, 'config', 'site');
   return onSnapshot(docRef, (snapshot) => {
     if (snapshot.exists()) {
-      callback(snapshot.data() as SiteConfig);
+      const data = snapshot.data() as SiteConfig;
+      const merged: SiteConfig = {
+        ...DEFAULT_SITE_CONFIG,
+        ...data,
+        logoUrl: data.logoUrl || DEFAULT_SITE_CONFIG.logoUrl
+      };
+      setStoredLocal('alov_site_config', merged);
+      callback(merged);
     } else {
-      setDoc(docRef, DEFAULT_SITE_CONFIG).catch(console.error);
-      callback(DEFAULT_SITE_CONFIG);
+      const stored = getStoredLocal('alov_site_config', DEFAULT_SITE_CONFIG);
+      const merged: SiteConfig = {
+        ...DEFAULT_SITE_CONFIG,
+        ...stored,
+        logoUrl: stored?.logoUrl || DEFAULT_SITE_CONFIG.logoUrl
+      };
+      setDoc(docRef, merged).catch(console.error);
+      callback(merged);
     }
   }, (err) => {
     console.warn('Site config snapshot error:', err);
-    callback(DEFAULT_SITE_CONFIG);
+    const stored = getStoredLocal('alov_site_config', DEFAULT_SITE_CONFIG);
+    callback({
+      ...DEFAULT_SITE_CONFIG,
+      ...stored,
+      logoUrl: stored?.logoUrl || DEFAULT_SITE_CONFIG.logoUrl
+    });
   });
 }
 
 export function useSiteConfig() {
-  const [siteConfig, setSiteConfig] = useState<SiteConfig>(DEFAULT_SITE_CONFIG);
+  const [siteConfig, setSiteConfig] = useState<SiteConfig>(() =>
+    getStoredLocal('alov_site_config', DEFAULT_SITE_CONFIG)
+  );
   useEffect(() => {
     const unsub = subscribeToSiteConfig(setSiteConfig);
     return () => unsub();
@@ -277,21 +347,25 @@ export function useSiteConfig() {
 }
 
 export async function saveSiteConfig(config: SiteConfig) {
+  setStoredLocal('alov_site_config', config);
   const docRef = doc(db, 'config', 'site');
   await setDoc(docRef, config);
 }
 
 export async function saveHeroConfig(hero: HeroConfig) {
+  setStoredLocal('alov_hero_config', hero);
   const docRef = doc(db, 'config', 'hero');
   await setDoc(docRef, hero);
 }
 
 export async function saveCategoriesConfig(categories: CategoryCard[]) {
+  setStoredLocal('alov_categories_config', categories);
   const docRef = doc(db, 'config', 'categories');
   await setDoc(docRef, { items: categories });
 }
 
 export async function saveMenuConfig(menuItems: MenuItem[]) {
+  setStoredLocal('alov_menu_items', menuItems);
   const docRef = doc(db, 'config', 'menu');
   await setDoc(docRef, { items: menuItems });
 }
@@ -300,8 +374,8 @@ export async function saveMenuItem(updatedItem: MenuItem) {
   const docRef = doc(db, 'config', 'menu');
   try {
     const snap = await getDoc(docRef);
-    let currentItems: MenuItem[] = MENU_ITEMS;
-    if (snap.exists() && Array.isArray(snap.data()?.items)) {
+    let currentItems: MenuItem[] = getStoredLocal('alov_menu_items', MENU_ITEMS);
+    if (snap.exists() && Array.isArray(snap.data()?.items) && snap.data().items.length > 0) {
       currentItems = snap.data().items;
     }
     const index = currentItems.findIndex((i) => i.id === updatedItem.id);
@@ -312,6 +386,7 @@ export async function saveMenuItem(updatedItem: MenuItem) {
     } else {
       newItems = [updatedItem, ...currentItems];
     }
+    setStoredLocal('alov_menu_items', newItems);
     await setDoc(docRef, { items: newItems });
   } catch (err) {
     console.error('Error in saveMenuItem:', err);
@@ -319,12 +394,72 @@ export async function saveMenuItem(updatedItem: MenuItem) {
   }
 }
 
+export async function saveCategory(updatedCat: CategoryCard) {
+  const docRef = doc(db, 'config', 'categories');
+  try {
+    const snap = await getDoc(docRef);
+    let currentCats: CategoryCard[] = getStoredLocal('alov_categories_config', DEFAULT_CATEGORIES);
+    if (snap.exists() && Array.isArray(snap.data()?.items) && snap.data().items.length > 0) {
+      currentCats = snap.data().items;
+    }
+    const index = currentCats.findIndex((c) => c.id === updatedCat.id);
+    let newCats: CategoryCard[];
+    if (index >= 0) {
+      newCats = [...currentCats];
+      newCats[index] = updatedCat;
+    } else {
+      newCats = [...currentCats, updatedCat];
+    }
+    setStoredLocal('alov_categories_config', newCats);
+    await setDoc(docRef, { items: newCats });
+  } catch (err) {
+    console.error('Error in saveCategory:', err);
+    throw err;
+  }
+}
+
+export async function deleteCategory(catId: string) {
+  const docRef = doc(db, 'config', 'categories');
+  try {
+    const snap = await getDoc(docRef);
+    let currentCats: CategoryCard[] = getStoredLocal('alov_categories_config', DEFAULT_CATEGORIES);
+    if (snap.exists() && Array.isArray(snap.data()?.items) && snap.data().items.length > 0) {
+      currentCats = snap.data().items;
+    }
+    const newCats = currentCats.filter((c) => c.id !== catId);
+    setStoredLocal('alov_categories_config', newCats);
+    await setDoc(docRef, { items: newCats });
+  } catch (err) {
+    console.error('Error in deleteCategory:', err);
+    throw err;
+  }
+}
+
+export async function deleteMenuItem(itemId: string) {
+  const docRef = doc(db, 'config', 'menu');
+  try {
+    const snap = await getDoc(docRef);
+    let currentItems: MenuItem[] = getStoredLocal('alov_menu_items', MENU_ITEMS);
+    if (snap.exists() && Array.isArray(snap.data()?.items) && snap.data().items.length > 0) {
+      currentItems = snap.data().items;
+    }
+    const newItems = currentItems.filter((i) => i.id !== itemId);
+    setStoredLocal('alov_menu_items', newItems);
+    await setDoc(docRef, { items: newItems });
+  } catch (err) {
+    console.error('Error in deleteMenuItem:', err);
+    throw err;
+  }
+}
+
 export async function saveReviewsConfig(reviews: Review[]) {
+  setStoredLocal('alov_reviews_list', reviews);
   const docRef = doc(db, 'config', 'reviews');
   await setDoc(docRef, { items: reviews });
 }
 
 export async function saveGalleryConfig(photos: GalleryPhoto[]) {
+  setStoredLocal('alov_gallery_photos', photos);
   const docRef = doc(db, 'config', 'gallery');
   await setDoc(docRef, { items: photos });
 }

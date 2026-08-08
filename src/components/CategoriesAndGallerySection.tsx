@@ -47,8 +47,8 @@ export const CategoriesAndGallerySection: React.FC<CategoriesAndGallerySectionPr
   ];
 
   return (
-    <section id="categories" className="py-12 sm:py-16 bg-[#082017] border-b border-emerald-900/80">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-16">
+    <section id="categories" className="py-10 sm:py-14 bg-[#082017] border-b border-emerald-900/80">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8 sm:space-y-10">
 
         {/* 0. SETLƏRİMİZ (4 Combo Sets Side-By-Side) */}
         <div className="space-y-6">
@@ -87,7 +87,7 @@ export const CategoriesAndGallerySection: React.FC<CategoriesAndGallerySectionPr
 
                   {/* Action Indicator */}
                   <div className="absolute bottom-2 right-2 z-10 flex items-center gap-1 px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-lg bg-amber-400 text-black font-extrabold text-[10px] sm:text-[11px] shadow-md group-hover:bg-amber-300 transition-colors">
-                    <span>Menyunu Aç</span>
+                    <span>Baxın</span>
                     <ChevronRight className="w-3 h-3 sm:w-3.5 sm:h-3.5 stroke-[3]" />
                   </div>
                 </div>
@@ -114,38 +114,39 @@ export const CategoriesAndGallerySection: React.FC<CategoriesAndGallerySectionPr
             </p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+          <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-3.5 sm:gap-5">
             {categories.map((cat) => (
               <div
                 key={cat.id}
                 onClick={() => onSelectCategory && onSelectCategory(cat.id as CategoryId)}
-                className="group flex flex-col transition-all duration-300 hover:-translate-y-2 cursor-pointer"
+                className="group flex flex-col transition-all duration-300 hover:-translate-y-1.5 cursor-pointer"
               >
-                {/* Photo Frame Box */}
-                <div className="relative h-64 sm:h-80 md:h-[320px] overflow-hidden rounded-3xl border-2 border-emerald-800/80 group-hover:border-amber-400 bg-black shadow-2xl transition-colors duration-300">
+                {/* Photo Frame Box - Height reduced by ~2x */}
+                <div className="relative h-36 sm:h-44 md:h-48 overflow-hidden rounded-2xl border border-emerald-800/80 group-hover:border-amber-400 bg-black shadow-xl transition-colors duration-300">
                   <img
                     src={cat.image}
                     alt={cat.name}
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                     loading="lazy"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-80 group-hover:opacity-60 transition-opacity" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-70 group-hover:opacity-50 transition-opacity" />
 
                   {/* Badge & Action Indicator */}
-                  <div className="absolute bottom-4 right-4 z-10 flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-amber-400 text-black font-extrabold text-xs shadow-lg group-hover:bg-amber-300 transition-colors">
-                    <span>Menyunu Aç</span>
-                    <ChevronRight className="w-4 h-4 stroke-[3]" />
+                  <div className="absolute bottom-2.5 right-2.5 z-10 flex items-center gap-1 px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-lg bg-amber-400 text-black font-extrabold text-[10px] sm:text-xs shadow-md group-hover:bg-amber-300 transition-colors">
+                    <span>Baxın</span>
+                    <ChevronRight className="w-3 h-3 sm:w-3.5 sm:h-3.5 stroke-[3]" />
                   </div>
                 </div>
 
                 {/* Text directly under the photo frame */}
-                <div className="mt-4 px-2 space-y-1.5 text-left">
-                  <h3 className="text-xl sm:text-2xl font-black text-white group-hover:text-amber-400 transition-colors flex items-center gap-2">
-                    <span>{cat.name}</span>
-                    {cat.icon && <span className="text-xl">{cat.icon}</span>}
+                <div className="mt-2.5 px-1 space-y-0.5 text-left">
+                  <h3 className="text-sm sm:text-base font-black text-white group-hover:text-amber-400 transition-colors flex items-center gap-1.5 line-clamp-1">
+                    <span>
+                      {cat.name.replace(/[\u{1F300}-\u{1F9FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}\u{1F600}-\u{1F64F}\u{1F680}-\u{1F6FF}\u{1F1E0}-\u{1F1FF}]/gu, '').trim()}
+                    </span>
                   </h3>
                   {cat.description && (
-                    <p className="text-sm sm:text-base font-medium text-emerald-200/80">
+                    <p className="text-xs font-medium text-emerald-200/80 line-clamp-1">
                       {cat.description}
                     </p>
                   )}

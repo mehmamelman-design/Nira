@@ -4,6 +4,7 @@ import { Hero } from './components/Hero';
 import { CategoriesAndGallerySection } from './components/CategoriesAndGallerySection';
 import { MenuSection } from './components/MenuSection';
 import { ReviewsSection } from './components/ReviewsSection';
+import { FaqSection } from './components/FaqSection';
 import { ContactSection } from './components/ContactSection';
 import { Footer } from './components/Footer';
 import { CartDrawer } from './components/CartDrawer';
@@ -24,7 +25,8 @@ import {
   useSiteConfig,
   saveSiteConfig,
   saveMenuItem,
-  saveHeroConfig
+  saveHeroConfig,
+  deleteMenuItem
 } from './lib/cmsStore';
 
 export default function App() {
@@ -117,7 +119,7 @@ export default function App() {
       return [...prev, { menuItem: item, quantity, selectedOption: option, notes }];
     });
 
-    showToast(`"${item.name}" səbətinizə əlavə edildi!`);
+    setIsCartOpen(true);
   };
 
   const handleUpdateQuantity = (itemId: string, delta: number) => {
@@ -215,7 +217,10 @@ export default function App() {
             {/* 3. Customer Reviews Section */}
             <ReviewsSection reviews={reviews} />
 
-            {/* 4. Address, Contact & Map Section */}
+            {/* 4. FAQ Section */}
+            <FaqSection />
+
+            {/* 5. Address, Contact & Map Section */}
             <ContactSection />
           </>
         ) : (
@@ -240,6 +245,10 @@ export default function App() {
             onEditMenuItem={(item) =>
               setAdminEditState({ isOpen: true, type: 'menuItem', menuItem: item })
             }
+            onDeleteMenuItem={async (itemId) => {
+              await deleteMenuItem(itemId);
+              showToast('Məhsul bazadan silindi.');
+            }}
             onAddNewMenuItem={() =>
               setAdminEditState({ isOpen: true, type: 'menuItem', menuItem: null })
             }
@@ -265,6 +274,10 @@ export default function App() {
         }}
         onSaveMenuItem={async (updatedItem) => {
           await saveMenuItem(updatedItem);
+        }}
+        onDeleteMenuItem={async (itemId) => {
+          await deleteMenuItem(itemId);
+          showToast('Məhsul bazadan silindi.');
         }}
         onSaveHero={async (updatedHero) => {
           await saveHeroConfig(updatedHero);

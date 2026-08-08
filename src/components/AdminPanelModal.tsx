@@ -86,6 +86,23 @@ export const AdminPanelModal: React.FC<AdminPanelModalProps> = ({
   const [newGalDesc, setNewGalDesc] = useState('');
   const [newGalUrl, setNewGalUrl] = useState('');
 
+  // Modal for adding a new Category Card / Set Card
+  const [showAddCategoryModal, setShowAddCategoryModal] = useState(false);
+  const [newCatName, setNewCatName] = useState('');
+  const [newCatDesc, setNewCatDesc] = useState('');
+  const [newCatImage, setNewCatImage] = useState('');
+
+  // Modal for adding a new Menu Item directly in Admin Panel
+  const [showAddMenuItemModal, setShowAddMenuItemModal] = useState(false);
+  const [newMenuName, setNewMenuName] = useState('');
+  const [newMenuPrice, setNewMenuPrice] = useState<number | string>('');
+  const [newMenuCategory, setNewMenuCategory] = useState<string>('pizza');
+  const [newMenuDesc, setNewMenuDesc] = useState('');
+  const [newMenuIngredients, setNewMenuIngredients] = useState('');
+  const [newMenuImage, setNewMenuImage] = useState('');
+  const [newMenuIsPopular, setNewMenuIsPopular] = useState(false);
+  const [newMenuIsHalal, setNewMenuIsHalal] = useState(true);
+
   useEffect(() => {
     setLocalHero(heroConfig);
   }, [heroConfig]);
@@ -154,9 +171,10 @@ export const AdminPanelModal: React.FC<AdminPanelModalProps> = ({
     }
   };
 
-  const handleSaveCategories = async () => {
+  const handleSaveCategories = async (updatedCategoriesList?: CategoryCard[]) => {
     try {
-      await saveCategoriesConfig(localCategories);
+      const listToSave = updatedCategoriesList || localCategories;
+      await saveCategoriesConfig(listToSave);
       onShowToast('Kateqoriya və Qalereya kartları Firestore-da uğurla saxlanıldı!');
     } catch (err) {
       console.error(err);
@@ -164,14 +182,81 @@ export const AdminPanelModal: React.FC<AdminPanelModalProps> = ({
     }
   };
 
-  const handleSaveMenu = async () => {
+  const handleSaveMenu = async (updatedMenuList?: MenuItem[]) => {
     try {
-      await saveMenuConfig(localMenu);
+      const listToSave = updatedMenuList || localMenu;
+      await saveMenuConfig(listToSave);
       onShowToast('Yemək menyusu və təfərrüatları Firestore-da uğurla saxlanıldı!');
     } catch (err) {
       console.error(err);
       onShowToast('Xəta baş verdi!');
     }
+  };
+
+  const handleDeleteCategory = (catId: string) => {
+    const updated = localCategories.filter((c) => c.id !== catId);
+    setLocalCategories(updated);
+    handleSaveCategories(updated);
+  };
+
+  const handleDeleteMenuItem = (itemId: string) => {
+    const updated = localMenu.filter((m) => m.id !== itemId);
+    setLocalMenu(updated);
+    handleSaveMenu(updated);
+  };
+
+  const handleAdminAddCategory = () => {
+    if (!newCatName) {
+      alert('Zəhmət olmasa kateqoriya adını daxil edin.');
+      return;
+    }
+    const catId = newCatName.toLowerCase().replace(/[^a-z0-9]/g, '_') || `cat_${Date.now()}`;
+    const created: CategoryCard = {
+      id: catId,
+      name: newCatName,
+      description: newCatDesc || 'Xüsusi dadlar və ləzzətli menyular',
+      image: newCatImage || 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&q=80&w=1200',
+      icon: ''
+    };
+    const updated = [...localCategories, created];
+    setLocalCategories(updated);
+    handleSaveCategories(updated);
+    setShowAddCategoryModal(false);
+    setNewCatName('');
+    setNewCatDesc('');
+    setNewCatImage('');
+  };
+
+  const handleAdminAddMenuItem = () => {
+    if (!newMenuName) {
+      alert('Zəhmət olmasa yeməyin adını daxil edin.');
+      return;
+    }
+    const created: MenuItem = {
+      id: `item_${Date.now()}`,
+      name: newMenuName.trim(),
+      price: typeof newMenuPrice === 'number' ? newMenuPrice : parseFloat(newMenuPrice as string) || 0,
+      description: newMenuDesc.trim() || 'Təzə və ləzzətli xammallarla hazırlanan xüsusi təam.',
+      category: (newMenuCategory as any) || 'pizza',
+      ingredients: newMenuIngredients.trim() || 'Təzə ərzaqlar, Mozzarella',
+      image: newMenuImage.trim() || 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&q=80&w=600',
+      isPopular: newMenuIsPopular,
+      isHalal: newMenuIsHalal,
+      prepTime: '12 dəq',
+      rating: 4.9,
+      isOutOfStock: false
+    };
+    const updated = [created, ...localMenu];
+    setLocalMenu(updated);
+    handleSaveMenu(updated);
+    setShowAddMenuItemModal(false);
+    setNewMenuName('');
+    setNewMenuPrice('');
+    setNewMenuDesc('');
+    setNewMenuIngredients('');
+    setNewMenuImage('');
+    setNewMenuIsPopular(false);
+    setNewMenuIsHalal(true);
   };
 
   const handleSaveReviews = async (updatedReviewsList?: Review[]) => {
@@ -204,11 +289,9 @@ export const AdminPanelModal: React.FC<AdminPanelModalProps> = ({
   };
 
   const handleDeleteReview = (id: string) => {
-    if (confirm('Bu şərhi silməyə əminsiniz?')) {
-      const updated = localReviews.filter((r) => r.id !== id);
-      setLocalReviews(updated);
-      handleSaveReviews(updated);
-    }
+    const updated = localReviews.filter((r) => r.id !== id);
+    setLocalReviews(updated);
+    handleSaveReviews(updated);
   };
 
   const handleAdminAddReview = () => {
@@ -260,11 +343,9 @@ export const AdminPanelModal: React.FC<AdminPanelModalProps> = ({
   };
 
   const handleDeleteGalleryPhoto = (id: string) => {
-    if (confirm('Bu fotonu qalereyadan silmək istəyirsiniz?')) {
-      const updated = localGallery.filter((g) => g.id !== id);
-      setLocalGallery(updated);
-      handleSaveGallery(updated);
-    }
+    const updated = localGallery.filter((g) => g.id !== id);
+    setLocalGallery(updated);
+    handleSaveGallery(updated);
   };
 
   return (
@@ -542,28 +623,46 @@ export const AdminPanelModal: React.FC<AdminPanelModalProps> = ({
                   
                   {/* Category Cards Section */}
                   <div className="space-y-4">
-                    <div className="flex items-center justify-between bg-zinc-900/80 p-4 rounded-2xl border border-zinc-800">
+                    <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 bg-zinc-900/80 p-4 rounded-2xl border border-zinc-800">
                       <div>
-                        <h3 className="text-base font-black text-white">1. Kateqoriya Kartlarının Şəkilləri (6 Əsas Kateqoriya)</h3>
+                        <h3 className="text-base font-black text-white">1. Kateqoriya & Set Kartları</h3>
                         <p className="text-xs text-zinc-400">
-                          Ana səhifədəki kateqoriya kartlarının şəkillərini, adlarını və təsvirlərini dəyişin.
+                          Ana səhifədəki kateqoriya və set kartlarını idarə edin, şəkillərini və adlarını dəyişin, yenisini əlavə edin.
                         </p>
                       </div>
 
-                      <button
-                        onClick={handleSaveCategories}
-                        className="px-4 py-2.5 rounded-xl bg-amber-400 hover:bg-amber-500 text-black font-extrabold text-xs flex items-center gap-1.5 transition-all cursor-pointer shadow"
-                      >
-                        <Save className="w-4 h-4 stroke-[3]" />
-                        <span>Dəyişiklikləri Yadda Saxla</span>
-                      </button>
+                      <div className="flex items-center gap-2">
+                        <button
+                          onClick={() => setShowAddCategoryModal(true)}
+                          className="px-4 py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-600 text-black font-extrabold text-xs flex items-center gap-1.5 transition-all cursor-pointer shadow"
+                        >
+                          <Plus className="w-4 h-4 stroke-[3]" />
+                          <span>Yeni Kateqoriya / Set</span>
+                        </button>
+
+                        <button
+                          onClick={() => handleSaveCategories()}
+                          className="px-4 py-2.5 rounded-xl bg-amber-400 hover:bg-amber-500 text-black font-extrabold text-xs flex items-center gap-1.5 transition-all cursor-pointer shadow"
+                        >
+                          <Save className="w-4 h-4 stroke-[3]" />
+                          <span>Yadda Saxla</span>
+                        </button>
+                      </div>
                     </div>
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                       {localCategories.map((cat, idx) => (
-                        <div key={cat.id} className="bg-zinc-900/90 border border-zinc-800 rounded-2xl p-4 space-y-3">
+                        <div key={cat.id} className="bg-zinc-900/90 border border-zinc-800 rounded-2xl p-4 space-y-3 relative group">
                           <div className="relative h-28 rounded-xl overflow-hidden bg-black border border-zinc-700">
                             <img src={cat.image} alt={cat.name} className="w-full h-full object-cover" />
+                            <button
+                              type="button"
+                              onClick={() => handleDeleteCategory(cat.id)}
+                              className="absolute top-2 right-2 p-1.5 rounded-lg bg-rose-600 hover:bg-rose-700 text-white shadow-lg cursor-pointer transition-all"
+                              title="Kateqoriyanı Sil"
+                            >
+                              <Trash2 className="w-3.5 h-3.5" />
+                            </button>
                           </div>
 
                           <div className="space-y-2">
@@ -714,17 +813,27 @@ export const AdminPanelModal: React.FC<AdminPanelModalProps> = ({
                     <div>
                       <h3 className="text-base font-black text-white">Yemək Kartlarının Şəkilləri və Təfərrüatları</h3>
                       <p className="text-xs text-zinc-400">
-                        Hər bir yeməyin fotosunu, adını, təsvirini, tərkib hissələrini redaktə edin və Nişanları (Populyar, Halal) dəyişin.
+                        Hər bir yeməyin fotosunu, adını, təsvirini, tərkib hissələrini redaktə edin, silin və ya yenisini əlavə edin.
                       </p>
                     </div>
 
-                    <button
-                      onClick={handleSaveMenu}
-                      className="px-5 py-3 rounded-xl bg-amber-400 hover:bg-amber-500 text-black font-extrabold text-xs flex items-center gap-1.5 transition-all cursor-pointer shadow"
-                    >
-                      <Save className="w-4 h-4 stroke-[3]" />
-                      <span>Bütün Yeməkləri Yadda Saxla</span>
-                    </button>
+                    <div className="flex items-center gap-2">
+                      <button
+                        onClick={() => setShowAddMenuItemModal(true)}
+                        className="px-4 py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-600 text-black font-extrabold text-xs flex items-center gap-1.5 transition-all cursor-pointer shadow"
+                      >
+                        <Plus className="w-4 h-4 stroke-[3]" />
+                        <span>Yeni Yemək Əlavə Et</span>
+                      </button>
+
+                      <button
+                        onClick={() => handleSaveMenu()}
+                        className="px-5 py-2.5 rounded-xl bg-amber-400 hover:bg-amber-500 text-black font-extrabold text-xs flex items-center gap-1.5 transition-all cursor-pointer shadow"
+                      >
+                        <Save className="w-4 h-4 stroke-[3]" />
+                        <span>Bütün Yeməkləri Yadda Saxla</span>
+                      </button>
+                    </div>
                   </div>
 
                   {/* Search filter */}
@@ -744,10 +853,18 @@ export const AdminPanelModal: React.FC<AdminPanelModalProps> = ({
                     {localMenu
                       .filter((item) => item.name.toLowerCase().includes(menuSearch.toLowerCase()))
                       .map((item, idx) => (
-                        <div key={item.id} className="bg-zinc-900/90 border border-zinc-800 rounded-2xl p-4 space-y-3">
+                        <div key={item.id} className="bg-zinc-900/90 border border-zinc-800 rounded-2xl p-4 space-y-3 relative">
                           <div className="flex gap-4">
-                            <div className="w-24 h-24 rounded-xl overflow-hidden bg-black shrink-0 border border-zinc-700">
+                            <div className="w-24 h-24 rounded-xl overflow-hidden bg-black shrink-0 border border-zinc-700 relative">
                               <img src={item.image} alt={item.name} className="w-full h-full object-cover" />
+                              <button
+                                type="button"
+                                onClick={() => handleDeleteMenuItem(item.id)}
+                                className="absolute top-1 left-1 p-1 rounded-lg bg-rose-600 hover:bg-rose-700 text-white shadow cursor-pointer transition-all"
+                                title="Yemək kartını sil"
+                              >
+                                <Trash2 className="w-3.5 h-3.5" />
+                              </button>
                             </div>
 
                             <div className="flex-1 space-y-2">
@@ -1246,6 +1363,217 @@ export const AdminPanelModal: React.FC<AdminPanelModalProps> = ({
                 className="flex-1 py-2.5 rounded-xl bg-emerald-500 text-black font-extrabold text-xs"
               >
                 Əlavə Et
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* MODAL FOR ADDING A NEW CATEGORY / SET CARD */}
+      {showAddCategoryModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
+          <div className="bg-[#1e293b] border border-zinc-700 rounded-3xl p-6 w-full max-w-md space-y-4 text-white">
+            <div className="flex items-center justify-between border-b border-zinc-700 pb-3">
+              <h3 className="text-base font-black">Yeni Kateqoriya / Set Card Əlavə Et</h3>
+              <button onClick={() => setShowAddCategoryModal(false)} className="text-zinc-400 hover:text-white">
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            <div className="space-y-3 text-xs">
+              <div>
+                <label className="block font-bold text-zinc-300 mb-1">Kateqoriya / Set Adı</label>
+                <input
+                  type="text"
+                  value={newCatName}
+                  onChange={(e) => setNewCatName(e.target.value)}
+                  placeholder="Məs: Ailə Setləri və ya Pidelər"
+                  className="w-full px-3 py-2 rounded-xl bg-zinc-900 border border-zinc-700 text-white"
+                />
+              </div>
+
+              <div>
+                <label className="block font-bold text-zinc-300 mb-1">Təsviri</label>
+                <input
+                  type="text"
+                  value={newCatDesc}
+                  onChange={(e) => setNewCatDesc(e.target.value)}
+                  placeholder="Məs: Ən ləzzətli və doyurucu menyular"
+                  className="w-full px-3 py-2 rounded-xl bg-zinc-900 border border-zinc-700 text-white"
+                />
+              </div>
+
+              <div>
+                <label className="block font-bold text-zinc-300 mb-1">Şəkil Linki (URL)</label>
+                <input
+                  type="text"
+                  value={newCatImage}
+                  onChange={(e) => setNewCatImage(e.target.value)}
+                  placeholder="https://images.unsplash.com/..."
+                  className="w-full px-3 py-2 rounded-xl bg-zinc-900 border border-zinc-700 text-white"
+                />
+              </div>
+
+              <div>
+                <label className="block font-bold text-zinc-300 mb-1">Və ya Fayldan Yüklə</label>
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={(e) => handleFileUpload(e, (url) => setNewCatImage(url))}
+                  className="w-full text-zinc-400 file:mr-2 file:py-1 file:px-2 file:rounded-lg file:border-0 file:text-xs file:font-bold file:bg-zinc-800 file:text-white hover:file:bg-zinc-700"
+                />
+              </div>
+            </div>
+
+            <div className="flex gap-2 pt-2">
+              <button
+                onClick={() => setShowAddCategoryModal(false)}
+                className="flex-1 py-2.5 rounded-xl bg-zinc-800 text-zinc-300 font-bold text-xs"
+              >
+                Ləğv Et
+              </button>
+              <button
+                onClick={handleAdminAddCategory}
+                className="flex-1 py-2.5 rounded-xl bg-emerald-500 text-black font-extrabold text-xs"
+              >
+                Kateqoriya Əlavə Et
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* MODAL FOR ADDING A NEW MENU ITEM */}
+      {showAddMenuItemModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
+          <div className="bg-[#1e293b] border border-zinc-700 rounded-3xl p-6 w-full max-w-lg space-y-4 text-white max-h-[90vh] overflow-y-auto">
+            <div className="flex items-center justify-between border-b border-zinc-700 pb-3">
+              <h3 className="text-base font-black">Yeni Yemək Kartı Əlavə Et</h3>
+              <button onClick={() => setShowAddMenuItemModal(false)} className="text-zinc-400 hover:text-white">
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            <div className="space-y-3 text-xs">
+              <div>
+                <label className="block font-bold text-zinc-300 mb-1">Yeməyin Adı</label>
+                <input
+                  type="text"
+                  value={newMenuName}
+                  onChange={(e) => setNewMenuName(e.target.value)}
+                  placeholder="Məs: Quşbaşı Pide"
+                  className="w-full px-3 py-2 rounded-xl bg-zinc-900 border border-zinc-700 text-white font-bold text-sm"
+                />
+              </div>
+
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="block font-bold text-zinc-300 mb-1">Qiyməti (₼)</label>
+                  <input
+                    type="number"
+                    step="0.10"
+                    value={newMenuPrice}
+                    onChange={(e) => setNewMenuPrice(e.target.value)}
+                    placeholder="12.50"
+                    className="w-full px-3 py-2 rounded-xl bg-zinc-900 border border-zinc-700 text-white font-bold"
+                  />
+                </div>
+
+                <div>
+                  <label className="block font-bold text-zinc-300 mb-1">Kateqoriya</label>
+                  <select
+                    value={newMenuCategory}
+                    onChange={(e) => setNewMenuCategory(e.target.value)}
+                    className="w-full px-3 py-2 rounded-xl bg-zinc-900 border border-zinc-700 text-white font-bold"
+                  >
+                    <option value="pizza">Pizza</option>
+                    <option value="fastfood">Fast Food & Burger</option>
+                    <option value="pide">Pide</option>
+                    <option value="calzone">Calizone</option>
+                    <option value="doner">Dönərlər</option>
+                    <option value="icikil">Soyuq İçkilər</option>
+                  </select>
+                </div>
+              </div>
+
+              <div>
+                <label className="block font-bold text-zinc-300 mb-1">Təsviri</label>
+                <textarea
+                  rows={2}
+                  value={newMenuDesc}
+                  onChange={(e) => setNewMenuDesc(e.target.value)}
+                  placeholder="Məs: Təzə kəsilmiş ət, bol mozzarella və xüsusi sos..."
+                  className="w-full px-3 py-2 rounded-xl bg-zinc-900 border border-zinc-700 text-white"
+                />
+              </div>
+
+              <div>
+                <label className="block font-bold text-zinc-300 mb-1">Tərkibi</label>
+                <input
+                  type="text"
+                  value={newMenuIngredients}
+                  onChange={(e) => setNewMenuIngredients(e.target.value)}
+                  placeholder="Məs: Dana əti, Mozzarella, Göbələk"
+                  className="w-full px-3 py-2 rounded-xl bg-zinc-900 border border-zinc-700 text-white"
+                />
+              </div>
+
+              <div>
+                <label className="block font-bold text-zinc-300 mb-1">Şəkil URL-i</label>
+                <input
+                  type="text"
+                  value={newMenuImage}
+                  onChange={(e) => setNewMenuImage(e.target.value)}
+                  placeholder="https://images.unsplash.com/..."
+                  className="w-full px-3 py-2 rounded-xl bg-zinc-900 border border-zinc-700 text-white"
+                />
+              </div>
+
+              <div>
+                <label className="block font-bold text-zinc-300 mb-1">Və ya Fayldan Yüklə</label>
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={(e) => handleFileUpload(e, (url) => setNewMenuImage(url))}
+                  className="w-full text-zinc-400 file:mr-2 file:py-1 file:px-2 file:rounded-lg file:border-0 file:text-xs file:font-bold file:bg-zinc-800 file:text-white hover:file:bg-zinc-700"
+                />
+              </div>
+
+              <div className="flex gap-4 pt-2">
+                <label className="flex items-center gap-2 cursor-pointer text-xs font-bold text-emerald-400">
+                  <input
+                    type="checkbox"
+                    checked={newMenuIsHalal}
+                    onChange={(e) => setNewMenuIsHalal(e.target.checked)}
+                    className="accent-emerald-500 rounded"
+                  />
+                  <span>Halal Sertifikatı</span>
+                </label>
+
+                <label className="flex items-center gap-2 cursor-pointer text-xs font-bold text-amber-400">
+                  <input
+                    type="checkbox"
+                    checked={newMenuIsPopular}
+                    onChange={(e) => setNewMenuIsPopular(e.target.checked)}
+                    className="accent-amber-400 rounded"
+                  />
+                  <span>Populyar Məhsul</span>
+                </label>
+              </div>
+            </div>
+
+            <div className="flex gap-2 pt-2">
+              <button
+                onClick={() => setShowAddMenuItemModal(false)}
+                className="flex-1 py-2.5 rounded-xl bg-zinc-800 text-zinc-300 font-bold text-xs"
+              >
+                Ləğv Et
+              </button>
+              <button
+                onClick={handleAdminAddMenuItem}
+                className="flex-1 py-2.5 rounded-xl bg-emerald-500 text-black font-extrabold text-xs"
+              >
+                Yeməyi Əlavə Et
               </button>
             </div>
           </div>
