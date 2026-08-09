@@ -96,18 +96,18 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
 
     setValidationError(null);
 
-    let text = `*ALOV QRILL & PİDE - SİFARİŞ SƏBƏTİ*\n\n`;
-    text += `*Xidmət Növü:* ${deliveryType === 'yerinde' ? 'Yerində (Restoranda)' : 'Ünvana Çatdırılma'}\n`;
+    let text = `NİRA - SİFARİŞ SƏBƏTİ\n\n`;
+    text += `Xidmət Növü: ${deliveryType === 'yerinde' ? 'Yerində (Restoranda)' : 'Ünvana Çatdırılma'}\n`;
     
     if (deliveryType === 'yerinde') {
-      text += `*Masa:* ${selectedTable}\n`;
+      text += `Masa: ${selectedTable}\n`;
     } else {
-      text += `*Müştəri Adı:* ${customerName}\n`;
+      text += `Müştəri Adı: ${customerName}\n`;
     }
 
-    text += `\n*SİFARİŞ EDİLƏN MƏHSULLAR:*\n`;
+    text += `\nSİFARİŞ EDİLƏN MƏHSULLAR:\n`;
     cartItems.forEach((item, index) => {
-      text += `${index + 1}. *${item.menuItem.name}* x${item.quantity}`;
+      text += `${index + 1}. ${item.menuItem.name} x${item.quantity}`;
       if (item.selectedOption) {
         text += ` (${item.selectedOption})`;
       }
@@ -115,15 +115,15 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
     });
 
     text += `\n--------------------------------\n`;
-    text += `*Məhsullar:* ${subtotal.toFixed(2)} ₼\n`;
+    text += `Məhsullar: ${subtotal.toFixed(2)} ₼\n`;
     if (appliedDiscount > 0) {
-      text += `*Endirim:* -${discountAmount.toFixed(2)} ₼\n`;
+      text += `Endirim: -${discountAmount.toFixed(2)} ₼\n`;
     }
-    text += `*YEKUN MƏBLƏĞ:* *${totalPrice.toFixed(2)} ₼*\n\n`;
+    text += `YEKUN MƏBLƏĞ: ${totalPrice.toFixed(2)} ₼\n\n`;
     text += `Zəhmət olmasa sifarişi təsdiqləyin!`;
 
     const encoded = encodeURIComponent(text);
-    window.open(`https://wa.me/994501234567?text=${encoded}`, '_blank');
+    window.open(`https://wa.me/994516359474?text=${encoded}`, '_blank');
     setOrderPlaced(true);
   };
 

@@ -1,11 +1,37 @@
 import React from 'react';
 import { Flame, Phone, MapPin, Instagram, MessageCircle, Clock, Heart } from 'lucide-react';
+import { useSiteConfig } from '../lib/cmsStore';
+import { CategoryId } from '../types';
 
 interface FooterProps {
   onNavigate: (sectionId: string) => void;
+  onSelectCategory?: (categoryId: CategoryId) => void;
 }
 
-export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
+export const Footer: React.FC<FooterProps> = ({ onNavigate, onSelectCategory }) => {
+  const { siteConfig } = useSiteConfig();
+  const logoUrl = siteConfig?.logoUrl || 'https://res.cloudinary.com/dq8xegykm/image/upload/v1786184761/Ba%C5%9Fl%C4%B1qs%C4%B1z_dizayn-Photoroom_t4omj6.png';
+
+  const menuCategories: { id: CategoryId; name: string }[] = [
+    { id: 'fastfood', name: 'FAST FOOD' },
+    { id: 'pizza', name: 'PİZZA' },
+    { id: 'kabablar', name: 'KABABLAR' },
+    { id: 'isti_yemekler', name: 'İSTİ YEMƏKLƏR' },
+    { id: 'icikil', name: 'SOYUQ İÇKİLƏR' },
+    { id: 'sorbalar', name: 'ŞORBALAR' },
+    { id: 'salat', name: 'SALAT' },
+    { id: 'cig_kofte', name: 'ÇİY KÖFTƏ' },
+    { id: 'qelyanaltilar', name: 'QƏLYANALTILAR' },
+  ];
+
+  const handleCategoryClick = (catId: CategoryId) => {
+    if (onSelectCategory) {
+      onSelectCategory(catId);
+    } else {
+      onNavigate('menu');
+    }
+  };
+
   return (
     <footer className="bg-[#082017] border-t border-emerald-900 text-emerald-100/80 text-sm">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
@@ -14,13 +40,21 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
           {/* Logo & About Slogan */}
           <div className="lg:col-span-4 space-y-4">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-white flex items-center justify-center text-emerald-950 shadow-lg">
-                <Flame className="w-6 h-6 fill-emerald-950 text-emerald-950" />
-              </div>
+              <button 
+                onClick={() => onNavigate('hero')}
+                className="flex items-center focus:outline-none cursor-pointer group"
+                aria-label="Ana Səhifə"
+              >
+                <img
+                  src={logoUrl}
+                  alt={siteConfig?.siteName || "NIRA Logo"}
+                  className="h-16 w-auto object-contain max-w-[220px] group-hover:scale-105 transition-transform duration-300"
+                />
+              </button>
             </div>
 
             <p className="text-xs text-emerald-200/80 leading-relaxed max-w-sm">
-              Təzə kərpic fırından çıxan xırçıltılı pidelər, xüsusi souslu smash burgerlər və ləzzətli döner yeməkləri. Əsl keyfiyyət və sürətli çatdırılma!
+              Təzə fast food, ləzzətli pizzalar, kabablar, isti yemeklər, şorbalar və sərin içkilər. Əsl keyfiyyət və sürətli çatdırılma!
             </p>
 
             <div className="pt-2 flex items-center gap-2 text-xs text-white font-semibold">
@@ -35,54 +69,16 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
               Menyu Bölmələri
             </h4>
             <ul className="space-y-2 text-xs font-medium">
-              <li>
-                <button
-                  onClick={() => onNavigate('menu')}
-                  className="hover:text-white transition-colors cursor-pointer"
-                >
-                  Pidelər & Daş Fırın Yeməkləri
-                </button>
-              </li>
-              <li>
-                <button
-                  onClick={() => onNavigate('menu')}
-                  className="hover:text-white transition-colors cursor-pointer"
-                >
-                  Smash & Crispy Burgerlər
-                </button>
-              </li>
-              <li>
-                <button
-                  onClick={() => onNavigate('menu')}
-                  className="hover:text-white transition-colors cursor-pointer"
-                >
-                  Alov Ət & Toyuq Dönərləri
-                </button>
-              </li>
-              <li>
-                <button
-                  onClick={() => onNavigate('menu')}
-                  className="hover:text-white transition-colors cursor-pointer"
-                >
-                  Qızarmış Toyuq & Naggetslər
-                </button>
-              </li>
-              <li>
-                <button
-                  onClick={() => onNavigate('menu')}
-                  className="hover:text-white transition-colors cursor-pointer"
-                >
-                  Sərin İçkilər & Ayran
-                </button>
-              </li>
-              <li>
-                <button
-                  onClick={() => onNavigate('menu')}
-                  className="hover:text-white transition-colors cursor-pointer"
-                >
-                  Fırın Sütlaç & Künefe
-                </button>
-              </li>
+              {menuCategories.map((cat) => (
+                <li key={cat.id}>
+                  <button
+                    onClick={() => handleCategoryClick(cat.id)}
+                    className="hover:text-amber-400 transition-colors cursor-pointer text-left uppercase font-semibold"
+                  >
+                    {cat.name}
+                  </button>
+                </li>
+              ))}
             </ul>
           </div>
 
@@ -140,7 +136,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
 
               {/* WhatsApp */}
               <a
-                href="https://wa.me/994501234567"
+                href="https://wa.me/994516359474"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="w-10 h-10 rounded-xl bg-emerald-950 border border-emerald-800 flex items-center justify-center text-white hover:border-white transition-all"
@@ -164,7 +160,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
 
             <div className="pt-2 text-xs text-emerald-200/90 space-y-1">
               <p>Nizami küç. 142 (Fəvvarələr Meydanı)</p>
-              <p className="font-bold text-white">+994 50 123 45 67</p>
+              <p className="font-bold text-white">(051) 635 94 74</p>
             </div>
 
           </div>

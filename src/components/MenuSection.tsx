@@ -18,32 +18,58 @@ interface MenuSectionProps {
   onAddNewMenuItem?: () => void;
   isSetView?: boolean;
   setTitle?: string;
+  initialSearchQuery?: string;
+  onSearchQueryChange?: (query: string) => void;
 }
 
 const DEFAULT_CATEGORY_IMAGES: Record<string, { image: string; desc: string }> = {
+  fastfood: {
+    image: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&q=80&w=1200',
+    desc: 'Xırçıltılı smash burgerlər, dadlı naggetslər və kartof fri',
+  },
   pizza: {
     image: 'https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&q=80&w=1200',
     desc: 'İsti daş fırında bişən bol xammallı pizzalar',
   },
-  fastfood: {
-    image: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&q=80&w=1200',
-    desc: 'Şirəli smash burgerlər və xırçıltılı naggetslər',
+  kabablar: {
+    image: 'https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&q=80&w=1200',
+    desc: 'Közdə bişən ləzzətli ət, tikə və lülə kabablar',
   },
-  pide: {
-    image: 'https://images.unsplash.com/photo-1628840042765-356cda07504e?auto=format&fit=crop&q=80&w=1200',
-    desc: 'Ənənəvi xırçıltılı ətli, pendirli və qıymalı pidələr',
-  },
-  calzone: {
-    image: 'https://images.unsplash.com/photo-1590947132387-155cc02f3212?auto=format&fit=crop&q=80&w=1200',
-    desc: 'İçi bol ərimiş mozzarella və xüsusi qiyməli calzonelar',
-  },
-  doner: {
-    image: 'https://images.unsplash.com/photo-1529006557810-274b9b2fc783?auto=format&fit=crop&q=80&w=1200',
-    desc: 'Közdə fırlanan təzə halal ət və toyuq dönərləri',
+  isti_yemekler: {
+    image: 'https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&q=80&w=1200',
+    desc: 'Təzə bişmiş ləzzətli isti ana yeməklər və fırın yeməkləri',
   },
   icikil: {
     image: 'https://images.unsplash.com/photo-1622483767028-3f66f32aef97?auto=format&fit=crop&q=80&w=1200',
-    desc: 'Buz kimi sərinləşdirici təbii içkilər və limanadlar',
+    desc: 'Buz kimi sərinləşdirici təbii içkilər və limonadlar',
+  },
+  sorbalar: {
+    image: 'https://images.unsplash.com/photo-1547592166-23ac45744acd?auto=format&fit=crop&q=80&w=1200',
+    desc: 'Xüsusi reseptlə hazırlanan isti ev şorbaları',
+  },
+  salat: {
+    image: 'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&q=80&w=1200',
+    desc: 'Təravətli tərəvəzlərdən hazırlanan xüsusi salatlar',
+  },
+  cig_kofte: {
+    image: 'https://images.unsplash.com/photo-1626777552726-4a6b54c97e46?auto=format&fit=crop&q=80&w=1200',
+    desc: 'Xüsusi ədviyyatlı və acılı təzə çiy köftələr',
+  },
+  qelyanaltilar: {
+    image: 'https://images.unsplash.com/photo-1626082927389-6cd097cdc6ec?auto=format&fit=crop&q=80&w=1200',
+    desc: 'Çıtır toyuq kanatları, fri, soğan halqaları və souslar',
+  },
+  desertler: {
+    image: 'https://images.unsplash.com/photo-1551024709-8f23befc6f87?auto=format&fit=crop&q=80&w=1200',
+    desc: 'Xüsusi paxlavalar, San Sebastian, cheesecake, sütlaç, künefe, dondurma və leziz tortlar',
+  },
+  kofe: {
+    image: 'https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&q=80&w=1200',
+    desc: 'Espresso, Americano, Latte, Cappucino, Raf, Mokka və ətirli kofelər',
+  },
+  kokteyl: {
+    image: 'https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?auto=format&fit=crop&q=80&w=1200',
+    desc: 'Sərinləşdirici Mojito, Mix Shake və xüsusi Nira kokteyli',
   },
   all: {
     image: 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&q=80&w=1200',
@@ -64,9 +90,11 @@ export const MenuSection: React.FC<MenuSectionProps> = ({
   onAddNewMenuItem,
   isSetView = false,
   setTitle,
+  initialSearchQuery = '',
+  onSearchQueryChange,
 }) => {
   const [activeCategory, setActiveCategory] = useState<CategoryId>(selectedCategory || 'all');
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState(initialSearchQuery);
   const [selectedCustomizerItem, setSelectedCustomizerItem] = useState<MenuItem | null>(null);
   const [deletingItem, setDeletingItem] = useState<MenuItem | null>(null);
 
@@ -75,6 +103,12 @@ export const MenuSection: React.FC<MenuSectionProps> = ({
       setActiveCategory(selectedCategory);
     }
   }, [selectedCategory]);
+
+  useEffect(() => {
+    if (initialSearchQuery !== undefined) {
+      setSearchQuery(initialSearchQuery);
+    }
+  }, [initialSearchQuery]);
 
   const handleCategoryChange = (catId: CategoryId) => {
     setActiveCategory(catId);
@@ -85,15 +119,21 @@ export const MenuSection: React.FC<MenuSectionProps> = ({
 
   const itemsToDisplay = menuItems && menuItems.length > 0 ? menuItems : MENU_ITEMS;
 
-  // The 6 Main Requested Categories + "Hamsı"
+  // The 9 Main Requested Categories + "Hamsı"
   const categories: { id: CategoryId; name: string; icon: string }[] = [
     { id: 'all', name: 'Hamsı', icon: '' },
-    { id: 'pizza', name: 'Pizzalar', icon: '' },
-    { id: 'fastfood', name: 'Fast Food & Burger', icon: '' },
-    { id: 'pide', name: 'Pidelər', icon: '' },
-    { id: 'calzone', name: 'Calizone', icon: '' },
-    { id: 'doner', name: 'Dönərlər', icon: '' },
-    { id: 'icikil', name: 'Soyuq İçkilər', icon: '' },
+    { id: 'fastfood', name: 'FAST FOOD', icon: '' },
+    { id: 'pizza', name: 'PİZZA', icon: '' },
+    { id: 'kabablar', name: 'KABABLAR', icon: '' },
+    { id: 'isti_yemekler', name: 'İSTİ YEMƏKLƏR', icon: '' },
+    { id: 'icikil', name: 'SOYUQ İÇKİLƏR', icon: '' },
+    { id: 'sorbalar', name: 'ŞORBALAR', icon: '' },
+    { id: 'salat', name: 'SALAT', icon: '' },
+    { id: 'cig_kofte', name: 'ÇİY KÖFTƏ', icon: '' },
+    { id: 'qelyanaltilar', name: 'QƏLYANALTILAR', icon: '' },
+    { id: 'desertler', name: 'DESERTLƏR', icon: '' },
+    { id: 'kofe', name: 'KOFE', icon: '' },
+    { id: 'kokteyl', name: 'KOKTEYL', icon: '' },
   ];
 
   // Resolve Category Image & Description
@@ -125,35 +165,7 @@ export const MenuSection: React.FC<MenuSectionProps> = ({
       if (activeCategory === 'all') {
         matchesCategory = true;
       } else if (activeCategory === 'icikil') {
-        matchesCategory =
-          item.category === 'icikil' ||
-          item.category === 'ickiler' ||
-          item.name.toLowerCase().includes('kola') ||
-          item.name.toLowerCase().includes('ayran') ||
-          item.name.toLowerCase().includes('limonad') ||
-          item.name.toLowerCase().includes('su') ||
-          item.name.toLowerCase().includes('fanta') ||
-          item.name.toLowerCase().includes('sprite');
-      } else if (activeCategory === 'pide') {
-        matchesCategory =
-          item.category === 'pide' ||
-          item.category === 'isti_yemekler' ||
-          item.name.toLowerCase().includes('pide') ||
-          item.name.toLowerCase().includes('lahmacun') ||
-          item.description.toLowerCase().includes('pide');
-      } else if (activeCategory === 'calzone') {
-        matchesCategory =
-          item.category === 'calzone' ||
-          item.name.toLowerCase().includes('calzone') ||
-          item.name.toLowerCase().includes('calizone') ||
-          item.description.toLowerCase().includes('calzone');
-      } else if (activeCategory === 'doner') {
-        matchesCategory =
-          item.category === 'doner' ||
-          item.name.toLowerCase().includes('dönər') ||
-          item.name.toLowerCase().includes('doner') ||
-          item.name.toLowerCase().includes('şavurma') ||
-          item.name.toLowerCase().includes('iskəndər');
+        matchesCategory = item.category === 'icikil' || item.category === 'ickiler';
       } else {
         matchesCategory = item.category === activeCategory;
       }
@@ -215,9 +227,6 @@ export const MenuSection: React.FC<MenuSectionProps> = ({
 
             {/* Banner Text Over Image at Bottom */}
             <div className="relative z-10 space-y-1.5 mt-auto pt-4">
-              <div className="inline-block px-2.5 py-0.5 sm:px-3 sm:py-1 rounded-full bg-white text-black font-extrabold text-[9px] sm:text-[11px] tracking-wider uppercase shadow-md">
-                XÜSUSİ BÖLMƏ TƏAMLARI
-              </div>
               <h1 className="text-2xl sm:text-3xl md:text-4xl font-black text-white tracking-tight uppercase drop-shadow-lg">
                 {titleText.replace(/[\u{1F300}-\u{1F9FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}\u{1F600}-\u{1F64F}\u{1F680}-\u{1F6FF}\u{1F1E0}-\u{1F1FF}]/gu, '').trim()}
               </h1>
@@ -236,13 +245,19 @@ export const MenuSection: React.FC<MenuSectionProps> = ({
               type="text"
               placeholder={`${titleText.replace(/[\u{1F300}-\u{1F9FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}\u{1F600}-\u{1F64F}\u{1F680}-\u{1F6FF}\u{1F1E0}-\u{1F1FF}]/gu, '').trim()} daxilində axtar...`}
               value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
+              onChange={(e) => {
+                setSearchQuery(e.target.value);
+                if (onSearchQueryChange) onSearchQueryChange(e.target.value);
+              }}
               className="w-full pl-10 pr-10 py-2.5 sm:py-3 rounded-xl bg-zinc-900/90 border border-zinc-800 text-white placeholder-zinc-400 text-xs sm:text-sm focus:outline-none focus:border-zinc-600 transition-all shadow-inner"
             />
             {searchQuery && (
               <button
                 type="button"
-                onClick={() => setSearchQuery('')}
+                onClick={() => {
+                  setSearchQuery('');
+                  if (onSearchQueryChange) onSearchQueryChange('');
+                }}
                 className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-amber-400 hover:text-white cursor-pointer"
               >
                 Təmizlə

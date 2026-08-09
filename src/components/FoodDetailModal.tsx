@@ -31,6 +31,8 @@ export const FoodDetailModal: React.FC<FoodDetailModalProps> = ({
     sorbalar: 'İSTİ ŞORBA',
     qelyanaltilar: 'QƏLYANALTI',
     desertler: 'LƏZZƏTLİ DESERT',
+    kofe: 'KOFE',
+    kokteyl: 'SƏRİNLƏŞDİRİCİ KOKTEYL',
     ickiler: 'SƏRİNLƏŞDİRİCİ İÇKİ'
   };
 
@@ -84,7 +86,7 @@ export const FoodDetailModal: React.FC<FoodDetailModalProps> = ({
             {/* Badges */}
             <div className="flex flex-wrap items-center gap-2">
               <span className="px-3 py-1 rounded-lg bg-amber-500 text-black text-[11px] font-black uppercase tracking-wider shadow">
-                {categoryNameMap[item.category] || 'ALOV LEZZƏTİ'}
+                {categoryNameMap[item.category] || 'NİRA LƏZZƏTİ'}
               </span>
               
               {item.isPopular && (

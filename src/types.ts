@@ -13,7 +13,9 @@ export type CategoryId =
   | 'sorbalar' 
   | 'qelyanaltilar' 
   | 'desertler' 
-  | 'ickiler';
+  | 'ickiler'
+  | 'kofe'
+  | 'kokteyl';
 
 export interface MenuItem {
   id: string;

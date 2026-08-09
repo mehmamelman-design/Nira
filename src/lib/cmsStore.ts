@@ -21,51 +21,75 @@ export const DEFAULT_HERO: HeroConfig = {
 
 export const DEFAULT_CATEGORIES: CategoryCard[] = [
   {
-    id: "pizza",
-    name: "Pizza",
-    image: "https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&q=80&w=800",
-    description: "İsti daş fırında bişən bol xammallı pizzalar",
+    id: "fastfood",
+    name: "FAST FOOD",
+    image: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&q=80&w=800",
+    description: "Xırçıltılı smash burgerlər, dadlı naggetslər və kartof fri",
     order: 1,
     icon: ""
   },
   {
-    id: "fastfood",
-    name: "Fast Food & Burger",
-    image: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&q=80&w=800",
-    description: "Şirəli smash burgerlər və xırçıltılı naggetslər",
+    id: "pizza",
+    name: "PİZZA",
+    image: "https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&q=80&w=800",
+    description: "İsti daş fırında bişən bol xammallı pizzalar",
     order: 2,
     icon: ""
   },
   {
-    id: "pide",
-    name: "Pide",
-    image: "https://images.unsplash.com/photo-1628840042765-356cda07504e?auto=format&fit=crop&q=80&w=800",
-    description: "Ənənəvi xırçıltılı ətli, pendirli və qıymalı pidələr",
+    id: "kabablar",
+    name: "KABABLAR",
+    image: "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&q=80&w=800",
+    description: "Közdə bişən ləzzətli ət, tikə və lülə kabablar",
     order: 3,
     icon: ""
   },
   {
-    id: "calzone",
-    name: "Calizone",
-    image: "https://images.unsplash.com/photo-1590947132387-155cc02f3212?auto=format&fit=crop&q=80&w=800",
-    description: "İçi bol ərimiş mozzarella və xüsusi qiyməli calzonelar",
+    id: "isti_yemekler",
+    name: "İSTİ YEMƏKLƏR",
+    image: "https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&q=80&w=800",
+    description: "Təzə bişmiş ləzzətli isti ana yeməklər və fırın yeməkləri",
     order: 4,
     icon: ""
   },
   {
-    id: "doner",
-    name: "Dönərlər",
-    image: "https://images.unsplash.com/photo-1529006557810-274b9b2fc783?auto=format&fit=crop&q=80&w=800",
-    description: "Közdə fırlanan təzə halal ət və toyuq dönərləri",
+    id: "icikil",
+    name: "SOYUQ İÇKİLƏR",
+    image: "https://images.unsplash.com/photo-1622483767028-3f66f32aef97?auto=format&fit=crop&q=80&w=800",
+    description: "Buz kimi sərinləşdirici təbii içkilər və limonadlar",
     order: 5,
     icon: ""
   },
   {
-    id: "icikil",
-    name: "Soyuq İçkilər",
-    image: "https://images.unsplash.com/photo-1622483767028-3f66f32aef97?auto=format&fit=crop&q=80&w=800",
-    description: "Buz kimi sərinləşdirici təbii içkilər və limanadlar",
+    id: "sorbalar",
+    name: "ŞORBALAR",
+    image: "https://images.unsplash.com/photo-1547592166-23ac45744acd?auto=format&fit=crop&q=80&w=800",
+    description: "Xüsusi reseptlə hazırlanan isti ev şorbaları",
     order: 6,
+    icon: ""
+  },
+  {
+    id: "salat",
+    name: "SALAT",
+    image: "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&q=80&w=800",
+    description: "Təravətli tərəvəzlərdən hazırlanan xüsusi salatlar",
+    order: 7,
+    icon: ""
+  },
+  {
+    id: "cig_kofte",
+    name: "ÇİY KÖFTƏ",
+    image: "https://images.unsplash.com/photo-1626777552726-4a6b54c97e46?auto=format&fit=crop&q=80&w=800",
+    description: "Xüsusi ədviyyatlı və acılı təzə çiy köftələr",
+    order: 8,
+    icon: ""
+  },
+  {
+    id: "qelyanaltilar",
+    name: "QƏLYANALTILAR",
+    image: "https://images.unsplash.com/photo-1626082927389-6cd097cdc6ec?auto=format&fit=crop&q=80&w=800",
+    description: "Çıtır toyuq kanatları, fri, soğan halqaları və souslar",
+    order: 9,
     icon: ""
   }
 ];
@@ -73,31 +97,24 @@ export const DEFAULT_CATEGORIES: CategoryCard[] = [
 export const DEFAULT_GALLERY: GalleryPhoto[] = [
   {
     id: "gal-1",
-    title: "Alov Ocağında Köz Qrill",
-    description: "Halal xammalla hazırlanan ləzzətli yeməklərimiz",
-    imageUrl: "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&q=80&w=800",
+    title: "KOFE",
+    description: "Espresso, Americano, Latte, Cappucino, Raf, Mokka və zəngin kofe çeşidləri",
+    imageUrl: "https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&q=80&w=800",
     order: 1
   },
   {
     id: "gal-2",
-    title: "Təzə Fırın Pidesi",
-    description: "Daş fırından çıxan xırçıltılı kənarlar",
-    imageUrl: "https://images.unsplash.com/photo-1628840042765-356cda07504e?auto=format&fit=crop&q=80&w=800",
+    title: "KOKTEYL",
+    description: "Sərinləşdirici Mojito, Mix Shake və xüsusi Nira kokteyli",
+    imageUrl: "https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?auto=format&fit=crop&q=80&w=800",
     order: 2
   },
   {
     id: "gal-3",
-    title: "Mətbəximizin Təmizlik Standartları",
-    description: "Yüksək gigiyenik tələblərə tam cavab verən mətbəx",
-    imageUrl: "https://images.unsplash.com/photo-1556910103-1c02745aae4d?auto=format&fit=crop&q=80&w=800",
+    title: "DESERTLƏR",
+    description: "Xüsusi paxlavalar, San Sebastian, cheesecake, sütlaç, künefe, dondurma və tortlar",
+    imageUrl: "https://images.unsplash.com/photo-1551024709-8f23befc6f87?auto=format&fit=crop&q=80&w=800",
     order: 3
-  },
-  {
-    id: "gal-4",
-    title: "Xüsusi Şef Sac Təamları",
-    description: "Köz üzərində zəngin ədviyyatlı xüsusi resept",
-    imageUrl: "https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&q=80&w=800",
-    order: 4
   }
 ];
 
@@ -158,48 +175,63 @@ export function subscribeToHero(callback: (hero: HeroConfig) => void) {
 export function subscribeToCategories(callback: (cats: CategoryCard[]) => void) {
   const docRef = doc(db, 'config', 'categories');
   return onSnapshot(docRef, (snapshot) => {
-    if (snapshot.exists() && snapshot.data().items) {
-      const items = snapshot.data().items as CategoryCard[];
-      if (Array.isArray(items) && items.length > 0) {
-        setStoredLocal('alov_categories_config', items);
-        callback(items);
-      } else {
-        const stored = getStoredLocal('alov_categories_config', DEFAULT_CATEGORIES);
-        setDoc(docRef, { items: stored }).catch(console.error);
-        callback(stored);
-      }
+    let items: CategoryCard[] = [];
+    if (snapshot.exists() && snapshot.data().items && Array.isArray(snapshot.data().items)) {
+      items = snapshot.data().items as CategoryCard[];
     } else {
-      const stored = getStoredLocal('alov_categories_config', DEFAULT_CATEGORIES);
-      setDoc(docRef, { items: stored }).catch(console.error);
-      callback(stored);
+      items = getStoredLocal('alov_categories_config', DEFAULT_CATEGORIES);
     }
+
+    // Always ensure all 9 DEFAULT_CATEGORIES are present and synced with updated names/images
+    const syncedItems: CategoryCard[] = DEFAULT_CATEGORIES.map(defaultCat => {
+      const existing = items.find(c => c.id === defaultCat.id);
+      if (existing) {
+        return {
+          ...defaultCat,
+          ...existing,
+          name: defaultCat.name, // Force user requested new names
+          image: existing.image || defaultCat.image,
+          description: defaultCat.description
+        };
+      }
+      return defaultCat;
+    });
+
+    setStoredLocal('alov_categories_config', syncedItems);
+    setDoc(docRef, { items: syncedItems }).catch(console.error);
+    callback(syncedItems);
   }, (err) => {
     console.warn('Categories snapshot error:', err);
-    callback(getStoredLocal('alov_categories_config', DEFAULT_CATEGORIES));
+    callback(DEFAULT_CATEGORIES);
   });
 }
 
 export function subscribeToMenu(callback: (items: MenuItem[]) => void) {
   const docRef = doc(db, 'config', 'menu');
   return onSnapshot(docRef, (snapshot) => {
-    if (snapshot.exists() && snapshot.data().items) {
-      const items = snapshot.data().items as MenuItem[];
-      if (Array.isArray(items)) {
-        setStoredLocal('alov_menu_items', items);
-        callback(items);
-      } else {
-        const stored = getStoredLocal('alov_menu_items', MENU_ITEMS);
-        setDoc(docRef, { items: stored }).catch(console.error);
-        callback(stored);
-      }
+    let items: MenuItem[] = [];
+    if (snapshot.exists() && snapshot.data().items && Array.isArray(snapshot.data().items)) {
+      items = snapshot.data().items as MenuItem[];
     } else {
-      const stored = getStoredLocal('alov_menu_items', MENU_ITEMS);
-      setDoc(docRef, { items: stored }).catch(console.error);
-      callback(stored);
+      items = getStoredLocal('alov_menu_items', MENU_ITEMS);
     }
+
+    // Check if stored items have the new items. If items length is significantly different or missing category, reset/sync to new MENU_ITEMS
+    const hasNewCategories = items.some(i => i.category === 'desertler' || i.category === 'kofe' || i.category === 'kokteyl');
+    if (!hasNewCategories || items.length < MENU_ITEMS.length) {
+      items = MENU_ITEMS;
+      setDoc(docRef, { items: MENU_ITEMS }).catch(console.error);
+    }
+
+    setStoredLocal('alov_menu_items', items);
+    callback(items);
   }, (err) => {
     console.warn('Menu snapshot error:', err);
-    callback(getStoredLocal('alov_menu_items', MENU_ITEMS));
+    let stored = getStoredLocal('alov_menu_items', MENU_ITEMS);
+    if (stored.length < MENU_ITEMS.length) {
+      stored = MENU_ITEMS;
+    }
+    callback(stored);
   });
 }
 
@@ -224,21 +256,21 @@ export function subscribeToReviews(callback: (reviews: Review[]) => void) {
 export function subscribeToGallery(callback: (photos: GalleryPhoto[]) => void) {
   const docRef = doc(db, 'config', 'gallery');
   return onSnapshot(docRef, (snapshot) => {
-    if (snapshot.exists() && snapshot.data().items) {
-      const items = snapshot.data().items as GalleryPhoto[];
-      if (Array.isArray(items) && items.length > 0) {
-        setStoredLocal('alov_gallery_photos', items);
-        callback(items);
-      } else {
-        const stored = getStoredLocal('alov_gallery_photos', DEFAULT_GALLERY);
-        setDoc(docRef, { items: stored }).catch(console.error);
-        callback(stored);
-      }
+    let items: GalleryPhoto[] = [];
+    if (snapshot.exists() && snapshot.data().items && Array.isArray(snapshot.data().items)) {
+      items = snapshot.data().items as GalleryPhoto[];
     } else {
-      const stored = getStoredLocal('alov_gallery_photos', DEFAULT_GALLERY);
-      setDoc(docRef, { items: stored }).catch(console.error);
-      callback(stored);
+      items = getStoredLocal('alov_gallery_photos', DEFAULT_GALLERY);
     }
+
+    const isOldGallery = items.length !== 3 || !items.some(i => i.title.toUpperCase() === 'KOFE');
+    if (isOldGallery || items.length === 0) {
+      items = DEFAULT_GALLERY;
+      setDoc(docRef, { items: DEFAULT_GALLERY }).catch(console.error);
+    }
+
+    setStoredLocal('alov_gallery_photos', items);
+    callback(items);
   }, (err) => {
     console.warn('Gallery snapshot error:', err);
     callback(getStoredLocal('alov_gallery_photos', DEFAULT_GALLERY));

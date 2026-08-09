@@ -32,6 +32,7 @@ import {
 export default function App() {
   const [currentView, setCurrentView] = useState<'home' | 'menu'>('home');
   const [selectedMenuCategory, setSelectedMenuCategory] = useState<CategoryId>('all');
+  const [searchQuery, setSearchQuery] = useState<string>('');
   const [isSetView, setIsSetView] = useState<boolean>(false);
   const [activeSetTitle, setActiveSetTitle] = useState<string | null>(null);
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
@@ -95,6 +96,17 @@ export default function App() {
     setCurrentView('menu');
     setActiveSection('menu');
     window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const handleSearch = (query: string) => {
+    setSearchQuery(query);
+    if (query.trim() && currentView !== 'menu') {
+      setSelectedMenuCategory('all');
+      setIsSetView(false);
+      setActiveSetTitle(null);
+      setCurrentView('menu');
+      setActiveSection('menu');
+    }
   };
 
   const handleOpenMenuWithSet = (setObj: { id: string; title: string; categoryId: CategoryId; description: string; imageUrl: string }) => {
@@ -212,6 +224,8 @@ export default function App() {
               galleryPhotos={galleryPhotos}
               onSelectCategory={(catId) => handleOpenMenuWithCategory(catId)}
               onSelectSet={handleOpenMenuWithSet}
+              onSearch={handleSearch}
+              searchQuery={searchQuery}
             />
 
             {/* 3. Customer Reviews Section */}
@@ -229,6 +243,8 @@ export default function App() {
             menuItems={menuItems}
             categoryCards={categories}
             selectedCategory={selectedMenuCategory}
+            initialSearchQuery={searchQuery}
+            onSearchQueryChange={setSearchQuery}
             onAddToCart={handleAddToCart}
             onCategoryChange={(cat) => {
               setSelectedMenuCategory(cat);
@@ -259,7 +275,10 @@ export default function App() {
       </main>
 
       {/* Footer */}
-      <Footer onNavigate={scrollToSection} />
+      <Footer
+        onNavigate={scrollToSection}
+        onSelectCategory={handleOpenMenuWithCategory}
+      />
 
       {/* Admin Quick Edit Modal (Logo, Food Items & Hero Cloudinary Upload Modal) */}
       <AdminEditModal

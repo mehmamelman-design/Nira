@@ -17,7 +17,7 @@ export const Hero: React.FC<HeroProps> = ({
   onOpenReviews,
   onOpenAiAssistant,
   isAdmin,
-  onEditHero
+  onEditHero,
 }) => {
   const title = heroConfig?.title || "Qaynar İsti Ocaqdan Qapınıza Çatdırılan Ən Ləzzətli Fast Food";
   const subtitle = heroConfig?.subtitle || "Təzə kəsilmiş halal ət, isti ocağın əvəzolunmaz qoxusu və xüsusi reseptlə hazırlanan çıtır qızarmış toyuqlar. Sifarişiniz xüsusi termo-qutularda 30 dəqiqəyə qaynar halda çatdırılır!";

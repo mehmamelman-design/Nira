@@ -250,12 +250,18 @@ export const AdminEditModal: React.FC<AdminEditModalProps> = ({
                         onChange={(e) => setCategory(e.target.value as CategoryId)}
                         className="w-full px-3.5 py-2.5 rounded-xl bg-black/60 border border-zinc-700 text-white font-bold text-sm focus:border-amber-400 focus:outline-none"
                       >
-                        <option value="pizza">Pizza</option>
-                        <option value="fastfood">Fast Food & Burger</option>
-                        <option value="pide">Pide</option>
-                        <option value="calzone">Calizone</option>
-                        <option value="doner">Dönərlər</option>
-                        <option value="icikil">Soyuq İçkilər</option>
+                        <option value="fastfood">FAST FOOD</option>
+                        <option value="pizza">PİZZA</option>
+                        <option value="kabablar">KABABLAR</option>
+                        <option value="isti_yemekler">İSTİ YEMƏKLƏR</option>
+                        <option value="icikil">SOYUQ İÇKİLƏR</option>
+                        <option value="sorbalar">ŞORBALAR</option>
+                        <option value="salat">SALAT</option>
+                        <option value="cig_kofte">ÇİY KÖFTƏ</option>
+                        <option value="qelyanaltilar">QƏLYANALTILAR</option>
+                        <option value="desertler">DESERTLƏR</option>
+                        <option value="kofe">KOFE</option>
+                        <option value="kokteyl">KOKTEYL</option>
                       </select>
                     </div>
                   </div>

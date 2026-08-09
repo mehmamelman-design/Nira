@@ -143,11 +143,11 @@ export const Navbar: React.FC<NavbarProps> = ({
               
               {/* Phone call quick button */}
               <a
-                href="tel:+994501234567"
+                href="tel:+994516359474"
                 className="hidden sm:flex items-center gap-2 px-3.5 py-2 rounded-xl bg-emerald-950 border border-emerald-800 text-white text-xs font-semibold hover:border-white transition-all"
               >
                 <Phone className="w-3.5 h-3.5 text-white" />
-                <span>+994 50 123 45 67</span>
+                <span>(051) 635 94 74</span>
               </a>
 
               {/* Profile / Registration Button */}
@@ -213,14 +213,14 @@ export const Navbar: React.FC<NavbarProps> = ({
 
             <div className="pt-2 border-t border-emerald-900 flex flex-col gap-2">
               <a
-                href="tel:+994501234567"
+                href="tel:+994516359474"
                 className="flex items-center justify-center gap-2 w-full py-3 rounded-xl bg-emerald-950 border border-emerald-800 text-white text-sm font-semibold"
               >
                 <Phone className="w-4 h-4 text-white" />
-                <span>Zəng Et: +994 50 123 45 67</span>
+                <span>Zəng Et: (051) 635 94 74</span>
               </a>
               <a
-                href="https://wa.me/994501234567?text=Salam!%20Sifaris%20vermek%20isteyirem"
+                href="https://wa.me/994516359474?text=Salam!%20Sifaris%20vermek%20isteyirem"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center justify-center gap-2 w-full py-3 rounded-xl bg-emerald-700 text-white text-sm font-semibold"

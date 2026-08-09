@@ -64,8 +64,8 @@ export const BRANCHES: Branch[] = [
     name: 'Mərkəz Filialı',
     address: 'Bakı şəh., Nəsimi r., Nizami küç. 142 (Fəvvarələr Meydanı yaxınlığı)',
     workingHours: 'Hər gün: 10:00 - 02:00',
-    phone: '+994 50 123 45 67',
-    whatsapp: '994501234567',
+    phone: '(051) 635 94 74',
+    whatsapp: '994516359474',
     mapEmbedUrl: 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3039.431284521453!2d49.83981881539268!3d40.37719087936991!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x40307d17300f2835%3A0xb3283256037a346!2sNizami%20St%2C%20Baku!5e0!2m2!1sen!2saz!4v1689000000000!5m2!1sen!2saz',
     googleMapsUrl: 'https://maps.google.com/?q=Nizami+Street+Baku',
     isMain: true

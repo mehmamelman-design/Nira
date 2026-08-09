@@ -1,12 +1,14 @@
 import React from 'react';
 import { CategoryCard, GalleryPhoto, CategoryId } from '../types';
-import { ChevronRight } from 'lucide-react';
+import { ChevronRight, Search } from 'lucide-react';
 
 interface CategoriesAndGallerySectionProps {
   categories: CategoryCard[];
   galleryPhotos: GalleryPhoto[];
   onSelectCategory?: (categoryId: CategoryId) => void;
   onSelectSet?: (setObj: { id: string; title: string; categoryId: CategoryId; description: string; imageUrl: string }) => void;
+  onSearch?: (query: string) => void;
+  searchQuery?: string;
 }
 
 export const CategoriesAndGallerySection: React.FC<CategoriesAndGallerySectionProps> = ({
@@ -14,6 +16,8 @@ export const CategoriesAndGallerySection: React.FC<CategoriesAndGallerySectionPr
   galleryPhotos,
   onSelectCategory,
   onSelectSet,
+  onSearch,
+  searchQuery,
 }) => {
   const setsData = [
     {
@@ -49,6 +53,33 @@ export const CategoriesAndGallerySection: React.FC<CategoriesAndGallerySectionPr
   return (
     <section id="categories" className="py-10 sm:py-14 bg-[#082017] border-b border-emerald-900/80">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8 sm:space-y-10">
+
+        {/* Search Bar - Positioned directly above Setlərimiz with Yellow Border & Search Logo */}
+        <div className="w-full max-w-xl">
+          <div className="relative w-full">
+            <Search className="w-5 h-5 absolute left-4 top-1/2 -translate-y-1/2 text-amber-400 stroke-[2.5]" />
+            <input
+              type="text"
+              placeholder="Menyuda istədiyiniz təamı axtarın (məsələn: Burger, Pitsa, Dönər)..."
+              value={searchQuery || ''}
+              onChange={(e) => onSearch && onSearch(e.target.value)}
+              className="w-full pl-11 pr-20 py-3 sm:py-3.5 rounded-2xl bg-black/90 border-2 border-amber-400 focus:border-amber-300 hover:border-yellow-300 text-white placeholder-zinc-400 text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-amber-400/40 transition-all shadow-xl font-medium"
+            />
+            {searchQuery ? (
+              <button
+                type="button"
+                onClick={() => onSearch && onSearch('')}
+                className="absolute right-3.5 top-1/2 -translate-y-1/2 px-2.5 py-1 rounded-lg bg-amber-400/20 text-amber-400 hover:text-white hover:bg-amber-400/40 text-xs font-bold transition-all"
+              >
+                Təmizlə
+              </button>
+            ) : (
+              <span className="absolute right-3.5 top-1/2 -translate-y-1/2 text-xs font-bold text-amber-400 bg-amber-500/10 px-2.5 py-1 rounded-md border border-amber-500/30 pointer-events-none">
+                Axtar
+              </span>
+            )}
+          </div>
+        </div>
 
         {/* 0. SETLƏRİMİZ (4 Combo Sets Side-By-Side) */}
         <div className="space-y-6">
@@ -86,7 +117,7 @@ export const CategoriesAndGallerySection: React.FC<CategoriesAndGallerySectionPr
                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-60 group-hover:opacity-40 transition-opacity" />
 
                   {/* Action Indicator */}
-                  <div className="absolute bottom-2 right-2 z-10 flex items-center gap-1 px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-lg bg-amber-400 text-black font-extrabold text-[10px] sm:text-[11px] shadow-md group-hover:bg-amber-300 transition-colors">
+                  <div className="absolute bottom-2 right-2 z-10 flex items-center gap-1 px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-lg bg-black text-white border border-amber-400 font-extrabold text-[10px] sm:text-[11px] shadow-md group-hover:bg-amber-400 group-hover:text-black transition-colors">
                     <span>Baxın</span>
                     <ChevronRight className="w-3 h-3 sm:w-3.5 sm:h-3.5 stroke-[3]" />
                   </div>
@@ -103,7 +134,7 @@ export const CategoriesAndGallerySection: React.FC<CategoriesAndGallerySectionPr
           </div>
         </div>
         
-        {/* 1. 6 MAIN FOOD CATEGORY CARDS */}
+        {/* 1. 9 MAIN FOOD CATEGORY CARDS */}
         <div className="space-y-6">
           <div className="space-y-1 text-left">
             <h2 className="text-lg sm:text-2xl md:text-3xl font-black text-white tracking-tight whitespace-nowrap">
@@ -132,7 +163,7 @@ export const CategoriesAndGallerySection: React.FC<CategoriesAndGallerySectionPr
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-70 group-hover:opacity-50 transition-opacity" />
 
                   {/* Badge & Action Indicator */}
-                  <div className="absolute bottom-2.5 right-2.5 z-10 flex items-center gap-1 px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-lg bg-amber-400 text-black font-extrabold text-[10px] sm:text-xs shadow-md group-hover:bg-amber-300 transition-colors">
+                  <div className="absolute bottom-2.5 right-2.5 z-10 flex items-center gap-1 px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-lg bg-black text-white border border-amber-400 font-extrabold text-[10px] sm:text-xs shadow-md group-hover:bg-amber-400 group-hover:text-black transition-colors">
                     <span>Baxın</span>
                     <ChevronRight className="w-3 h-3 sm:w-3.5 sm:h-3.5 stroke-[3]" />
                   </div>
@@ -156,22 +187,25 @@ export const CategoriesAndGallerySection: React.FC<CategoriesAndGallerySectionPr
           </div>
         </div>
 
-        {/* 2. SIRRIN TƏAMLARIMIZ / GALLERY */}
+        {/* 2. ŞİRİN TƏAMLARIMIZ / GALLERY */}
         <div className="space-y-6 pt-6 border-t border-emerald-900/80">
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
             <div>
               <h2 className="text-2xl sm:text-3xl font-black text-white tracking-tight">
-                Sirrin <span className="text-emerald-300">təamlarımız</span>
+                Şirin <span className="text-emerald-300">təamlarımız</span>
               </h2>
             </div>
           </div>
 
-          <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5">
-            {galleryPhotos.map((photo) => {
-              const targetCategory: CategoryId = photo.title.toLowerCase().includes('pide')
-                ? 'pide'
-                : photo.title.toLowerCase().includes('qrill') || photo.title.toLowerCase().includes('sac')
-                ? 'fastfood'
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-5">
+            {galleryPhotos.slice(0, 3).map((photo) => {
+              const titleLower = photo.title.toLowerCase();
+              const targetCategory: CategoryId = titleLower.includes('kofe')
+                ? 'kofe'
+                : titleLower.includes('kokteyl')
+                ? 'kokteyl'
+                : titleLower.includes('desert')
+                ? 'desertler'
                 : 'all';
 
               return (
@@ -191,7 +225,7 @@ export const CategoriesAndGallerySection: React.FC<CategoriesAndGallerySectionPr
                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-60 group-hover:opacity-40 transition-opacity" />
 
                     {/* Action Indicator */}
-                    <div className="absolute bottom-2.5 right-2.5 z-10 flex items-center gap-1 px-2.5 py-1 rounded-lg bg-amber-400 text-black font-extrabold text-[11px] shadow-md group-hover:bg-amber-300 transition-colors">
+                    <div className="absolute bottom-2.5 right-2.5 z-10 flex items-center gap-1 px-2.5 py-1 rounded-lg bg-black text-white border border-amber-400 font-extrabold text-[11px] shadow-md group-hover:bg-amber-400 group-hover:text-black transition-colors">
                       <span>Menyunu Aç</span>
                       <ChevronRight className="w-3.5 h-3.5 stroke-[3]" />
                     </div>
