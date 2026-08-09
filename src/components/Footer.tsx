@@ -159,7 +159,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate, onSelectCategory }) 
             </div>
 
             <div className="pt-2 text-xs text-emerald-200/90 space-y-1">
-              <p>Nizami küç. 142 (Fəvvarələr Meydanı)</p>
+              <p>Heydər Əliyev prospekti 48a (Neptun Supermarket-1 qarşısı)</p>
               <p className="font-bold text-white">(051) 635 94 74</p>
             </div>
 

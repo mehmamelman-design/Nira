@@ -11,34 +11,12 @@ export const ContactSection: React.FC = () => {
         
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto space-y-4 mb-14">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-900/80 border border-emerald-700/80 text-white text-xs font-bold uppercase tracking-widest">
-            <MapPin className="w-4 h-4 text-white" />
-            <span>Əlaqə Və Ünvanlar</span>
-          </div>
           <h2 className="text-3xl sm:text-4xl font-black text-white tracking-tight">
-            Bizim Filiallarımız Və <span className="text-emerald-300">Xəritədə Yerləşməsi</span>
+            Bizim Filialımız Və <span className="text-emerald-300">Xəritədə Yerləşməsi</span>
           </h2>
           <p className="text-emerald-200/80 text-sm sm:text-base">
             Qonağımız olun və ya bircə zənglə/WhatsApp mesajı ilə bəyəndiyiniz yeməyi ünvana sifariş edin.
           </p>
-        </div>
-
-        {/* Branch Selector Tabs */}
-        <div className="flex justify-center gap-3 mb-8">
-          {BRANCHES.map((branch) => (
-            <button
-              key={branch.id}
-              onClick={() => setSelectedBranch(branch)}
-              className={`px-5 py-3 rounded-2xl text-xs sm:text-sm font-bold transition-all duration-200 flex items-center gap-2 cursor-pointer ${
-                selectedBranch.id === branch.id
-                  ? 'bg-white text-black shadow-lg scale-105'
-                  : 'bg-emerald-900/70 border border-emerald-800 text-emerald-100 hover:text-white'
-              }`}
-            >
-              <Flame className={`w-4 h-4 ${selectedBranch.id === branch.id ? 'fill-black text-black' : 'text-white'}`} />
-              <span>{branch.name}</span>
-            </button>
-          ))}
         </div>
 
         {/* Branch Details & Interactive Buttons + Embedded Map Grid */}

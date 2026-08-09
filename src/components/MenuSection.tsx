@@ -409,16 +409,11 @@ export const MenuSection: React.FC<MenuSectionProps> = ({
                         {item.name}
                       </h3>
 
-                      {/* Rating, Prep Time & Calories */}
-                      <div className="flex items-center gap-1.5 text-[10px] sm:text-xs font-semibold text-zinc-400 flex-wrap">
-                        <span className="flex items-center gap-0.5 text-amber-400 font-bold">
-                          <Star className="w-3 h-3 fill-amber-400" />
+                      {/* Rating */}
+                      <div className="flex items-center gap-1.5 text-[10px] sm:text-xs font-semibold flex-wrap">
+                        <span className="flex items-center gap-0.5 text-white font-bold">
+                          <Star className="w-3 h-3 fill-white text-white" />
                           <span>{item.rating || 4.9}</span>
-                        </span>
-                        <span className="text-zinc-700">•</span>
-                        <span className="flex items-center gap-0.5 text-zinc-300">
-                          <Clock className="w-3 h-3 text-emerald-400" />
-                          <span>{item.prepTime || '12 dəq'}</span>
                         </span>
                       </div>
 
