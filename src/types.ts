@@ -17,6 +17,11 @@ export type CategoryId =
   | 'kofe'
   | 'kokteyl';
 
+export interface DrinkVariant {
+  name: string;
+  price: number;
+}
+
 export interface MenuItem {
   id: string;
   name: string;
@@ -33,6 +38,7 @@ export interface MenuItem {
   rating?: number;
   calories?: string;
   options?: string[];
+  variants?: DrinkVariant[];
 }
 
 export interface Review {
@@ -60,6 +66,8 @@ export interface HeroConfig {
   subtitle: string;
   videoUrl: string;
   imageUrl: string;
+  images?: string[];
+  mobileImages?: string[];
   isVideoEnabled: boolean;
 }
 

@@ -193,14 +193,14 @@ export const MenuSection: React.FC<MenuSectionProps> = ({
   };
 
   return (
-    <div className="min-h-screen bg-[#071710] text-white py-8 sm:py-12 px-4 sm:px-6 lg:px-8 space-y-8 animate-fadeIn">
+    <div className="min-h-screen bg-white text-zinc-900 py-8 sm:py-12 px-4 sm:px-6 lg:px-8 space-y-8 animate-fadeIn">
       <div className="max-w-7xl mx-auto space-y-8">
         
         {/* Top Header & Category Hero Banner */}
         <div className="space-y-4">
           
           {/* Expanded Banner Image Section with Back Button directly inside on Top-Left */}
-          <div className="relative w-full h-52 sm:h-64 md:h-72 overflow-hidden rounded-2xl sm:rounded-3xl shadow-2xl bg-zinc-950 flex flex-col justify-between p-4 sm:p-6 transition-all duration-300">
+          <div className="relative w-full h-52 sm:h-64 md:h-72 overflow-hidden rounded-2xl sm:rounded-3xl shadow-xl bg-zinc-950 flex flex-col justify-between p-4 sm:p-6 transition-all duration-300">
             {/* Background Image of Selected Category */}
             <img
               src={activeCatImage}
@@ -240,7 +240,7 @@ export const MenuSection: React.FC<MenuSectionProps> = ({
 
           {/* Search Box below the Banner Header */}
           <div className="relative w-full max-w-xl">
-            <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-zinc-400" />
+            <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-emerald-700" />
             <input
               type="text"
               placeholder={`${titleText.replace(/[\u{1F300}-\u{1F9FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}\u{1F600}-\u{1F64F}\u{1F680}-\u{1F6FF}\u{1F1E0}-\u{1F1FF}]/gu, '').trim()} daxilində axtar...`}
@@ -249,7 +249,7 @@ export const MenuSection: React.FC<MenuSectionProps> = ({
                 setSearchQuery(e.target.value);
                 if (onSearchQueryChange) onSearchQueryChange(e.target.value);
               }}
-              className="w-full pl-10 pr-10 py-2.5 sm:py-3 rounded-xl bg-zinc-900/90 border border-zinc-800 text-white placeholder-zinc-400 text-xs sm:text-sm focus:outline-none focus:border-zinc-600 transition-all shadow-inner"
+              className="w-full pl-10 pr-10 py-2.5 sm:py-3 rounded-xl bg-white border-2 border-emerald-300 text-zinc-900 placeholder-zinc-500 text-xs sm:text-sm focus:outline-none focus:border-emerald-600 transition-all shadow-sm font-bold"
             />
             {searchQuery && (
               <button
@@ -258,7 +258,7 @@ export const MenuSection: React.FC<MenuSectionProps> = ({
                   setSearchQuery('');
                   if (onSearchQueryChange) onSearchQueryChange('');
                 }}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-amber-400 hover:text-white cursor-pointer"
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-xs font-bold text-emerald-700 hover:text-emerald-900 cursor-pointer"
               >
                 Təmizlə
               </button>
@@ -307,7 +307,7 @@ export const MenuSection: React.FC<MenuSectionProps> = ({
 
         {/* Search Box & Controls Header End */}
 
-        {/* 2. YEMƏK KARTLARI (Food Cards Grid - 2 per row on mobile, scaled down 1.5x) */}
+        {/* 2. YEMƏK KARTLARI (Horizontal Food Cards - Image on left, details on right, 1 per row / list layout) */}
         {filteredItems.length === 0 ? (
           <div className="text-center py-16 bg-zinc-950/80 rounded-3xl border border-zinc-800 space-y-3">
             <p className="text-zinc-400 text-sm font-medium">
@@ -325,7 +325,7 @@ export const MenuSection: React.FC<MenuSectionProps> = ({
             </button>
           </div>
         ) : (
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-2.5 sm:gap-4">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-3.5 sm:gap-4">
             {filteredItems.map((item) => {
               const ingredients = getIngredients(item);
 
@@ -333,136 +333,126 @@ export const MenuSection: React.FC<MenuSectionProps> = ({
                 <div
                   key={item.id}
                   onClick={() => !item.isOutOfStock && onAddToCart(item)}
-                  className="bg-zinc-900/95 border border-zinc-800/90 hover:border-amber-500/60 rounded-2xl overflow-hidden shadow-lg hover:shadow-xl hover:shadow-amber-500/10 transition-all duration-300 group flex flex-col justify-between cursor-pointer"
+                  className="bg-white border border-zinc-200 hover:border-zinc-300 rounded-2xl p-2 sm:p-2.5 shadow-sm hover:shadow-md transition-all duration-300 group flex items-center gap-2.5 sm:gap-3 cursor-pointer relative"
                 >
-                  {/* Top Image Section */}
-                  <div>
-                    <div className="relative h-32 sm:h-40 overflow-hidden bg-zinc-950">
-                      <img
-                        src={item.image}
-                        alt={item.name}
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                        loading="lazy"
-                      />
+                  {/* Left Side: Compact Square Photo Box */}
+                  <div className="relative w-20 h-20 sm:w-28 sm:h-28 md:w-32 md:h-32 rounded-xl overflow-hidden bg-black shrink-0 border border-zinc-200">
+                    <img
+                      src={item.image}
+                      alt={item.name}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                      loading="lazy"
+                    />
 
-                      {/* Gradient Overlay for Readability */}
-                      <div className="absolute inset-0 bg-gradient-to-t from-zinc-950 via-transparent to-black/30" />
-
-                      {/* Badges on Image */}
-                      <div className="absolute top-1.5 left-1.5 flex flex-wrap gap-1 z-10 max-w-[70%]">
-                        {item.isHalal !== false && (
-                          <span className="px-1.5 py-0.5 rounded bg-emerald-600/95 text-white text-[9px] font-black tracking-wider shadow flex items-center gap-0.5">
-                            <ShieldCheck className="w-2.5 h-2.5 text-white" /> Halal
-                          </span>
-                        )}
-
-                        {item.isPopular && (
-                          <span className="px-1.5 py-0.5 rounded bg-amber-500 text-black text-[9px] font-black uppercase tracking-wider shadow flex items-center gap-0.5">
-                            <Sparkles className="w-2.5 h-2.5 fill-black" /> Populyar
-                          </span>
-                        )}
-                      </div>
-
-                      {/* Admin Edit & Delete Buttons */}
-                      {isAdmin && (
-                        <div className="absolute top-1.5 right-1.5 z-20 flex items-center gap-1">
-                          <button
-                            type="button"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              if (onEditMenuItem) onEditMenuItem(item);
-                            }}
-                            className="p-1.5 rounded-lg bg-amber-400 text-black hover:bg-amber-300 shadow-lg font-black transition-transform duration-200 hover:scale-110 cursor-pointer flex items-center justify-center"
-                            title={`"${item.name}" məhsulunu redaktə et`}
-                          >
-                            <Pencil className="w-3.5 h-3.5" />
-                          </button>
-                          <button
-                            type="button"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              setDeletingItem(item);
-                            }}
-                            className="p-1.5 rounded-lg bg-rose-600 text-white hover:bg-rose-500 shadow-lg font-black transition-transform duration-200 hover:scale-110 cursor-pointer flex items-center justify-center"
-                            title={`"${item.name}" məhsulunu sil`}
-                          >
-                            <Trash2 className="w-3.5 h-3.5" />
-                          </button>
-                        </div>
+                    {/* Badges on Image (Halal & Populyar) */}
+                    <div className="absolute top-1 left-1 flex flex-col gap-0.5 z-10 max-w-[90%]">
+                      {item.isHalal !== false && (
+                        <span className="px-1 py-0.2 rounded bg-emerald-700 text-white text-[8px] font-black tracking-wider shadow flex items-center gap-0.5 w-max">
+                          <ShieldCheck className="w-2 h-2 text-white" /> Halal
+                        </span>
                       )}
 
-                      {/* Out of Stock Badge if applicable */}
-                      {item.isOutOfStock && (
-                        <div className="absolute inset-0 bg-black/80 backdrop-blur-xs flex items-center justify-center z-20">
-                          <span className="px-2 py-0.5 rounded-lg bg-red-600 text-white font-black text-[10px] uppercase tracking-wider">
-                            Tükənib
-                          </span>
-                        </div>
+                      {item.isPopular && (
+                        <span className="px-1 py-0.2 rounded bg-amber-400 text-black text-[8px] font-black uppercase tracking-wider shadow flex items-center gap-0.5 w-max">
+                          <Sparkles className="w-2 h-2 fill-black" /> POPULYAR
+                        </span>
                       )}
                     </div>
 
-                    {/* Card Content Body */}
-                    <div className="p-2.5 sm:p-3 space-y-1.5">
-                      
-                      {/* Food Name (White color) */}
-                      <h3 className="text-xs sm:text-sm font-black text-white group-hover:text-amber-400 transition-colors line-clamp-1">
+                    {/* Admin Edit & Delete Buttons over image */}
+                    {isAdmin && (
+                      <div className="absolute bottom-1 left-1 z-20 flex items-center gap-1">
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            if (onEditMenuItem) onEditMenuItem(item);
+                          }}
+                          className="p-1 rounded bg-amber-400 text-black hover:bg-amber-300 shadow font-black cursor-pointer flex items-center justify-center"
+                          title={`"${item.name}" məhsulunu redaktə et`}
+                        >
+                          <Pencil className="w-3 h-3" />
+                        </button>
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setDeletingItem(item);
+                          }}
+                          className="p-1 rounded bg-rose-600 text-white hover:bg-rose-500 shadow font-black cursor-pointer flex items-center justify-center"
+                          title={`"${item.name}" məhsulunu sil`}
+                        >
+                          <Trash2 className="w-3 h-3" />
+                        </button>
+                      </div>
+                    )}
+
+                    {/* Out of Stock Badge if applicable */}
+                    {item.isOutOfStock && (
+                      <div className="absolute inset-0 bg-black/80 backdrop-blur-xs flex items-center justify-center z-20">
+                        <span className="px-1.5 py-0.5 rounded bg-red-600 text-white font-black text-[9px] uppercase tracking-wider">
+                          Tükənib
+                        </span>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Right Side Details Column */}
+                  <div className="flex-1 min-w-0 flex flex-col justify-center space-y-1 py-0.5">
+                    {/* Top Header: Title on Left, Price on Right */}
+                    <div className="flex items-start justify-between gap-1.5">
+                      <h3 className="text-xs sm:text-sm font-black text-emerald-950 uppercase group-hover:text-emerald-700 transition-colors line-clamp-1">
                         {item.name}
                       </h3>
 
-                      {/* Rating */}
-                      <div className="flex items-center gap-1.5 text-[10px] sm:text-xs font-semibold flex-wrap">
-                        <span className="flex items-center gap-0.5 text-white font-bold">
-                          <Star className="w-3 h-3 fill-white text-white" />
-                          <span>{item.rating || 4.9}</span>
-                        </span>
-                      </div>
+                      {!isSetView && (
+                        <div className="text-right shrink-0">
+                          <span className="text-xs sm:text-sm font-black text-emerald-950 tracking-tight whitespace-nowrap">
+                            {item.price.toFixed(2)} ₼
+                          </span>
+                        </div>
+                      )}
+                    </div>
 
-                      {/* Description */}
-                      <p className="text-[10px] sm:text-xs text-zinc-300 font-medium line-clamp-2 leading-tight">
+                    {/* Rating & Ingredient Tags Row */}
+                    <div className="flex items-center gap-1 flex-wrap">
+                      <span className="flex items-center gap-0.5 text-amber-500 font-extrabold text-[10px] sm:text-xs shrink-0">
+                        <Star className="w-3 h-3 fill-amber-400 text-amber-500" />
+                        <span>{item.rating || 4.9}</span>
+                      </span>
+
+                      {ingredients.slice(0, 2).map((ing, idx) => (
+                        <span
+                          key={idx}
+                          className="px-1 py-0.5 rounded bg-emerald-50 border border-emerald-200 text-[8px] sm:text-[9px] text-emerald-900 font-extrabold line-clamp-1"
+                        >
+                          {ing}
+                        </span>
+                      ))}
+                    </div>
+
+                    {/* Description Text & "Əlavə Et" Button side-by-side */}
+                    <div className="flex items-center justify-between gap-1.5 pt-0.5">
+                      <p className="text-[9px] sm:text-[10px] text-zinc-600 font-medium line-clamp-2 leading-tight flex-1 min-w-0">
                         {item.description}
                       </p>
 
-                      {/* Ingredients List */}
-                      <div className="flex flex-wrap gap-0.5 pt-0.5">
-                        {ingredients.slice(0, 3).map((ing, idx) => (
-                          <span
-                            key={idx}
-                            className="px-1.5 py-0.5 rounded bg-zinc-950 text-[9px] text-zinc-400 font-medium"
-                          >
-                            {ing}
-                          </span>
-                        ))}
-                      </div>
-
+                      {!isSetView && (
+                        <button
+                          type="button"
+                          disabled={item.isOutOfStock}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            onAddToCart(item);
+                          }}
+                          className="px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-lg sm:rounded-xl bg-emerald-700 hover:bg-emerald-800 active:scale-95 text-white font-extrabold text-[10px] sm:text-xs flex items-center gap-1 shadow-xs transition-all cursor-pointer disabled:bg-zinc-300 disabled:text-zinc-500 disabled:cursor-not-allowed whitespace-nowrap shrink-0"
+                        >
+                          <ShoppingBag className="w-3 h-3 fill-white/10 shrink-0" />
+                          <span>Əlavə Et</span>
+                        </button>
+                      )}
                     </div>
                   </div>
-
-                  {/* Card Footer: Price & "+ Səbətə əlavə et" Accent Button */}
-                  {!isSetView && (
-                    <div className="p-2.5 sm:p-3 pt-0 space-y-1.5">
-                      <div className="flex items-center justify-between border-t border-zinc-800/80 pt-1.5">
-                        <span className="text-[10px] text-zinc-400 font-medium">Qiymət:</span>
-                        <span className="text-xs sm:text-sm font-black text-amber-400 tracking-tight">
-                          {item.price.toFixed(2)} ₼
-                        </span>
-                      </div>
-
-                      {/* "+ Əlavə Et" Yellow Button */}
-                      <button
-                        type="button"
-                        disabled={item.isOutOfStock}
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          onAddToCart(item);
-                        }}
-                        className="w-full py-1 px-2 rounded-lg bg-amber-400 hover:bg-amber-500 active:scale-[0.98] text-black font-extrabold text-[10px] sm:text-xs transition-all cursor-pointer flex items-center justify-center gap-1 shadow-xs disabled:bg-zinc-700 disabled:text-zinc-500 disabled:cursor-not-allowed whitespace-nowrap"
-                      >
-                        <ShoppingBag className="w-3 h-3 fill-black/10 shrink-0" />
-                        <span>Əlavə Et</span>
-                      </button>
-                    </div>
-                  )}
-
                 </div>
               );
             })}

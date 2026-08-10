@@ -18,6 +18,7 @@ import { auth } from './lib/firebase';
 import { onAuthStateChanged, User as FirebaseUser } from 'firebase/auth';
 import {
   useHeroConfig,
+  useMiddleHeroConfig,
   useCategoryCards,
   useMenuItems,
   useReviews,
@@ -26,6 +27,7 @@ import {
   saveSiteConfig,
   saveMenuItem,
   saveHeroConfig,
+  saveMiddleHeroConfig,
   deleteMenuItem
 } from './lib/cmsStore';
 
@@ -46,12 +48,14 @@ export default function App() {
   // Admin Quick Edit Modal State
   const [adminEditState, setAdminEditState] = useState<{
     isOpen: boolean;
-    type: 'logo' | 'menuItem' | 'hero';
+    type: 'logo' | 'menuItem' | 'hero' | 'middleHero';
     menuItem?: MenuItem | null;
+    slideIndex?: number;
   }>({
     isOpen: false,
     type: 'logo',
     menuItem: null,
+    slideIndex: 0,
   });
 
   // Auth User state to check if mehmamelman@gmail.com is logged in
@@ -77,6 +81,7 @@ export default function App() {
   // Firestore Real-time Subscriptions
   const { siteConfig } = useSiteConfig();
   const { config: heroConfig } = useHeroConfig();
+  const { middleHeroConfig } = useMiddleHeroConfig();
   const { categories } = useCategoryCards();
   const { items: menuItems } = useMenuItems();
   const { reviews } = useReviews();
@@ -188,7 +193,7 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-[#0b291d] text-white flex flex-col font-sans selection:bg-emerald-300 selection:text-black">
+    <div className="min-h-screen bg-white text-zinc-900 flex flex-col font-sans selection:bg-emerald-500 selection:text-white">
       
       {/* Sticky Top Navbar */}
       <Navbar
@@ -213,12 +218,12 @@ export default function App() {
               onOpenReviews={() => scrollToSection('reviews')}
               onOpenAiAssistant={() => setIsAiModalOpen(true)}
               isAdmin={isAdmin}
-              onEditHero={() =>
-                setAdminEditState({ isOpen: true, type: 'hero' })
+              onEditHero={(idx) =>
+                setAdminEditState({ isOpen: true, type: 'hero', slideIndex: idx ?? 0 })
               }
             />
 
-            {/* 2. 6 Category Blocks & Gallery (No individual food cards on homepage!) */}
+            {/* 2. Category Blocks with Hero Slider middle banner & Gallery */}
             <CategoriesAndGallerySection
               categories={categories}
               galleryPhotos={galleryPhotos}
@@ -226,6 +231,12 @@ export default function App() {
               onSelectSet={handleOpenMenuWithSet}
               onSearch={handleSearch}
               searchQuery={searchQuery}
+              middleHeroConfig={middleHeroConfig}
+              isAdmin={isAdmin}
+              onOrderNow={() => handleOpenMenuWithCategory('all')}
+              onOpenReviews={() => scrollToSection('reviews')}
+              onOpenAiAssistant={() => setIsAiModalOpen(true)}
+              onEditMiddleHero={(idx) => setAdminEditState({ isOpen: true, type: 'middleHero', slideIndex: idx ?? 0 })}
             />
 
             {/* 3. Customer Reviews Section */}
@@ -287,7 +298,8 @@ export default function App() {
         type={adminEditState.type}
         logoUrl={siteConfig.logoUrl}
         menuItem={adminEditState.menuItem}
-        heroConfig={heroConfig}
+        heroConfig={adminEditState.type === 'middleHero' ? middleHeroConfig : heroConfig}
+        initialSlideIndex={adminEditState.slideIndex ?? 0}
         onSaveLogo={async (newUrl) => {
           await saveSiteConfig({ ...siteConfig, logoUrl: newUrl });
         }}
@@ -299,7 +311,11 @@ export default function App() {
           showToast('Məhsul bazadan silindi.');
         }}
         onSaveHero={async (updatedHero) => {
-          await saveHeroConfig(updatedHero);
+          if (adminEditState.type === 'middleHero') {
+            await saveMiddleHeroConfig(updatedHero);
+          } else {
+            await saveHeroConfig(updatedHero);
+          }
         }}
         onShowToast={showToast}
       />

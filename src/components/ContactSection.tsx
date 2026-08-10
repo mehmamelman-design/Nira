@@ -6,15 +6,15 @@ export const ContactSection: React.FC = () => {
   const [selectedBranch, setSelectedBranch] = useState(BRANCHES[0]);
 
   return (
-    <section id="contact" className="py-20 bg-[#0b291d] border-b border-emerald-900/80 relative scroll-mt-20">
+    <section id="contact" className="py-20 bg-white border-b border-zinc-200 relative scroll-mt-20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto space-y-4 mb-14">
-          <h2 className="text-3xl sm:text-4xl font-black text-white tracking-tight">
-            Bizim Filialımız Və <span className="text-emerald-300">Xəritədə Yerləşməsi</span>
+          <h2 className="text-3xl sm:text-4xl font-black text-emerald-950 tracking-tight">
+            Bizim Filialımız Və <span className="text-emerald-700">Xəritədə Yerləşməsi</span>
           </h2>
-          <p className="text-emerald-200/80 text-sm sm:text-base">
+          <p className="text-emerald-800 text-sm sm:text-base font-semibold">
             Qonağımız olun və ya bircə zənglə/WhatsApp mesajı ilə bəyəndiyiniz yeməyi ünvana sifariş edin.
           </p>
         </div>
@@ -23,29 +23,29 @@ export const ContactSection: React.FC = () => {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
           
           {/* Branch Info Card & Action Buttons */}
-          <div className="lg:col-span-5 bg-emerald-900/70 border border-emerald-800 rounded-3xl p-6 sm:p-8 space-y-6 shadow-xl">
+          <div className="lg:col-span-5 bg-white border-2 border-emerald-200 rounded-3xl p-6 sm:p-8 space-y-6 shadow-md">
             
             <div className="space-y-2">
-              <span className="px-2.5 py-1 rounded-lg bg-black/60 border border-emerald-700 text-white text-[11px] font-bold uppercase tracking-wider">
+              <span className="px-2.5 py-1 rounded-lg bg-emerald-100 border border-emerald-300 text-emerald-900 text-[11px] font-extrabold uppercase tracking-wider">
                 Seçilmiş Filial
               </span>
-              <h3 className="text-2xl font-black text-white">
+              <h3 className="text-2xl font-black text-emerald-950">
                 {selectedBranch.name}
               </h3>
             </div>
 
-            <div className="space-y-4 pt-2 border-t border-emerald-800/80 text-sm">
+            <div className="space-y-4 pt-2 border-t border-emerald-200 text-sm">
               
               {/* Address */}
               <div className="flex items-start gap-3">
-                <div className="p-2.5 rounded-xl bg-black/60 text-white shrink-0">
-                  <MapPin className="w-5 h-5 text-white" />
+                <div className="p-2.5 rounded-xl bg-emerald-100 text-emerald-900 shrink-0">
+                  <MapPin className="w-5 h-5 text-emerald-800" />
                 </div>
                 <div>
-                  <span className="block text-xs font-bold text-emerald-300 uppercase tracking-wider">
+                  <span className="block text-xs font-bold text-emerald-800 uppercase tracking-wider">
                     Dəqiq Ünvan:
                   </span>
-                  <p className="text-emerald-100 font-medium leading-relaxed">
+                  <p className="text-zinc-800 font-semibold leading-relaxed">
                     {selectedBranch.address}
                   </p>
                 </div>
@@ -53,14 +53,14 @@ export const ContactSection: React.FC = () => {
 
               {/* Working Hours */}
               <div className="flex items-start gap-3">
-                <div className="p-2.5 rounded-xl bg-black/60 text-white shrink-0">
-                  <Clock className="w-5 h-5 text-white" />
+                <div className="p-2.5 rounded-xl bg-emerald-100 text-emerald-900 shrink-0">
+                  <Clock className="w-5 h-5 text-emerald-800" />
                 </div>
                 <div>
-                  <span className="block text-xs font-bold text-emerald-300 uppercase tracking-wider">
+                  <span className="block text-xs font-bold text-emerald-800 uppercase tracking-wider">
                     İş Saatları:
                   </span>
-                  <p className="text-white font-semibold">
+                  <p className="text-zinc-900 font-bold">
                     {selectedBranch.workingHours}
                   </p>
                 </div>
@@ -68,14 +68,14 @@ export const ContactSection: React.FC = () => {
 
               {/* Phone */}
               <div className="flex items-start gap-3">
-                <div className="p-2.5 rounded-xl bg-black/60 text-white shrink-0">
-                  <Phone className="w-5 h-5 text-white" />
+                <div className="p-2.5 rounded-xl bg-emerald-100 text-emerald-900 shrink-0">
+                  <Phone className="w-5 h-5 text-emerald-800" />
                 </div>
                 <div>
-                  <span className="block text-xs font-bold text-emerald-300 uppercase tracking-wider">
+                  <span className="block text-xs font-bold text-emerald-800 uppercase tracking-wider">
                     Birbaşa Əlaqə Nömrəsi:
                   </span>
-                  <p className="text-white font-extrabold text-base">
+                  <p className="text-emerald-950 font-extrabold text-base">
                     {selectedBranch.phone}
                   </p>
                 </div>
@@ -84,8 +84,8 @@ export const ContactSection: React.FC = () => {
             </div>
 
             {/* Interactive Action Buttons */}
-            <div className="pt-4 border-t border-emerald-800/80 space-y-3">
-              <span className="block text-xs font-bold text-emerald-300 uppercase tracking-wider">
+            <div className="pt-4 border-t border-emerald-200 space-y-3">
+              <span className="block text-xs font-bold text-emerald-800 uppercase tracking-wider">
                 Tez Və Sürətli Əlaqə
               </span>
 
@@ -94,7 +94,7 @@ export const ContactSection: React.FC = () => {
                 {/* 1. Zəng Et Button */}
                 <a
                   href={`tel:${selectedBranch.phone.replace(/\s+/g, '')}`}
-                  className="py-3 px-4 rounded-xl bg-black text-white font-extrabold text-xs hover:bg-zinc-900 transition-all shadow-md flex items-center justify-center gap-2"
+                  className="py-3 px-4 rounded-xl bg-emerald-700 text-white font-extrabold text-xs hover:bg-emerald-800 transition-all shadow-sm flex items-center justify-center gap-2"
                 >
                   <Phone className="w-4 h-4 fill-white text-white" />
                   <span>Zəng Et</span>

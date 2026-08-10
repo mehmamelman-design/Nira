@@ -33,7 +33,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate, onSelectCategory }) 
   };
 
   return (
-    <footer className="bg-[#082017] border-t border-emerald-900 text-emerald-100/80 text-sm">
+    <footer className="bg-white border-t border-zinc-200 text-zinc-800 text-sm">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-10">
           
@@ -53,27 +53,27 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate, onSelectCategory }) 
               </button>
             </div>
 
-            <p className="text-xs text-emerald-200/80 leading-relaxed max-w-sm">
+            <p className="text-xs text-zinc-700 font-medium leading-relaxed max-w-sm">
               Təzə fast food, ləzzətli pizzalar, kabablar, isti yemeklər, şorbalar və sərin içkilər. Əsl keyfiyyət və sürətli çatdırılma!
             </p>
 
-            <div className="pt-2 flex items-center gap-2 text-xs text-white font-semibold">
-              <Clock className="w-4 h-4 text-emerald-300" />
+            <div className="pt-2 flex items-center gap-2 text-xs text-emerald-950 font-bold">
+              <Clock className="w-4 h-4 text-emerald-700" />
               <span>İş Saatları: Hər gün 10:00 - 02:00</span>
             </div>
           </div>
 
           {/* Quick Links to Menu Sections */}
           <div className="lg:col-span-3 space-y-3">
-            <h4 className="text-xs font-bold uppercase tracking-wider text-white">
+            <h4 className="text-xs font-extrabold uppercase tracking-wider text-emerald-950">
               Menyu Bölmələri
             </h4>
-            <ul className="space-y-2 text-xs font-medium">
+            <ul className="space-y-2 text-xs font-semibold">
               {menuCategories.map((cat) => (
                 <li key={cat.id}>
                   <button
                     onClick={() => handleCategoryClick(cat.id)}
-                    className="hover:text-amber-400 transition-colors cursor-pointer text-left uppercase font-semibold"
+                    className="hover:text-emerald-700 transition-colors cursor-pointer text-left uppercase text-zinc-700 hover:text-emerald-900"
                   >
                     {cat.name}
                   </button>
@@ -84,27 +84,27 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate, onSelectCategory }) 
 
           {/* Quick Navigation Sections */}
           <div className="lg:col-span-2 space-y-3">
-            <h4 className="text-xs font-bold uppercase tracking-wider text-white">
+            <h4 className="text-xs font-extrabold uppercase tracking-wider text-emerald-950">
               Sürətli Səhifələr
             </h4>
-            <ul className="space-y-2 text-xs font-medium">
+            <ul className="space-y-2 text-xs font-semibold text-zinc-700">
               <li>
-                <button onClick={() => onNavigate('hero')} className="hover:text-white transition-colors">
+                <button onClick={() => onNavigate('hero')} className="hover:text-emerald-900 transition-colors">
                   Ana Səhifə
                 </button>
               </li>
               <li>
-                <button onClick={() => onNavigate('menu')} className="hover:text-white transition-colors">
+                <button onClick={() => onNavigate('menu')} className="hover:text-emerald-900 transition-colors">
                   Tam Menyu
                 </button>
               </li>
               <li>
-                <button onClick={() => onNavigate('reviews')} className="hover:text-white transition-colors">
+                <button onClick={() => onNavigate('reviews')} className="hover:text-emerald-900 transition-colors">
                   Rəylər Və Reyting
                 </button>
               </li>
               <li>
-                <button onClick={() => onNavigate('contact')} className="hover:text-white transition-colors">
+                <button onClick={() => onNavigate('contact')} className="hover:text-emerald-900 transition-colors">
                   Ünvan Və Əlaqə
                 </button>
               </li>
@@ -113,11 +113,11 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate, onSelectCategory }) 
 
           {/* Social Media & Direct Contact */}
           <div className="lg:col-span-3 space-y-3">
-            <h4 className="text-xs font-bold uppercase tracking-wider text-white">
+            <h4 className="text-xs font-extrabold uppercase tracking-wider text-emerald-950">
               Bizimlə Əlaqədə Olun
             </h4>
 
-            <p className="text-xs text-emerald-200/80">
+            <p className="text-xs text-zinc-700 font-medium">
               Sosial şəbəkələrdə bizi izləyin və xüsusi endirimlərdən xəbərdar olun:
             </p>
 
@@ -128,10 +128,10 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate, onSelectCategory }) 
                 href="https://instagram.com"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-10 h-10 rounded-xl bg-emerald-950 border border-emerald-800 flex items-center justify-center text-white hover:border-white transition-all"
+                className="w-10 h-10 rounded-xl bg-white border border-emerald-300 flex items-center justify-center text-emerald-900 hover:bg-emerald-100 transition-all shadow-sm"
                 aria-label="Instagram"
               >
-                <Instagram className="w-5 h-5" />
+                <Instagram className="w-5 h-5 text-emerald-800" />
               </a>
 
               {/* WhatsApp */}
@@ -139,10 +139,10 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate, onSelectCategory }) 
                 href="https://wa.me/994516359474"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-10 h-10 rounded-xl bg-emerald-950 border border-emerald-800 flex items-center justify-center text-white hover:border-white transition-all"
+                className="w-10 h-10 rounded-xl bg-white border border-emerald-300 flex items-center justify-center text-emerald-900 hover:bg-emerald-100 transition-all shadow-sm"
                 aria-label="WhatsApp"
               >
-                <MessageCircle className="w-5 h-5 fill-white/20" />
+                <MessageCircle className="w-5 h-5 text-emerald-800" />
               </a>
 
               {/* TikTok Icon */}
@@ -150,7 +150,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate, onSelectCategory }) 
                 href="https://tiktok.com"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-10 h-10 rounded-xl bg-emerald-950 border border-emerald-800 flex items-center justify-center text-white hover:border-white transition-all font-bold text-xs"
+                className="w-10 h-10 rounded-xl bg-white border border-emerald-300 flex items-center justify-center text-emerald-900 hover:bg-emerald-100 transition-all font-bold text-xs shadow-sm"
                 aria-label="TikTok"
               >
                 TikTok
@@ -158,9 +158,9 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate, onSelectCategory }) 
 
             </div>
 
-            <div className="pt-2 text-xs text-emerald-200/90 space-y-1">
+            <div className="pt-2 text-xs text-zinc-700 font-semibold space-y-1">
               <p>Heydər Əliyev prospekti 48a (Neptun Supermarket-1 qarşısı)</p>
-              <p className="font-bold text-white">(051) 635 94 74</p>
+              <p className="font-extrabold text-emerald-950 text-sm">(051) 635 94 74</p>
             </div>
 
           </div>
@@ -168,11 +168,11 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate, onSelectCategory }) 
         </div>
 
         {/* Bottom Copyright Bar */}
-        <div className="mt-12 pt-8 border-t border-emerald-900/80 flex flex-col sm:flex-row items-center justify-between text-xs text-emerald-300/80 gap-4">
+        <div className="mt-12 pt-8 border-t border-emerald-200 flex flex-col sm:flex-row items-center justify-between text-xs text-zinc-600 font-semibold gap-4">
           <p>© {new Date().getFullYear()} Bütün hüquqlar qorunur.</p>
-          <div className="flex items-center gap-1 text-[11px]">
-            <span>Sevgi və odun fırınının istisi ilə hazırlandı</span>
-            <Flame className="w-3.5 h-3.5 text-white fill-white inline" />
+          <div className="flex items-center gap-1 text-[11px] font-bold text-emerald-900">
+            <span>Sevgi və ləzzətlə hazırlandı</span>
+            <Flame className="w-3.5 h-3.5 text-emerald-700 fill-emerald-600 inline" />
           </div>
         </div>
 

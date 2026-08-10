@@ -43,21 +43,21 @@ export const FaqSection: React.FC = () => {
   };
 
   return (
-    <section id="faq" className="py-16 sm:py-20 bg-[#092218] border-b border-emerald-900/80 scroll-mt-20">
+    <section id="faq" className="py-16 sm:py-20 bg-white border-b border-zinc-200 scroll-mt-20">
       <div className="max-w-4xl mx-auto px-4 sm:px-6">
         
         {/* Section Header */}
         <div className="text-center space-y-2 mb-10">
-          <span className="text-[11px] font-bold text-emerald-300/80 uppercase tracking-widest block">
+          <span className="text-[11px] font-extrabold text-emerald-800 uppercase tracking-widest block">
             TEZ-TEZ VERİLƏN SUALLAR
           </span>
-          <h2 className="text-2xl sm:text-3xl font-black text-white tracking-tight">
+          <h2 className="text-2xl sm:text-3xl font-black text-emerald-950 tracking-tight">
             Tez-tez verilən suallar
           </h2>
         </div>
 
         {/* Accordion List */}
-        <div className="divide-y divide-emerald-900/60">
+        <div className="divide-y divide-emerald-200">
           {FAQ_ITEMS.map((item) => {
             const isOpen = openId === item.id;
             return (
@@ -72,19 +72,19 @@ export const FaqSection: React.FC = () => {
                   aria-expanded={isOpen}
                 >
                   <div className="flex items-center gap-2 min-w-0 overflow-hidden">
-                    <HelpCircle className="w-4 h-4 text-white shrink-0 group-hover:scale-110 transition-transform" />
-                    <span className="text-[11px] sm:text-[12px] font-semibold text-white whitespace-nowrap overflow-hidden text-ellipsis group-hover:text-amber-300 transition-colors">
+                    <HelpCircle className="w-4 h-4 text-emerald-700 shrink-0 group-hover:scale-110 transition-transform" />
+                    <span className="text-xs sm:text-sm font-bold text-emerald-950 whitespace-nowrap overflow-hidden text-ellipsis group-hover:text-emerald-700 transition-colors">
                       {item.question}
                     </span>
                   </div>
 
-                  <div className={`p-1 text-white/80 transition-transform duration-300 shrink-0 ${isOpen ? 'rotate-180 text-amber-300' : ''}`}>
-                    <ChevronDown className="w-3.5 h-3.5" />
+                  <div className={`p-1 text-emerald-800 transition-transform duration-300 shrink-0 ${isOpen ? 'rotate-180 text-emerald-700' : ''}`}>
+                    <ChevronDown className="w-4 h-4" />
                   </div>
                 </button>
 
                 {isOpen && (
-                  <div className="pb-2 pt-1 pl-6 text-[10px] sm:text-[11px] text-emerald-100/80 leading-normal animate-in fade-in duration-200">
+                  <div className="pb-3 pt-1 pl-6 text-xs sm:text-sm font-semibold text-zinc-800 leading-relaxed animate-in fade-in duration-200">
                     {item.answer}
                   </div>
                 )}

@@ -465,276 +465,143 @@ export const MENU_ITEMS: MenuItem[] = [
 
   // ==================== 5. SOYUQ İÇKİLƏR ====================
   {
-    id: 'ic-1',
-    name: 'COLA 0.5L',
+    id: 'ic-cola',
+    name: 'COLA',
     category: 'icikil',
-    description: 'Buz kimi sərinləşdirici Coca-Cola 0.5L plastik şüşədə',
+    description: 'Buz kimi sərinləşdirici Coca-Cola (seçim üçün tıklayın)',
     price: 1.50,
     image: 'https://images.unsplash.com/photo-1622483767028-3f66f32aef97?auto=format&fit=crop&q=80&w=800',
-    isPopular: true
+    isPopular: true,
+    variants: [
+      { name: '0.5L', price: 1.50 },
+      { name: '1L', price: 2.50 },
+      { name: 'Banka', price: 2.20 },
+      { name: 'Şüşə', price: 2.50 }
+    ]
   },
   {
-    id: 'ic-2',
-    name: 'COLA 1L',
+    id: 'ic-fanta',
+    name: 'FANTA',
     category: 'icikil',
-    description: 'Sərinləşdirici Coca-Cola 1L plastik şüşədə',
-    price: 2.50,
-    image: 'https://images.unsplash.com/photo-1622483767028-3f66f32aef97?auto=format&fit=crop&q=80&w=800'
-  },
-  {
-    id: 'ic-3',
-    name: 'FANTA 0.5L',
-    category: 'icikil',
-    description: 'Meyvəli və sərinləşdirici Fanta 0.5L',
+    description: 'Portağal aromalı sərinləşdirici Fanta (seçim üçün tıklayın)',
     price: 1.50,
-    image: 'https://images.unsplash.com/photo-1624517452488-04869289c4ca?auto=format&fit=crop&q=80&w=800'
+    image: 'https://images.unsplash.com/photo-1624517452488-04869289c4ca?auto=format&fit=crop&q=80&w=800',
+    isPopular: true,
+    variants: [
+      { name: '0.5L', price: 1.50 },
+      { name: '1L', price: 2.50 },
+      { name: 'Banka', price: 2.20 }
+    ]
   },
   {
-    id: 'ic-4',
-    name: 'FANTA 1L',
+    id: 'ic-sprite',
+    name: 'SPRITE',
     category: 'icikil',
-    description: 'Portağal dadlı Fanta 1L',
-    price: 2.50,
-    image: 'https://images.unsplash.com/photo-1624517452488-04869289c4ca?auto=format&fit=crop&q=80&w=800'
-  },
-  {
-    id: 'ic-5',
-    name: 'SPRITE 0.5L',
-    category: 'icikil',
-    description: 'Limon və laym dadlı Sprite 0.5L',
+    description: 'Limon və laym dadlı sərinləşdirici Sprite (seçim üçün tıklayın)',
     price: 1.50,
-    image: 'https://images.unsplash.com/photo-1625772299848-391b6a87d7b3?auto=format&fit=crop&q=80&w=800'
+    image: 'https://images.unsplash.com/photo-1625772299848-391b6a87d7b3?auto=format&fit=crop&q=80&w=800',
+    variants: [
+      { name: '0.5L', price: 1.50 },
+      { name: '1L', price: 2.00 },
+      { name: 'Banka', price: 2.20 }
+    ]
   },
   {
-    id: 'ic-6',
-    name: 'SPRITE 1L',
+    id: 'ic-sirab',
+    name: 'SİRAB',
     category: 'icikil',
-    description: 'Limon-laym dadlı Sprite 1L',
+    description: 'Təbii mineral Sirab suyu (seçim üçün tıklayın)',
     price: 2.00,
-    image: 'https://images.unsplash.com/photo-1625772299848-391b6a87d7b3?auto=format&fit=crop&q=80&w=800'
+    image: 'https://images.unsplash.com/photo-1548839140-29a749e1bc4e?auto=format&fit=crop&q=80&w=800',
+    variants: [
+      { name: '0.5L Qazlı Şüşə', price: 2.00 },
+      { name: '0.5L Şüşə', price: 2.00 }
+    ]
   },
   {
-    id: 'ic-7',
-    name: 'COLA BANKA',
+    id: 'ic-ayran',
+    name: 'AYRAN',
     category: 'icikil',
-    description: 'Buz kimi Coca-Cola metal bankada (0.33L)',
-    price: 2.20,
-    image: 'https://images.unsplash.com/photo-1554866585-cd94860890b7?auto=format&fit=crop&q=80&w=800',
-    isPopular: true
-  },
-  {
-    id: 'ic-8',
-    name: 'FANTA BANKA',
-    category: 'icikil',
-    description: 'Fanta metal bankada (0.33L)',
-    price: 2.20,
-    image: 'https://images.unsplash.com/photo-1624517452488-04869289c4ca?auto=format&fit=crop&q=80&w=800'
-  },
-  {
-    id: 'ic-9',
-    name: 'SPRITE BANKA',
-    category: 'icikil',
-    description: 'Sprite metal bankada (0.33L)',
-    price: 2.20,
-    image: 'https://images.unsplash.com/photo-1625772299848-391b6a87d7b3?auto=format&fit=crop&q=80&w=800'
-  },
-  {
-    id: 'ic-10',
-    name: 'COLA ŞÜŞƏ',
-    category: 'icikil',
-    description: 'Klassik şüşə butulqada orijinal Coca-Cola',
-    price: 2.50,
-    image: 'https://images.unsplash.com/photo-1622483767028-3f66f32aef97?auto=format&fit=crop&q=80&w=800',
-    isPopular: true
-  },
-  {
-    id: 'ic-11',
-    name: 'SİRAB 0.5L QAZLI ŞÜŞƏ',
-    category: 'icikil',
-    description: 'Təbii mineral Sirab qazlı su şüşə butulqada',
-    price: 2.00,
-    image: 'https://images.unsplash.com/photo-1560023907-5f339617ea30?auto=format&fit=crop&q=80&w=800'
-  },
-  {
-    id: 'ic-12',
-    name: 'SİRAB 0.5L ŞÜŞƏ',
-    category: 'icikil',
-    description: 'Təbii mineral Sirab qazsız su şüşə butulqada',
-    price: 2.00,
-    image: 'https://images.unsplash.com/photo-1548839140-29a749e1bc4e?auto=format&fit=crop&q=80&w=800'
-  },
-  {
-    id: 'ic-13',
-    name: 'MEYVƏ ŞİRƏSİ',
-    category: 'icikil',
-    description: 'Təbii meyvə şirəsi (Portağal, Albalı, Şaftalı, Alma)',
-    price: 4.00,
-    image: 'https://images.unsplash.com/photo-1613478223719-2ab802602423?auto=format&fit=crop&q=80&w=800',
-    isPopular: true
-  },
-  {
-    id: 'ic-14',
-    name: 'FRESH',
-    category: 'icikil',
-    description: 'Təzə sıxılmış təbii portağal və ya nar fresh şirəsi',
-    price: 6.00,
-    image: 'https://images.unsplash.com/photo-1613478223719-2ab802602423?auto=format&fit=crop&q=80&w=800',
-    isPopular: true
-  },
-  {
-    id: 'ic-15',
-    name: 'AYRAN 0.5L',
-    category: 'icikil',
-    description: 'Ev üsulu sərinlədici təbii ayran',
+    description: 'Sərinlədici təbii ev ayranı (seçim üçün tıklayın)',
     price: 1.50,
     image: 'https://images.unsplash.com/photo-1528751014936-863e6e7a319c?auto=format&fit=crop&q=80&w=800',
-    isPopular: true
+    isPopular: true,
+    variants: [
+      { name: '0.5L', price: 1.50 },
+      { name: '0.5L Nanəli', price: 1.50 },
+      { name: '1L', price: 3.00 }
+    ]
   },
   {
-    id: 'ic-16',
-    name: 'AYRAN 0.5L NANƏLİ',
+    id: 'ic-cesme',
+    name: 'ÇEŞMƏ',
     category: 'icikil',
-    description: 'Ətirli təzə nanəli sərinləşdirici ayran',
+    description: 'Təbii çeşmə bulaq suyu (seçim üçün tıklayın)',
     price: 1.50,
-    image: 'https://images.unsplash.com/photo-1528751014936-863e6e7a319c?auto=format&fit=crop&q=80&w=800'
+    image: 'https://images.unsplash.com/photo-1548839140-29a749e1bc4e?auto=format&fit=crop&q=80&w=800',
+    variants: [
+      { name: '0.5L Qazsız (Qazlı)', price: 1.50 },
+      { name: '0.7L Qazsız (Qazlı)', price: 2.00 }
+    ]
   },
   {
-    id: 'ic-17',
-    name: 'AYRAN 1L',
+    id: 'ic-qizilquyu',
+    name: 'QIZIL QUYU',
     category: 'icikil',
-    description: 'Böyük qrafində təbii ev ayranı',
-    price: 3.00,
-    image: 'https://images.unsplash.com/photo-1528751014936-863e6e7a319c?auto=format&fit=crop&q=80&w=800'
-  },
-  {
-    id: 'ic-18',
-    name: 'ÇEŞMƏ 0.5L QAZSIZ (QAZLI)',
-    category: 'icikil',
-    description: 'Çeşmə bulaq suyu 0.5L',
-    price: 1.50,
-    image: 'https://images.unsplash.com/photo-1548839140-29a749e1bc4e?auto=format&fit=crop&q=80&w=800'
-  },
-  {
-    id: 'ic-19',
-    name: 'ÇEŞMƏ 0.7L QAZSIZ (QAZLI)',
-    category: 'icikil',
-    description: 'Çeşmə bulaq suyu 0.7L şüşədə',
+    description: 'Xüsusi milli limonad çeşidləri (seçim üçün tıklayın)',
     price: 2.00,
-    image: 'https://images.unsplash.com/photo-1548839140-29a749e1bc4e?auto=format&fit=crop&q=80&w=800'
+    image: 'https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?auto=format&fit=crop&q=80&w=800',
+    isPopular: true,
+    variants: [
+      { name: '0.5L Lemon', price: 2.00 },
+      { name: '0.5L Tərxun', price: 2.00 },
+      { name: '0.5L Düşəs', price: 2.00 },
+      { name: '0.5L Qızıl Gül', price: 2.00 },
+      { name: '0.7L Lemon', price: 2.50 },
+      { name: '0.7L Düşəs', price: 2.50 },
+      { name: '0.7L Tərxun', price: 2.50 },
+      { name: '0.7L Qızıl Gül', price: 2.50 }
+    ]
   },
   {
-    id: 'ic-20',
-    name: 'QIZIL QUYU 0.5L LİMON',
+    id: 'ic-meyvesiresi',
+    name: 'MEYVƏ ŞİRƏSİ',
     category: 'icikil',
-    description: 'Qızıl Quyu limonad 0.5L Limon dadlı',
-    price: 2.00,
-    image: 'https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?auto=format&fit=crop&q=80&w=800'
-  },
-  {
-    id: 'ic-21',
-    name: 'QIZIL QUYU 0.5L TƏRXUN',
-    category: 'icikil',
-    description: 'Qızıl Quyu limonad 0.5L Tərxun dadlı',
-    price: 2.00,
-    image: 'https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?auto=format&fit=crop&q=80&w=800'
-  },
-  {
-    id: 'ic-22',
-    name: 'QIZIL QUYU 0.5L DÜŞƏS',
-    category: 'icikil',
-    description: 'Qızıl Quyu limonad 0.5L Düşəs (Armud) dadlı',
-    price: 2.00,
-    image: 'https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?auto=format&fit=crop&q=80&w=800'
-  },
-  {
-    id: 'ic-23',
-    name: 'QIZIL QUYU 0.7L LİMON',
-    category: 'icikil',
-    description: 'Qızıl Quyu limonad 0.7L Limon dadlı',
+    description: 'Təbii meyvə şirəsi və fresh şirələr (seçim üçün tıklayın)',
     price: 2.50,
-    image: 'https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?auto=format&fit=crop&q=80&w=800'
+    image: 'https://images.unsplash.com/photo-1613478223719-2ab802602423?auto=format&fit=crop&q=80&w=800',
+    isPopular: true,
+    variants: [
+      { name: '0.5L', price: 2.50 },
+      { name: '1L Meyvə Şirəsi', price: 4.00 },
+      { name: 'Fresh', price: 6.00 }
+    ]
   },
   {
-    id: 'ic-24',
-    name: 'QIZIL QUYU 0.7L DÜŞƏS',
+    id: 'ic-kompotlar',
+    name: 'KOMPOTLAR',
     category: 'icikil',
-    description: 'Qızıl Quyu limonad 0.7L Düşəs dadlı',
-    price: 2.50,
-    image: 'https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?auto=format&fit=crop&q=80&w=800'
-  },
-  {
-    id: 'ic-25',
-    name: 'QIZIL QUYU 0.7L TƏRXUN',
-    category: 'icikil',
-    description: 'Qızıl Quyu limonad 0.7L Tərxun dadlı',
-    price: 2.50,
-    image: 'https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?auto=format&fit=crop&q=80&w=800'
-  },
-  {
-    id: 'ic-26',
-    name: 'QIZIL QUYU 0.5L QIZIL GÜL',
-    category: 'icikil',
-    description: 'Qızıl Quyu limonad 0.5L Ətirli Qızıl Gül dadlı',
-    price: 2.00,
-    image: 'https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?auto=format&fit=crop&q=80&w=800'
-  },
-  {
-    id: 'ic-27',
-    name: 'QIZIL QUYU 0.7L QIZIL GÜL',
-    category: 'icikil',
-    description: 'Qızıl Quyu limonad 0.7L Ətirli Qızıl Gül dadlı',
-    price: 2.50,
-    image: 'https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?auto=format&fit=crop&q=80&w=800'
-  },
-  {
-    id: 'ic-28',
-    name: 'MEYVƏ ŞİRƏSİ 0.5L',
-    category: 'icikil',
-    description: 'Təbii meyvə şirəsi 0.5L',
-    price: 2.50,
-    image: 'https://images.unsplash.com/photo-1613478223719-2ab802602423?auto=format&fit=crop&q=80&w=800'
-  },
-  {
-    id: 'ic-29',
-    name: 'HEYVA KOMPOTU',
-    category: 'icikil',
-    description: 'Ev üsulu hazırlanan təbii heyva kompotu',
+    description: 'Təbii ev üsulu hazırlanan kompotlar (seçim üçün tıklayın)',
     price: 3.00,
     image: 'https://images.unsplash.com/photo-1551024709-8f23befc6f87?auto=format&fit=crop&q=80&w=800',
-    isPopular: true
+    isPopular: true,
+    variants: [
+      { name: 'Heyva Kompotu', price: 3.00 },
+      { name: 'Vişnə Kompotu', price: 3.00 },
+      { name: 'Zoğal Kompotu', price: 3.00 },
+      { name: 'Feyxoa Kompotu', price: 3.00 }
+    ]
   },
   {
-    id: 'ic-30',
-    name: 'VİŞNƏ KOMPOTU',
-    category: 'icikil',
-    description: 'Milli ev üsulu albalı/vişnə kompotu',
-    price: 3.00,
-    image: 'https://images.unsplash.com/photo-1551024709-8f23befc6f87?auto=format&fit=crop&q=80&w=800'
-  },
-  {
-    id: 'ic-31',
-    name: 'ZOĞAL KOMPOTU',
-    category: 'icikil',
-    description: 'Təbii zoğaldan hazırlanmış turşməzə kompot',
-    price: 3.00,
-    image: 'https://images.unsplash.com/photo-1551024709-8f23befc6f87?auto=format&fit=crop&q=80&w=800'
-  },
-  {
-    id: 'ic-32',
-    name: 'FEYXOA KOMPOTU',
-    category: 'icikil',
-    description: 'Lənkəran feyxoasından hazırlanan vitaminsiz ev kompotu',
-    price: 3.00,
-    image: 'https://images.unsplash.com/photo-1551024709-8f23befc6f87?auto=format&fit=crop&q=80&w=800',
-    isPopular: true
-  },
-  {
-    id: 'ic-33',
+    id: 'ic-coplu',
     name: 'ÇÖPLÜ SOK',
     category: 'icikil',
     description: 'Uşaqlar üçün çöp borulu meyvə şirəsi (0.2L)',
     price: 1.00,
-    image: 'https://images.unsplash.com/photo-1613478223719-2ab802602423?auto=format&fit=crop&q=80&w=800'
+    image: 'https://images.unsplash.com/photo-1613478223719-2ab802602423?auto=format&fit=crop&q=80&w=800',
+    variants: [
+      { name: '0.2L', price: 1.00 }
+    ]
   },
 
   // ==================== 6. ŞORBALAR ====================

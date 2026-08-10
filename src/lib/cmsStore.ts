@@ -16,6 +16,28 @@ export const DEFAULT_HERO: HeroConfig = {
   subtitle: "Təzə kəsilmiş halal ət, isti ocağın əvəzolunmaz qoxusu və xüsusi reseptlə hazırlanan çıtır qızarmış toyuqlar. Sifarişiniz xüsusi termo-qutularda 30 dəqiqəyə qaynar halda çatdırılır!",
   videoUrl: "https://assets.mixkit.co/videos/preview/mixkit-chef-cooking-food-in-a-pan-40292-large.mp4",
   imageUrl: "https://images.unsplash.com/photo-1561758033-d89a9ad46330?auto=format&fit=crop&q=80&w=1600",
+  images: [
+    "https://images.unsplash.com/photo-1561758033-d89a9ad46330?auto=format&fit=crop&q=80&w=1600",
+    "https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&q=80&w=1600",
+    "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&q=80&w=1600",
+    "https://images.unsplash.com/photo-1550547660-d9450f859349?auto=format&fit=crop&q=80&w=1600"
+  ],
+  mobileImages: [],
+  isVideoEnabled: false
+};
+
+export const DEFAULT_MIDDLE_HERO: HeroConfig = {
+  title: "Təzə Və Xüsusi Şirniyyatlar, İsti Və Soyuq İçkilər",
+  subtitle: "Sizlər üçün xüsusi olaraq hazırlanan təbii içkilər və ləzzətli desertlər",
+  videoUrl: "",
+  imageUrl: "https://images.unsplash.com/photo-1551024709-8f23befc6f87?auto=format&fit=crop&q=80&w=1600",
+  images: [
+    "https://images.unsplash.com/photo-1551024709-8f23befc6f87?auto=format&fit=crop&q=80&w=1600",
+    "https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&q=80&w=1600",
+    "https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?auto=format&fit=crop&q=80&w=1600",
+    "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&q=80&w=1600"
+  ],
+  mobileImages: [],
   isVideoEnabled: false
 };
 
@@ -216,11 +238,19 @@ export function subscribeToMenu(callback: (items: MenuItem[]) => void) {
       items = getStoredLocal('alov_menu_items', MENU_ITEMS);
     }
 
-    // Check if stored items have the new items. If items length is significantly different or missing category, reset/sync to new MENU_ITEMS
+    // Check if stored items have drinks with variants. If old drinks or missing categories, sync with MENU_ITEMS
+    const hasDrinkVariants = items.some(i => i.category === 'icikil' && i.variants && i.variants.length > 0);
     const hasNewCategories = items.some(i => i.category === 'desertler' || i.category === 'kofe' || i.category === 'kokteyl');
-    if (!hasNewCategories || items.length < MENU_ITEMS.length) {
-      items = MENU_ITEMS;
-      setDoc(docRef, { items: MENU_ITEMS }).catch(console.error);
+    
+    if (!hasDrinkVariants || !hasNewCategories) {
+      // Keep non-drink items from existing, replace drinks with new MENU_ITEMS drinks
+      const drinkItems = MENU_ITEMS.filter(i => i.category === 'icikil');
+      const nonDrinkItems = items.filter(i => i.category !== 'icikil');
+      items = [...nonDrinkItems, ...drinkItems];
+      if (!hasNewCategories) {
+        items = MENU_ITEMS;
+      }
+      setDoc(docRef, { items }).catch(console.error);
     }
 
     setStoredLocal('alov_menu_items', items);
@@ -287,6 +317,35 @@ export function useHeroConfig() {
     return () => unsub();
   }, []);
   return { config };
+}
+
+export function subscribeToMiddleHero(callback: (hero: HeroConfig) => void) {
+  const docRef = doc(db, 'config', 'middle_hero');
+  return onSnapshot(docRef, (snapshot) => {
+    if (snapshot.exists()) {
+      const data = snapshot.data() as HeroConfig;
+      setStoredLocal('alov_middle_hero_config', data);
+      callback(data);
+    } else {
+      const stored = getStoredLocal('alov_middle_hero_config', DEFAULT_MIDDLE_HERO);
+      setDoc(docRef, stored).catch(console.error);
+      callback(stored);
+    }
+  }, (err) => {
+    console.warn('Middle Hero snapshot error:', err);
+    callback(getStoredLocal('alov_middle_hero_config', DEFAULT_MIDDLE_HERO));
+  });
+}
+
+export function useMiddleHeroConfig() {
+  const [middleHeroConfig, setMiddleHeroConfig] = useState<HeroConfig>(() =>
+    getStoredLocal('alov_middle_hero_config', DEFAULT_MIDDLE_HERO)
+  );
+  useEffect(() => {
+    const unsub = subscribeToMiddleHero(setMiddleHeroConfig);
+    return () => unsub();
+  }, []);
+  return { middleHeroConfig };
 }
 
 export function useCategoryCards() {
@@ -387,6 +446,12 @@ export async function saveSiteConfig(config: SiteConfig) {
 export async function saveHeroConfig(hero: HeroConfig) {
   setStoredLocal('alov_hero_config', hero);
   const docRef = doc(db, 'config', 'hero');
+  await setDoc(docRef, hero);
+}
+
+export async function saveMiddleHeroConfig(hero: HeroConfig) {
+  setStoredLocal('alov_middle_hero_config', hero);
+  const docRef = doc(db, 'config', 'middle_hero');
   await setDoc(docRef, hero);
 }
 

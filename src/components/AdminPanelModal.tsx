@@ -27,12 +27,14 @@ import {
   Clock
 } from 'lucide-react';
 import { HeroConfig, CategoryCard, MenuItem, Review, GalleryPhoto } from '../types';
+import { compressImageFile } from '../lib/imageCompressor';
 import {
   saveHeroConfig,
   saveCategoriesConfig,
   saveMenuConfig,
   saveReviewsConfig,
-  saveGalleryConfig
+  saveGalleryConfig,
+  DEFAULT_HERO
 } from '../lib/cmsStore';
 
 interface AdminPanelModalProps {
@@ -141,22 +143,17 @@ export const AdminPanelModal: React.FC<AdminPanelModalProps> = ({
     setPassword('');
   };
 
-  // Helper for image file to base64 Data URL
-  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>, callback: (url: string) => void) => {
+  // Helper for image file to compressed base64 Data URL
+  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>, callback: (url: string) => void) => {
     const file = e.target.files?.[0];
     if (file) {
-      if (file.size > 2 * 1024 * 1024) {
-        alert("Fayl ölçüsü maksimum 2MB ola bilər.");
-        return;
+      try {
+        const compressed = await compressImageFile(file);
+        callback(compressed);
+        onShowToast('Şəkil uğurla yükləndi!');
+      } catch (err: any) {
+        alert(err.message || 'Şəkil yüklənərkən xəta baş verdi');
       }
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        if (typeof reader.result === 'string') {
-          callback(reader.result);
-          onShowToast('Şəkil uğurla yükləndi!');
-        }
-      };
-      reader.readAsDataURL(file);
     }
   };
 
@@ -1160,26 +1157,87 @@ export const AdminPanelModal: React.FC<AdminPanelModalProps> = ({
                       />
                     </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <div>
-                        <label className="block text-xs font-extrabold text-zinc-300 mb-1">Fon Şəkli URL-i (Hero Image)</label>
-                        <input
-                          type="text"
-                          value={localHero.imageUrl}
-                          onChange={(e) => setLocalHero({ ...localHero, imageUrl: e.target.value })}
-                          className="w-full px-4 py-2.5 rounded-xl bg-zinc-950 border border-zinc-800 text-xs text-zinc-300"
-                        />
+                    {/* Slider Images Grid */}
+                    <div className="space-y-2">
+                      <div className="flex items-center justify-between">
+                        <label className="block text-xs font-extrabold text-amber-400">Slider Arxa Fon Şəkilləri (4 Fotoşəkil)</label>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setLocalHero({
+                              ...localHero,
+                              imageUrl: DEFAULT_HERO.images[0],
+                              images: [...DEFAULT_HERO.images]
+                            });
+                          }}
+                          className="text-[11px] text-red-400 hover:text-red-300 font-bold underline cursor-pointer"
+                        >
+                          Yüklənən Şəkilləri Sil / Sıfırla
+                        </button>
                       </div>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                        {[0, 1, 2, 3].map((idx) => {
+                          const userImgs = Array.isArray(localHero.images) ? localHero.images : [];
+                          const defaultList = DEFAULT_HERO.images;
+                          const currentVal = userImgs[idx] !== undefined && userImgs[idx] !== null
+                            ? userImgs[idx]
+                            : (idx === 0 ? (localHero.imageUrl || defaultList[0]) : defaultList[idx]);
 
-                      <div>
-                        <label className="block text-xs font-extrabold text-zinc-300 mb-1">Fon Video URL-i (MP4 Video)</label>
-                        <input
-                          type="text"
-                          value={localHero.videoUrl}
-                          onChange={(e) => setLocalHero({ ...localHero, videoUrl: e.target.value })}
-                          className="w-full px-4 py-2.5 rounded-xl bg-zinc-950 border border-zinc-800 text-xs text-zinc-300"
-                        />
+                          const updateSlideAtIndex = (val: string) => {
+                            const newImgs = [...userImgs];
+                            while (newImgs.length < 4) {
+                              const i = newImgs.length;
+                              newImgs.push(i === 0 ? (localHero.imageUrl || defaultList[0]) : defaultList[i]);
+                            }
+                            newImgs[idx] = val;
+                            setLocalHero({
+                              ...localHero,
+                              imageUrl: newImgs[0],
+                              images: newImgs
+                            });
+                          };
+
+                          return (
+                            <div key={idx} className="bg-zinc-950 p-2.5 rounded-xl border border-zinc-800 space-y-1.5">
+                              <div className="flex items-center justify-between">
+                                <span className="text-[10px] text-zinc-400 font-bold">Slider Şəkli {idx + 1}</span>
+                                {currentVal && (
+                                  <button
+                                    type="button"
+                                    onClick={() => updateSlideAtIndex('')}
+                                    className="text-[10px] text-red-400 hover:text-red-300 font-semibold cursor-pointer"
+                                  >
+                                    Sil
+                                  </button>
+                                )}
+                              </div>
+                              <input
+                                type="text"
+                                value={currentVal}
+                                onChange={(e) => updateSlideAtIndex(e.target.value)}
+                                placeholder="https://..."
+                                className="w-full px-3 py-1.5 rounded-lg bg-zinc-900 border border-zinc-800 text-xs text-zinc-300 font-mono"
+                              />
+                              <input
+                                type="file"
+                                accept="image/*"
+                                onChange={(e) => handleFileUpload(e, (url) => updateSlideAtIndex(url))}
+                                className="w-full text-[10px] text-zinc-400 file:mr-2 file:py-0.5 file:px-2 file:rounded file:border-0 file:text-[10px] file:font-bold file:bg-amber-400 file:text-black hover:file:bg-amber-300 cursor-pointer"
+                              />
+                            </div>
+                          );
+                        })}
                       </div>
+                    </div>
+
+                    <div>
+                      <label className="block text-xs font-extrabold text-zinc-300 mb-1">Fon Video URL-i (MP4 Video)</label>
+                      <input
+                        type="text"
+                        value={localHero.videoUrl}
+                        onChange={(e) => setLocalHero({ ...localHero, videoUrl: e.target.value })}
+                        className="w-full px-4 py-2.5 rounded-xl bg-zinc-950 border border-zinc-800 text-xs text-zinc-300 font-mono"
+                      />
                     </div>
 
                     {/* Toggle Video Background */}
