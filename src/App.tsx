@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { Navbar } from './components/Navbar';
 import { Hero } from './components/Hero';
 import { CategoriesAndGallerySection } from './components/CategoriesAndGallerySection';
@@ -13,6 +13,7 @@ import { AiAssistantModal } from './components/AiAssistantModal';
 import { AdminPanelModal } from './components/AdminPanelModal';
 import { AuthModal } from './components/AuthModal';
 import { AdminEditModal } from './components/AdminEditModal';
+import { SplashScreen } from './components/SplashScreen';
 import { CartItem, MenuItem, CategoryId } from './types';
 import { auth } from './lib/firebase';
 import { onAuthStateChanged, User as FirebaseUser } from 'firebase/auth';
@@ -86,6 +87,30 @@ export default function App() {
   const { items: menuItems } = useMenuItems();
   const { reviews } = useReviews();
   const { photos: galleryPhotos } = useGalleryPhotos();
+
+  // Fast preloading array for instant image rendering after splash screen
+  const preloadImages = useMemo(() => {
+    const urls: string[] = [];
+    if (siteConfig?.logoUrl) urls.push(siteConfig.logoUrl);
+    if (heroConfig?.slides) {
+      heroConfig.slides.forEach((s) => {
+        if (s.imageUrl) urls.push(s.imageUrl);
+        if (s.mobileImageUrl) urls.push(s.mobileImageUrl);
+      });
+    }
+    if (categories) {
+      categories.forEach((c) => {
+        if (c.imageUrl) urls.push(c.imageUrl);
+        if (c.images) urls.push(...c.images);
+      });
+    }
+    if (menuItems) {
+      menuItems.slice(0, 25).forEach((m) => {
+        if (m.imageUrl) urls.push(m.imageUrl);
+      });
+    }
+    return Array.from(new Set(urls));
+  }, [siteConfig, heroConfig, categories, menuItems]);
 
   const showToast = (msg: string) => {
     setToastMessage(msg);
@@ -194,7 +219,11 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-white text-zinc-900 flex flex-col font-sans selection:bg-emerald-500 selection:text-white">
-      
+      {/* Initial 3-4s White Splash Loading Screen */}
+      <SplashScreen
+        imageUrlsToPreload={preloadImages}
+      />
+
       {/* Sticky Top Navbar */}
       <Navbar
         cartItems={cartItems}

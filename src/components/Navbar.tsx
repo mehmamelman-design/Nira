@@ -100,7 +100,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                 <img
                   src={siteConfig?.logoUrl || 'https://res.cloudinary.com/dq8xegykm/image/upload/v1786184761/Ba%C5%9Fl%C4%B1qs%C4%B1z_dizayn-Photoroom_t4omj6.png'}
                   alt={siteConfig?.siteName || "NIRA-Fest&Food Restorani Logo"}
-                  className="h-[60px] sm:h-[72px] w-auto object-contain max-w-[240px] scale-[1.5] origin-left group-hover:scale-[1.58] transition-transform duration-300"
+                  className="h-[70px] sm:h-[84px] w-auto object-contain max-w-[280px] sm:max-w-[340px] scale-[1.25] origin-left group-hover:scale-[1.32] transition-transform duration-300"
                 />
               </button>
 

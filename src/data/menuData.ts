@@ -230,7 +230,88 @@ export const MENU_ITEMS: MenuItem[] = [
     prepTime: '15-20 dəq'
   },
 
-  // ==================== 3. KABABLAR ====================
+  // ==================== PİDƏ ====================
+  {
+    id: 'pd-1',
+    name: 'PİDƏ SADƏ PENDİRLİ',
+    category: 'pide',
+    description: 'Xüsusi daş fırında bişmiş bol ərimiş kaşar pendirli orijinal İncə Anadolu pidesi',
+    ingredients: 'Fırın xəmiri, Təzə Kaşar pendiri, Kərə yağı',
+    price: 6.00,
+    image: 'https://images.unsplash.com/photo-1541529086526-db283c563270?auto=format&fit=crop&q=80&w=800',
+    isPopular: true,
+    isHalal: true,
+    prepTime: '12-15 dəq'
+  },
+  {
+    id: 'pd-2',
+    name: 'PİDƏ QIYMƏLİ',
+    category: 'pide',
+    description: 'Ədviyyatlı dana qiyməsi, pomidor, bibər və soğanlı fırın pidesi',
+    ingredients: 'Fırın xəmiri, Dana qiyməsi, Pomidor, Biber, Soğan, Ədviyyat',
+    price: 7.00,
+    image: 'https://images.unsplash.com/photo-1626777552726-4a6b54c97e46?auto=format&fit=crop&q=80&w=800',
+    isPopular: true,
+    isHalal: true,
+    prepTime: '12-15 dəq'
+  },
+  {
+    id: 'pd-3',
+    name: 'PİDƏ QIYMƏLİ PENDİRLİ',
+    category: 'pide',
+    description: 'Nəfis dana qiyməsi və üzərində ərimiş bol kaşar pendirli pidesi',
+    ingredients: 'Fırın xəmiri, Dana qiyməsi, Kaşar pendiri, Kərə yağı',
+    price: 8.00,
+    image: 'https://images.unsplash.com/photo-1541529086526-db283c563270?auto=format&fit=crop&q=80&w=800',
+    isHalal: true,
+    prepTime: '12-15 dəq'
+  },
+  {
+    id: 'pd-4',
+    name: 'PİDƏ TİKƏ ƏTLİ (KUŞBAŞILI)',
+    category: 'pide',
+    description: 'İncə doğranmış marinad olunmuş dana can əti, pomidor və bibərli daş fırın pidesi',
+    ingredients: 'Fırın xəmiri, Dana can əti, Pomidor, Biber, Kərə yağı',
+    price: 9.00,
+    image: 'https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&q=80&w=800',
+    isPopular: true,
+    isHalal: true,
+    prepTime: '15 dəq'
+  },
+  {
+    id: 'pd-5',
+    name: 'PİDƏ TİKƏ ƏTLİ PENDİRLİ',
+    category: 'pide',
+    description: 'Xırda doğranmış dana əti, rəngli bibərlər və üzərində nar kimi qızarmış kaşar pendiri',
+    ingredients: 'Fırın xəmiri, Dana əti, Kaşar pendiri, Pomidor, Bibər, Kərə yağı',
+    price: 10.00,
+    image: 'https://images.unsplash.com/photo-1541529086526-db283c563270?auto=format&fit=crop&q=80&w=800',
+    isHalal: true,
+    prepTime: '15 dəq'
+  },
+  {
+    id: 'pd-6',
+    name: 'PİDƏ SUCUQLU PENDİRLİ',
+    category: 'pide',
+    description: 'Qızardılmış halal sucuq dilimləri və bol ərimiş kaşar pendiri ilə ləzzətli pide',
+    ingredients: 'Fırın xəmiri, Halal sucuq, Kaşar pendiri, Kərə yağı',
+    price: 7.50,
+    image: 'https://images.unsplash.com/photo-1534308983496-4fabb1a015ee?auto=format&fit=crop&q=80&w=800',
+    isHalal: true,
+    prepTime: '12-15 dəq'
+  },
+  {
+    id: 'pd-7',
+    name: 'PİDƏ QARIŞIQ (ALOV SPECIAL)',
+    category: 'pide',
+    description: 'Hər şeydən bol: Kuşbaşı dana əti, qiymə, sucuq, göbələk və iki qat kaşar pendiri',
+    ingredients: 'Kuşbaşı ət, Qiymə, Sucuq, Göbələk, Kaşar pendiri, Kərə yağı',
+    price: 11.00,
+    image: 'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?auto=format&fit=crop&q=80&w=800',
+    isPopular: true,
+    isHalal: true,
+    prepTime: '15 dəq'
+  },
   {
     id: 'kb-1',
     name: 'ADANA KABAB',

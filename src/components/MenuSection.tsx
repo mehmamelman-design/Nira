@@ -4,6 +4,7 @@ import { MenuItem, CategoryId, CategoryCard } from '../types';
 import { MENU_ITEMS } from '../data/menuData';
 import { ItemCustomizerModal } from './ItemCustomizerModal';
 import { FaqSection } from './FaqSection';
+import { CATEGORY_GROUPS } from './CategoriesAndGallerySection';
 
 interface MenuSectionProps {
   menuItems?: MenuItem[];
@@ -23,6 +24,11 @@ interface MenuSectionProps {
 }
 
 const DEFAULT_CATEGORY_IMAGES: Record<string, { image: string; desc: string }> = {
+  // DEFAULT_CATEGORY_IMAGES with Pide
+  pide: {
+    image: 'https://images.unsplash.com/photo-1541529086526-db283c563270?auto=format&fit=crop&q=80&w=1200',
+    desc: 'İsti daş fırında bişmiş bol kaşar pendirli, qiyməli və kuşbaşılı pidelər',
+  },
   fastfood: {
     image: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&q=80&w=1200',
     desc: 'Xırçıltılı smash burgerlər, dadlı naggetslər və kartof fri',
@@ -77,6 +83,79 @@ const DEFAULT_CATEGORY_IMAGES: Record<string, { image: string; desc: string }> =
   },
 };
 
+const DEFAULT_CATEGORY_SLIDES: Record<string, string[]> = {
+  fastfood: [
+    'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&q=80&w=1200',
+    'https://images.unsplash.com/photo-1550547660-d9450f859349?auto=format&fit=crop&q=80&w=1200',
+    'https://images.unsplash.com/photo-1561758033-d89a9ad46330?auto=format&fit=crop&q=80&w=1200',
+    'https://images.unsplash.com/photo-1586190848861-99aa4a171e90?auto=format&fit=crop&q=80&w=1200',
+  ],
+  pizza: [
+    'https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&q=80&w=1200',
+    'https://images.unsplash.com/photo-1534308983496-4fabb1a015ee?auto=format&fit=crop&q=80&w=1200',
+    'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?auto=format&fit=crop&q=80&w=1200',
+    'https://images.unsplash.com/photo-1604382355076-af4b0eb60143?auto=format&fit=crop&q=80&w=1200',
+  ],
+  kabablar: [
+    'https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&q=80&w=1200',
+    'https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&q=80&w=1200',
+    'https://images.unsplash.com/photo-1529193591184-b1d58069ecdd?auto=format&fit=crop&q=80&w=1200',
+    'https://images.unsplash.com/photo-1603360946369-dc9bb6258143?auto=format&fit=crop&q=80&w=1200',
+  ],
+  isti_yemekler: [
+    'https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&q=80&w=1200',
+    'https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&q=80&w=1200',
+    'https://images.unsplash.com/photo-1565299585323-38d6b0865b47?auto=format&fit=crop&q=80&w=1200',
+  ],
+  icikil: [
+    'https://images.unsplash.com/photo-1622483767028-3f66f32aef97?auto=format&fit=crop&q=80&w=1200',
+    'https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?auto=format&fit=crop&q=80&w=1200',
+    'https://images.unsplash.com/photo-1556881286-fc6915169721?auto=format&fit=crop&q=80&w=1200',
+  ],
+  sorbalar: [
+    'https://images.unsplash.com/photo-1547592166-23ac45744acd?auto=format&fit=crop&q=80&w=1200',
+    'https://images.unsplash.com/photo-1588566565463-180a5b2090d2?auto=format&fit=crop&q=80&w=1200',
+    'https://images.unsplash.com/photo-1541832676-9b763b0239ab?auto=format&fit=crop&q=80&w=1200',
+  ],
+  salat: [
+    'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&q=80&w=1200',
+    'https://images.unsplash.com/photo-1540420773420-3366772f4999?auto=format&fit=crop&q=80&w=1200',
+    'https://images.unsplash.com/photo-1515543237350-b3eea1ec8082?auto=format&fit=crop&q=80&w=1200',
+  ],
+  cig_kofte: [
+    'https://images.unsplash.com/photo-1626777552726-4a6b54c97e46?auto=format&fit=crop&q=80&w=1200',
+    'https://images.unsplash.com/photo-1565299585323-38d6b0865b47?auto=format&fit=crop&q=80&w=1200',
+  ],
+  qelyanaltilar: [
+    'https://images.unsplash.com/photo-1626082927389-6cd097cdc6ec?auto=format&fit=crop&q=80&w=1200',
+    'https://images.unsplash.com/photo-1562967914-608f82629710?auto=format&fit=crop&q=80&w=1200',
+  ],
+  pide: [
+    'https://images.unsplash.com/photo-1541529086526-db283c563270?auto=format&fit=crop&q=80&w=1200',
+    'https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&q=80&w=1200',
+  ],
+  desertler: [
+    'https://images.unsplash.com/photo-1551024709-8f23befc6f87?auto=format&fit=crop&q=80&w=1200',
+    'https://images.unsplash.com/photo-1587314168485-3236d6710814?auto=format&fit=crop&q=80&w=1200',
+    'https://images.unsplash.com/photo-1563729784474-d77dbb933a9e?auto=format&fit=crop&q=80&w=1200',
+  ],
+  kofe: [
+    'https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&q=80&w=1200',
+    'https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?auto=format&fit=crop&q=80&w=1200',
+    'https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&q=80&w=1200',
+  ],
+  kokteyl: [
+    'https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?auto=format&fit=crop&q=80&w=1200',
+    'https://images.unsplash.com/photo-1551024709-8f23befc6f87?auto=format&fit=crop&q=80&w=1200',
+  ],
+  all: [
+    'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&q=80&w=1200',
+    'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&q=80&w=1200',
+    'https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&q=80&w=1200',
+    'https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&q=80&w=1200',
+  ],
+};
+
 export const MenuSection: React.FC<MenuSectionProps> = ({
   menuItems,
   categoryCards,
@@ -119,11 +198,12 @@ export const MenuSection: React.FC<MenuSectionProps> = ({
 
   const itemsToDisplay = menuItems && menuItems.length > 0 ? menuItems : MENU_ITEMS;
 
-  // The 9 Main Requested Categories + "Hamsı"
+  // All Requested Categories + "Hamsı"
   const categories: { id: CategoryId; name: string; icon: string }[] = [
     { id: 'all', name: 'Hamsı', icon: '' },
     { id: 'fastfood', name: 'FAST FOOD', icon: '' },
     { id: 'pizza', name: 'PİZZA', icon: '' },
+    { id: 'pide', name: 'PİDƏ', icon: '' },
     { id: 'kabablar', name: 'KABABLAR', icon: '' },
     { id: 'isti_yemekler', name: 'İSTİ YEMƏKLƏR', icon: '' },
     { id: 'icikil', name: 'SOYUQ İÇKİLƏR', icon: '' },
@@ -156,6 +236,30 @@ export const MenuSection: React.FC<MenuSectionProps> = ({
       ? 'Bütün Menyular'
       : currentCatObj.name
     : 'Menyu';
+
+  const [currentBannerSlide, setCurrentBannerSlide] = useState(0);
+
+  const activeCatSlides = useMemo(() => {
+    if (currentCard?.images && currentCard.images.length > 0) {
+      return currentCard.images;
+    }
+    if (DEFAULT_CATEGORY_SLIDES[activeCategory] && DEFAULT_CATEGORY_SLIDES[activeCategory].length > 0) {
+      return DEFAULT_CATEGORY_SLIDES[activeCategory];
+    }
+    return [activeCatImage];
+  }, [currentCard, activeCategory, activeCatImage]);
+
+  useEffect(() => {
+    setCurrentBannerSlide(0);
+  }, [activeCategory]);
+
+  useEffect(() => {
+    if (activeCatSlides.length <= 1) return;
+    const timer = setInterval(() => {
+      setCurrentBannerSlide((prev) => (prev + 1) % activeCatSlides.length);
+    }, 2500);
+    return () => clearInterval(timer);
+  }, [activeCatSlides]);
 
   // Filtering Logic
   const filteredItems = useMemo(() => {
@@ -193,48 +297,85 @@ export const MenuSection: React.FC<MenuSectionProps> = ({
   };
 
   return (
-    <div className="min-h-screen bg-white text-zinc-900 py-8 sm:py-12 px-4 sm:px-6 lg:px-8 space-y-8 animate-fadeIn">
-      <div className="max-w-7xl mx-auto space-y-8">
+    <div className="min-h-screen bg-white text-zinc-900 pb-8 sm:pb-12 animate-fadeIn">
+      {/* Full-width Category Hero Banner (stretched to site borders, taller height, no dark photo overlays) */}
+      <div className="relative w-full h-64 sm:h-80 md:h-[420px] lg:h-[480px] overflow-hidden bg-zinc-900 flex flex-col justify-between p-4 sm:p-6 lg:p-8 transition-all duration-300">
+        {/* Background Slides of Selected Category with smooth fade transition (Bright, clear full resolution photos without dark mask) */}
+        {activeCatSlides.map((imgUrl, idx) => (
+          <img
+            key={imgUrl + idx}
+            src={imgUrl}
+            alt={titleText}
+            className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ease-in-out hover:scale-105 ${
+              idx === currentBannerSlide ? 'opacity-100 z-0' : 'opacity-0 z-0'
+            }`}
+          />
+        ))}
+
+        {/* Floating Top Controls Bar (Back Button) */}
+        <div className="relative z-20 flex items-center justify-between">
+          {onBackToHome && (
+            <button
+              type="button"
+              onClick={onBackToHome}
+              className="px-2 py-1 sm:px-2.5 sm:py-1.5 rounded-xl bg-black/80 hover:bg-black text-white border border-white/20 font-bold text-[10px] sm:text-xs flex items-center gap-1 transition-all cursor-pointer shadow-xl backdrop-blur-md active:scale-95 whitespace-nowrap"
+            >
+              <ArrowLeft className="w-3 h-3 text-white shrink-0" />
+              <span>Ana Səhifəyə Qayıt</span>
+            </button>
+          )}
+        </div>
+
+        {/* Category Title cleanly centered at bottom without dark frame box */}
+        <div className="relative z-20 mt-auto flex justify-center text-center pb-2">
+          <h1 className="text-xl sm:text-2xl md:text-3xl font-black text-white tracking-tight uppercase drop-shadow-[0_2px_10px_rgba(0,0,0,0.95)]">
+            {titleText.replace(/[\u{1F300}-\u{1F9FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}\u{1F600}-\u{1F64F}\u{1F680}-\u{1F6FF}\u{1F1E0}-\u{1F1FF}]/gu, '').trim()}
+          </h1>
+        </div>
+      </div>
+
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-6 space-y-8">
         
-        {/* Top Header & Category Hero Banner */}
+        {/* Top Header & Category Navigation */}
         <div className="space-y-4">
           
-          {/* Expanded Banner Image Section with Back Button directly inside on Top-Left */}
-          <div className="relative w-full h-52 sm:h-64 md:h-72 overflow-hidden rounded-2xl sm:rounded-3xl shadow-xl bg-zinc-950 flex flex-col justify-between p-4 sm:p-6 transition-all duration-300">
-            {/* Background Image of Selected Category */}
-            <img
-              src={activeCatImage}
-              alt={titleText}
-              className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 hover:scale-105"
-            />
-            {/* Dark Gradients for Text & Button Legibility */}
-            <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/40 to-black/30" />
-            <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-transparent to-transparent" />
+          {/* KATEQORİYALARIMIZ (Group Navigation Bar inside Menu view) */}
+          <div className="py-2 px-1 space-y-2.5 text-center">
+            <div className="flex items-center justify-center gap-2">
+              <span className="h-0.5 w-6 sm:w-10 bg-emerald-600 rounded-full" />
+              <h3 className="text-xs sm:text-sm font-black uppercase text-emerald-950 tracking-wider">
+                Kateqoriyalarımız
+              </h3>
+              <span className="h-0.5 w-6 sm:w-10 bg-emerald-600 rounded-full" />
+            </div>
 
-            {/* Back Button directly inside on Top-Left of the Photo */}
-            {onBackToHome && (
-              <div className="relative z-20 flex items-center justify-between">
-                <button
-                  type="button"
-                  onClick={onBackToHome}
-                  className="px-2.5 py-1.5 sm:px-3 sm:py-2 rounded-xl bg-black/80 hover:bg-black backdrop-blur-md text-white border border-zinc-700/80 hover:border-zinc-500 font-bold text-[10px] sm:text-xs flex items-center gap-1.5 transition-all cursor-pointer shadow-lg active:scale-95 whitespace-nowrap"
-                >
-                  <ArrowLeft className="w-3.5 h-3.5 text-white shrink-0" />
-                  <span>Ana Səhifəyə Qayıt</span>
-                </button>
-              </div>
-            )}
+            <div className="flex items-center justify-center flex-wrap gap-1.5 sm:gap-2">
+              {CATEGORY_GROUPS.map((group) => {
+                const IconComp = group.icon;
+                const isGroupActive = group.subCategories.some(sc => sc.id === activeCategory);
 
-            {/* Banner Text Over Image at Bottom */}
-            <div className="relative z-10 space-y-1.5 mt-auto pt-4">
-              <h1 className="text-2xl sm:text-3xl md:text-4xl font-black text-white tracking-tight uppercase drop-shadow-lg">
-                {titleText.replace(/[\u{1F300}-\u{1F9FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}\u{1F600}-\u{1F64F}\u{1F680}-\u{1F6FF}\u{1F1E0}-\u{1F1FF}]/gu, '').trim()}
-              </h1>
-              {activeCatDesc && (
-                <p className="text-xs sm:text-sm font-medium text-zinc-200 max-w-2xl drop-shadow leading-snug">
-                  {activeCatDesc}
-                </p>
-              )}
+                return (
+                  <button
+                    type="button"
+                    key={group.id}
+                    onClick={() => {
+                      if (group.subCategories.length > 0) {
+                        handleCategoryChange(group.subCategories[0].id);
+                      } else {
+                        handleCategoryChange('all');
+                      }
+                    }}
+                    className={`px-3 py-1.5 sm:px-4 sm:py-2 rounded-xl font-black text-[11px] sm:text-xs md:text-sm transition-all duration-200 cursor-pointer flex items-center gap-1.5 shadow-2xs ${
+                      isGroupActive
+                        ? 'bg-emerald-800 text-white shadow-md ring-1 ring-emerald-900 scale-102'
+                        : 'bg-white hover:bg-emerald-50 text-zinc-800 border border-zinc-200'
+                    }`}
+                  >
+                    <IconComp className={`w-3.5 h-3.5 sm:w-4 sm:h-4 ${isGroupActive ? 'text-amber-300' : 'text-emerald-700'}`} />
+                    <span>{group.name}</span>
+                  </button>
+                );
+              })}
             </div>
           </div>
 
@@ -325,18 +466,28 @@ export const MenuSection: React.FC<MenuSectionProps> = ({
             </button>
           </div>
         ) : (
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-3.5 sm:gap-4">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 lg:gap-8">
             {filteredItems.map((item) => {
               const ingredients = getIngredients(item);
+              const hasVariants = item.variants && item.variants.length > 0;
+
+              const handleItemClick = () => {
+                if (item.isOutOfStock) return;
+                if (hasVariants) {
+                  setSelectedCustomizerItem(item);
+                } else {
+                  onAddToCart(item);
+                }
+              };
 
               return (
                 <div
                   key={item.id}
-                  onClick={() => !item.isOutOfStock && onAddToCart(item)}
-                  className="bg-white border border-zinc-200 hover:border-zinc-300 rounded-2xl p-2 sm:p-2.5 shadow-sm hover:shadow-md transition-all duration-300 group flex items-center gap-2.5 sm:gap-3 cursor-pointer relative"
+                  onClick={handleItemClick}
+                  className="bg-white border border-zinc-200 hover:border-emerald-600 rounded-2xl lg:rounded-3xl p-3.5 sm:p-5 lg:p-6 shadow-xs hover:shadow-xl transition-all duration-300 group flex items-center gap-3.5 sm:gap-4 lg:gap-6 cursor-pointer relative"
                 >
-                  {/* Left Side: Compact Square Photo Box */}
-                  <div className="relative w-20 h-20 sm:w-28 sm:h-28 md:w-32 md:h-32 rounded-xl overflow-hidden bg-black shrink-0 border border-zinc-200">
+                  {/* Left Side: Photo Box - Enlarged on Mobile & Desktop */}
+                  <div className="relative w-28 h-28 sm:w-36 sm:h-36 md:w-44 md:h-44 lg:w-52 lg:h-52 rounded-xl sm:rounded-2xl overflow-hidden bg-black shrink-0 border border-zinc-200 shadow-xs">
                     <img
                       src={item.image}
                       alt={item.name}
@@ -345,33 +496,33 @@ export const MenuSection: React.FC<MenuSectionProps> = ({
                     />
 
                     {/* Badges on Image (Halal & Populyar) */}
-                    <div className="absolute top-1 left-1 flex flex-col gap-0.5 z-10 max-w-[90%]">
+                    <div className="absolute top-1.5 left-1.5 sm:top-2 sm:left-2 flex flex-col gap-1 z-10 max-w-[90%]">
                       {item.isHalal !== false && (
-                        <span className="px-1 py-0.2 rounded bg-emerald-700 text-white text-[8px] font-black tracking-wider shadow flex items-center gap-0.5 w-max">
-                          <ShieldCheck className="w-2 h-2 text-white" /> Halal
+                        <span className="px-1.5 py-0.5 rounded-md bg-emerald-700 text-white text-[9px] sm:text-xs font-black tracking-wider shadow flex items-center gap-1 w-max">
+                          <ShieldCheck className="w-2.5 h-2.5 sm:w-3.5 sm:h-3.5 text-white" /> Halal
                         </span>
                       )}
 
                       {item.isPopular && (
-                        <span className="px-1 py-0.2 rounded bg-amber-400 text-black text-[8px] font-black uppercase tracking-wider shadow flex items-center gap-0.5 w-max">
-                          <Sparkles className="w-2 h-2 fill-black" /> POPULYAR
+                        <span className="px-1.5 py-0.5 rounded-md bg-amber-400 text-black text-[9px] sm:text-xs font-black uppercase tracking-wider shadow flex items-center gap-1 w-max">
+                          <Sparkles className="w-2.5 h-2.5 sm:w-3.5 sm:h-3.5 fill-black" /> POPULYAR
                         </span>
                       )}
                     </div>
 
                     {/* Admin Edit & Delete Buttons over image */}
                     {isAdmin && (
-                      <div className="absolute bottom-1 left-1 z-20 flex items-center gap-1">
+                      <div className="absolute bottom-1.5 left-1.5 z-20 flex items-center gap-1">
                         <button
                           type="button"
                           onClick={(e) => {
                             e.stopPropagation();
                             if (onEditMenuItem) onEditMenuItem(item);
                           }}
-                          className="p-1 rounded bg-amber-400 text-black hover:bg-amber-300 shadow font-black cursor-pointer flex items-center justify-center"
+                          className="p-1.5 rounded-lg bg-amber-400 text-black hover:bg-amber-300 shadow font-black cursor-pointer flex items-center justify-center"
                           title={`"${item.name}" məhsulunu redaktə et`}
                         >
-                          <Pencil className="w-3 h-3" />
+                          <Pencil className="w-3.5 h-3.5" />
                         </button>
                         <button
                           type="button"
@@ -379,10 +530,10 @@ export const MenuSection: React.FC<MenuSectionProps> = ({
                             e.stopPropagation();
                             setDeletingItem(item);
                           }}
-                          className="p-1 rounded bg-rose-600 text-white hover:bg-rose-500 shadow font-black cursor-pointer flex items-center justify-center"
+                          className="p-1.5 rounded-lg bg-rose-600 text-white hover:bg-rose-500 shadow font-black cursor-pointer flex items-center justify-center"
                           title={`"${item.name}" məhsulunu sil`}
                         >
-                          <Trash2 className="w-3 h-3" />
+                          <Trash2 className="w-3.5 h-3.5" />
                         </button>
                       </div>
                     )}
@@ -390,7 +541,7 @@ export const MenuSection: React.FC<MenuSectionProps> = ({
                     {/* Out of Stock Badge if applicable */}
                     {item.isOutOfStock && (
                       <div className="absolute inset-0 bg-black/80 backdrop-blur-xs flex items-center justify-center z-20">
-                        <span className="px-1.5 py-0.5 rounded bg-red-600 text-white font-black text-[9px] uppercase tracking-wider">
+                        <span className="px-2 py-1 rounded-lg bg-red-600 text-white font-black text-xs uppercase tracking-wider">
                           Tükənib
                         </span>
                       </div>
@@ -398,33 +549,38 @@ export const MenuSection: React.FC<MenuSectionProps> = ({
                   </div>
 
                   {/* Right Side Details Column */}
-                  <div className="flex-1 min-w-0 flex flex-col justify-center space-y-1 py-0.5">
+                  <div className="flex-1 min-w-0 flex flex-col justify-between space-y-1.5 sm:space-y-2.5 py-0.5 h-full">
                     {/* Top Header: Title on Left, Price on Right */}
-                    <div className="flex items-start justify-between gap-1.5">
-                      <h3 className="text-xs sm:text-sm font-black text-emerald-950 uppercase group-hover:text-emerald-700 transition-colors line-clamp-1">
+                    <div className="flex items-start justify-between gap-2">
+                      <h3 className="text-sm sm:text-base lg:text-xl font-black text-emerald-950 uppercase group-hover:text-emerald-700 transition-colors line-clamp-2 leading-tight">
                         {item.name}
                       </h3>
 
                       {!isSetView && (
                         <div className="text-right shrink-0">
-                          <span className="text-xs sm:text-sm font-black text-emerald-950 tracking-tight whitespace-nowrap">
-                            {item.price.toFixed(2)} ₼
+                          <span className="text-sm sm:text-lg lg:text-2xl font-black text-emerald-950 tracking-tight whitespace-nowrap block">
+                            {hasVariants ? `от ${item.price.toFixed(2)}` : `${item.price.toFixed(2)}`} ₼
                           </span>
+                          {hasVariants && (
+                            <span className="text-[9px] sm:text-xs font-bold text-amber-600 block">
+                              (Ölçülər var)
+                            </span>
+                          )}
                         </div>
                       )}
                     </div>
 
                     {/* Rating & Ingredient Tags Row */}
-                    <div className="flex items-center gap-1 flex-wrap">
-                      <span className="flex items-center gap-0.5 text-amber-500 font-extrabold text-[10px] sm:text-xs shrink-0">
-                        <Star className="w-3 h-3 fill-amber-400 text-amber-500" />
+                    <div className="flex items-center gap-1.5 flex-wrap">
+                      <span className="flex items-center gap-1 text-amber-500 font-black text-xs sm:text-sm shrink-0">
+                        <Star className="w-3.5 h-3.5 sm:w-4 sm:h-4 fill-amber-400 text-amber-500" />
                         <span>{item.rating || 4.9}</span>
                       </span>
 
-                      {ingredients.slice(0, 2).map((ing, idx) => (
+                      {ingredients.slice(0, 3).map((ing, idx) => (
                         <span
                           key={idx}
-                          className="px-1 py-0.5 rounded bg-emerald-50 border border-emerald-200 text-[8px] sm:text-[9px] text-emerald-900 font-extrabold line-clamp-1"
+                          className="px-1 py-0.2 rounded-md bg-emerald-50 border border-emerald-200 text-[7px] sm:text-[9px] text-emerald-900 font-extrabold line-clamp-1"
                         >
                           {ing}
                         </span>
@@ -432,8 +588,8 @@ export const MenuSection: React.FC<MenuSectionProps> = ({
                     </div>
 
                     {/* Description Text & "Əlavə Et" Button side-by-side */}
-                    <div className="flex items-center justify-between gap-1.5 pt-0.5">
-                      <p className="text-[9px] sm:text-[10px] text-zinc-600 font-medium line-clamp-2 leading-tight flex-1 min-w-0">
+                    <div className="flex items-end justify-between gap-2 pt-1">
+                      <p className="text-[11px] sm:text-xs lg:text-sm text-zinc-600 font-medium line-clamp-2 sm:line-clamp-3 leading-snug flex-1 min-w-0">
                         {item.description}
                       </p>
 
@@ -443,12 +599,12 @@ export const MenuSection: React.FC<MenuSectionProps> = ({
                           disabled={item.isOutOfStock}
                           onClick={(e) => {
                             e.stopPropagation();
-                            onAddToCart(item);
+                            handleItemClick();
                           }}
-                          className="px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-lg sm:rounded-xl bg-emerald-700 hover:bg-emerald-800 active:scale-95 text-white font-extrabold text-[10px] sm:text-xs flex items-center gap-1 shadow-xs transition-all cursor-pointer disabled:bg-zinc-300 disabled:text-zinc-500 disabled:cursor-not-allowed whitespace-nowrap shrink-0"
+                          className="px-3 py-1.5 sm:px-4 sm:py-2 lg:px-6 lg:py-3 rounded-xl lg:rounded-2xl bg-emerald-800 hover:bg-emerald-900 active:scale-95 text-white font-black text-xs sm:text-sm lg:text-base flex items-center gap-1.5 shadow-md hover:shadow-lg transition-all cursor-pointer disabled:bg-zinc-300 disabled:text-zinc-500 disabled:cursor-not-allowed whitespace-nowrap shrink-0"
                         >
-                          <ShoppingBag className="w-3 h-3 fill-white/10 shrink-0" />
-                          <span>Əlavə Et</span>
+                          <ShoppingBag className="w-3.5 h-3.5 sm:w-4 sm:h-4 fill-white/20 shrink-0" />
+                          <span>{hasVariants ? 'Ölçü Seç' : 'Əlavə Et'}</span>
                         </button>
                       )}
                     </div>

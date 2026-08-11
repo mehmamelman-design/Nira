@@ -19,8 +19,6 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
   onRemoveItem,
   onClearCart
 }) => {
-  const [deliveryType, setDeliveryType] = useState<'yerinde' | 'catdirilma'>('yerinde');
-  const [selectedTable, setSelectedTable] = useState('');
   const [customerName, setCustomerName] = useState('');
   const [promoCode, setPromoCode] = useState('');
   const [appliedDiscount, setAppliedDiscount] = useState<number>(0); // 0 to 1 percentage
@@ -84,25 +82,11 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
   const handleSendWhatsAppOrder = () => {
     if (cartItems.length === 0) return;
 
-    if (deliveryType === 'yerinde' && !selectedTable) {
-      setValidationError('Zəhmət olmasa masanı seçin!');
-      return;
-    }
-
-    if (deliveryType === 'catdirilma' && !customerName.trim()) {
-      setValidationError('Zəhmət olmasa adınızı daxil edin!');
-      return;
-    }
-
     setValidationError(null);
 
     let text = `NİRA - SİFARİŞ SƏBƏTİ\n\n`;
-    text += `Xidmət Növü: ${deliveryType === 'yerinde' ? 'Yerində (Restoranda)' : 'Ünvana Çatdırılma'}\n`;
-    
-    if (deliveryType === 'yerinde') {
-      text += `Masa: ${selectedTable}\n`;
-    } else {
-      text += `Müştəri Adı: ${customerName}\n`;
+    if (customerName.trim()) {
+      text += `Müştəri: ${customerName.trim()}\n`;
     }
 
     text += `\nSİFARİŞ EDİLƏN MƏHSULLAR:\n`;
@@ -254,94 +238,23 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
 
           </div>
 
-          {/* Bottom Section: Delivery Selector + Table/Name + Promokod + Price Summary + Button */}
+          {/* Bottom Section: Promokod + Price Summary + Button */}
           {cartItems.length > 0 && !orderPlaced && (
             <div className="p-4 sm:p-5 bg-[#09100d] border-t border-zinc-800/90 space-y-3 shrink-0">
               
-              {/* Delivery / In-House Toggle */}
-              <div className="grid grid-cols-2 gap-2 p-1 bg-[#121c17] rounded-xl border border-zinc-800">
-                <button
-                  type="button"
-                  onClick={() => {
-                    setDeliveryType('yerinde');
-                    setValidationError(null);
-                  }}
-                  className={`py-2 rounded-lg text-xs font-extrabold transition-all cursor-pointer ${
-                    deliveryType === 'yerinde'
-                      ? 'bg-amber-400 text-black shadow-md'
-                      : 'text-zinc-400 hover:text-white'
-                  }`}
-                >
-                  Yerində
-                </button>
-                <button
-                  type="button"
-                  onClick={() => {
-                    setDeliveryType('catdirilma');
-                    setValidationError(null);
-                  }}
-                  className={`py-2 rounded-lg text-xs font-extrabold transition-all cursor-pointer ${
-                    deliveryType === 'catdirilma'
-                      ? 'bg-amber-400 text-black shadow-md'
-                      : 'text-zinc-400 hover:text-white'
-                  }`}
-                >
-                  Çatdırılma
-                </button>
+              {/* Optional Name / Note Input */}
+              <div className="space-y-1">
+                <label className="block text-[11px] font-bold text-amber-400">
+                  Adınız və ya Qeydiniz (istəyə bağlı):
+                </label>
+                <input
+                  type="text"
+                  placeholder="Adınızı və ya qeydinizi daxil edin..."
+                  value={customerName}
+                  onChange={(e) => setCustomerName(e.target.value)}
+                  className="w-full px-3.5 py-2.5 bg-[#121c17] border border-zinc-800 rounded-xl text-white text-xs focus:outline-none focus:border-amber-400 transition-colors"
+                />
               </div>
-
-              {/* If "Yerində" Selected -> Table Dropdown */}
-              {deliveryType === 'yerinde' ? (
-                <div className="space-y-1">
-                  <div className="flex items-center justify-between">
-                    <label className="text-xs font-bold text-amber-400">
-                      Masanızı seçin:
-                    </label>
-                    <span className="text-[10px] text-zinc-500 font-medium">Düzgün seçin</span>
-                  </div>
-                  <select
-                    value={selectedTable}
-                    onChange={(e) => {
-                      setSelectedTable(e.target.value);
-                      if (e.target.value) setValidationError(null);
-                    }}
-                    className={`w-full px-3.5 py-2.5 bg-[#0a0a0a] border rounded-xl text-white text-xs font-bold focus:outline-none cursor-pointer transition-colors ${
-                      validationError && !selectedTable ? 'border-red-500 ring-1 ring-red-500 bg-red-950/20' : 'border-zinc-800 focus:border-amber-400'
-                    }`}
-                  >
-                    <option value="" className="bg-[#0a0a0a] text-zinc-400 font-semibold py-2">Masanı seçin...</option>
-                    <option value="Masa 1" className="bg-[#0a0a0a] text-white font-bold py-2">Masa 1</option>
-                    <option value="Masa 2" className="bg-[#0a0a0a] text-white font-bold py-2">Masa 2</option>
-                    <option value="Masa 3" className="bg-[#0a0a0a] text-white font-bold py-2">Masa 3</option>
-                    <option value="Masa 4" className="bg-[#0a0a0a] text-white font-bold py-2">Masa 4</option>
-                    <option value="Masa 5" className="bg-[#0a0a0a] text-white font-bold py-2">Masa 5</option>
-                    <option value="Masa 6" className="bg-[#0a0a0a] text-white font-bold py-2">Masa 6</option>
-                    <option value="Masa 7" className="bg-[#0a0a0a] text-white font-bold py-2">Masa 7</option>
-                    <option value="Masa 8" className="bg-[#0a0a0a] text-white font-bold py-2">Masa 8</option>
-                    <option value="Masa 9" className="bg-[#0a0a0a] text-white font-bold py-2">Masa 9</option>
-                    <option value="Masa 10" className="bg-[#0a0a0a] text-white font-bold py-2">Masa 10</option>
-                  </select>
-                </div>
-              ) : (
-                /* If "Çatdırılma" Selected -> Only Name Input */
-                <div className="space-y-1">
-                  <label className="block text-[11px] font-bold text-amber-400">
-                    Adınız:
-                  </label>
-                  <input
-                    type="text"
-                    placeholder="Adınızı daxil edin..."
-                    value={customerName}
-                    onChange={(e) => {
-                      setCustomerName(e.target.value);
-                      if (e.target.value) setValidationError(null);
-                    }}
-                    className={`w-full px-3.5 py-2.5 bg-[#121c17] border rounded-xl text-white text-xs focus:outline-none transition-colors ${
-                      validationError && !customerName ? 'border-red-500 ring-1 ring-red-500 bg-red-950/20' : 'border-zinc-800 focus:border-amber-400'
-                    }`}
-                  />
-                </div>
-              )}
 
               {/* Promokod Section */}
               <div className="flex gap-2">

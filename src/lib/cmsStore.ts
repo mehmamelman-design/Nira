@@ -113,6 +113,38 @@ export const DEFAULT_CATEGORIES: CategoryCard[] = [
     description: "Çıtır toyuq kanatları, fri, soğan halqaları və souslar",
     order: 9,
     icon: ""
+  },
+  {
+    id: "pide",
+    name: "PİDƏ",
+    image: "https://images.unsplash.com/photo-1541529086526-db283c563270?auto=format&fit=crop&q=80&w=800",
+    description: "İsti daş fırında bişmiş bol kaşar pendirli, qiyməli və kuşbaşılı pidelər",
+    order: 10,
+    icon: ""
+  },
+  {
+    id: "desertler",
+    name: "DESERTLƏR",
+    image: "https://images.unsplash.com/photo-1551024709-8f23befc6f87?auto=format&fit=crop&q=80&w=800",
+    description: "Xüsusi paxlavalar, San Sebastian, cheesecake, künefe, dondurma və tortlar",
+    order: 11,
+    icon: ""
+  },
+  {
+    id: "kofe",
+    name: "KOFE",
+    image: "https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&q=80&w=800",
+    description: "Espresso, Americano, Latte, Cappucino, Raf, Mokka və zəngin kofe çeşidləri",
+    order: 12,
+    icon: ""
+  },
+  {
+    id: "kokteyl",
+    name: "KOKTEYL",
+    image: "https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?auto=format&fit=crop&q=80&w=800",
+    description: "Sərinləşdirici Mojito, Mix Shake və xüsusi Nira kokteyli",
+    order: 13,
+    icon: ""
   }
 ];
 
@@ -198,33 +230,19 @@ export function subscribeToCategories(callback: (cats: CategoryCard[]) => void) 
   const docRef = doc(db, 'config', 'categories');
   return onSnapshot(docRef, (snapshot) => {
     let items: CategoryCard[] = [];
-    if (snapshot.exists() && snapshot.data().items && Array.isArray(snapshot.data().items)) {
+    if (snapshot.exists() && snapshot.data().items && Array.isArray(snapshot.data().items) && snapshot.data().items.length > 0) {
       items = snapshot.data().items as CategoryCard[];
+      setStoredLocal('alov_categories_config', items);
+      callback(items);
     } else {
       items = getStoredLocal('alov_categories_config', DEFAULT_CATEGORIES);
+      setStoredLocal('alov_categories_config', items);
+      setDoc(docRef, { items }).catch(console.error);
+      callback(items);
     }
-
-    // Always ensure all 9 DEFAULT_CATEGORIES are present and synced with updated names/images
-    const syncedItems: CategoryCard[] = DEFAULT_CATEGORIES.map(defaultCat => {
-      const existing = items.find(c => c.id === defaultCat.id);
-      if (existing) {
-        return {
-          ...defaultCat,
-          ...existing,
-          name: defaultCat.name, // Force user requested new names
-          image: existing.image || defaultCat.image,
-          description: defaultCat.description
-        };
-      }
-      return defaultCat;
-    });
-
-    setStoredLocal('alov_categories_config', syncedItems);
-    setDoc(docRef, { items: syncedItems }).catch(console.error);
-    callback(syncedItems);
   }, (err) => {
     console.warn('Categories snapshot error:', err);
-    callback(DEFAULT_CATEGORIES);
+    callback(getStoredLocal('alov_categories_config', DEFAULT_CATEGORIES));
   });
 }
 
@@ -232,35 +250,19 @@ export function subscribeToMenu(callback: (items: MenuItem[]) => void) {
   const docRef = doc(db, 'config', 'menu');
   return onSnapshot(docRef, (snapshot) => {
     let items: MenuItem[] = [];
-    if (snapshot.exists() && snapshot.data().items && Array.isArray(snapshot.data().items)) {
+    if (snapshot.exists() && snapshot.data().items && Array.isArray(snapshot.data().items) && snapshot.data().items.length > 0) {
       items = snapshot.data().items as MenuItem[];
+      setStoredLocal('alov_menu_items', items);
+      callback(items);
     } else {
       items = getStoredLocal('alov_menu_items', MENU_ITEMS);
-    }
-
-    // Check if stored items have drinks with variants. If old drinks or missing categories, sync with MENU_ITEMS
-    const hasDrinkVariants = items.some(i => i.category === 'icikil' && i.variants && i.variants.length > 0);
-    const hasNewCategories = items.some(i => i.category === 'desertler' || i.category === 'kofe' || i.category === 'kokteyl');
-    
-    if (!hasDrinkVariants || !hasNewCategories) {
-      // Keep non-drink items from existing, replace drinks with new MENU_ITEMS drinks
-      const drinkItems = MENU_ITEMS.filter(i => i.category === 'icikil');
-      const nonDrinkItems = items.filter(i => i.category !== 'icikil');
-      items = [...nonDrinkItems, ...drinkItems];
-      if (!hasNewCategories) {
-        items = MENU_ITEMS;
-      }
+      setStoredLocal('alov_menu_items', items);
       setDoc(docRef, { items }).catch(console.error);
+      callback(items);
     }
-
-    setStoredLocal('alov_menu_items', items);
-    callback(items);
   }, (err) => {
     console.warn('Menu snapshot error:', err);
-    let stored = getStoredLocal('alov_menu_items', MENU_ITEMS);
-    if (stored.length < MENU_ITEMS.length) {
-      stored = MENU_ITEMS;
-    }
+    const stored = getStoredLocal('alov_menu_items', MENU_ITEMS);
     callback(stored);
   });
 }
@@ -287,20 +289,16 @@ export function subscribeToGallery(callback: (photos: GalleryPhoto[]) => void) {
   const docRef = doc(db, 'config', 'gallery');
   return onSnapshot(docRef, (snapshot) => {
     let items: GalleryPhoto[] = [];
-    if (snapshot.exists() && snapshot.data().items && Array.isArray(snapshot.data().items)) {
+    if (snapshot.exists() && snapshot.data().items && Array.isArray(snapshot.data().items) && snapshot.data().items.length > 0) {
       items = snapshot.data().items as GalleryPhoto[];
+      setStoredLocal('alov_gallery_photos', items);
+      callback(items);
     } else {
       items = getStoredLocal('alov_gallery_photos', DEFAULT_GALLERY);
+      setStoredLocal('alov_gallery_photos', items);
+      setDoc(docRef, { items }).catch(console.error);
+      callback(items);
     }
-
-    const isOldGallery = items.length !== 3 || !items.some(i => i.title.toUpperCase() === 'KOFE');
-    if (isOldGallery || items.length === 0) {
-      items = DEFAULT_GALLERY;
-      setDoc(docRef, { items: DEFAULT_GALLERY }).catch(console.error);
-    }
-
-    setStoredLocal('alov_gallery_photos', items);
-    callback(items);
   }, (err) => {
     console.warn('Gallery snapshot error:', err);
     callback(getStoredLocal('alov_gallery_photos', DEFAULT_GALLERY));
