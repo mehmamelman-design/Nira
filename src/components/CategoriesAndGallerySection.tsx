@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { CategoryCard, GalleryPhoto, CategoryId, HeroConfig } from '../types';
-import { ChevronRight, Utensils, Coffee, Pizza, Flame, Package } from 'lucide-react';
+import { ChevronRight, Utensils, Coffee, Pizza, Flame, Package, Pencil } from 'lucide-react';
 import { Hero } from './Hero';
 import { DEFAULT_CATEGORIES } from '../lib/cmsStore';
 
@@ -17,6 +17,7 @@ interface CategoriesAndGallerySectionProps {
   onOpenReviews?: () => void;
   onOpenAiAssistant?: () => void;
   onEditMiddleHero?: (slideIndex?: number) => void;
+  onEditCategory?: (category: CategoryCard) => void;
 }
 
 export const CATEGORY_GROUPS = [
@@ -83,6 +84,7 @@ export const CategoriesAndGallerySection: React.FC<CategoriesAndGallerySectionPr
   onOpenReviews = () => {},
   onOpenAiAssistant = () => {},
   onEditMiddleHero,
+  onEditCategory,
 }) => {
   const [selectedGroupId, setSelectedGroupId] = useState<string>('esas_yemekler');
 
@@ -102,12 +104,28 @@ export const CategoriesAndGallerySection: React.FC<CategoriesAndGallerySectionPr
       <div
         key={cat.id}
         onClick={() => onSelectCategory && onSelectCategory(cat.id as CategoryId)}
-        className="group flex flex-col bg-white border border-zinc-200 hover:border-emerald-600 rounded-2xl sm:rounded-3xl p-3 sm:p-5 lg:p-6 shadow-md hover:shadow-2xl transition-all duration-300 hover:-translate-y-1.5 cursor-pointer"
+        className="group relative flex flex-col bg-white rounded-2xl sm:rounded-3xl p-1.5 sm:p-2.5 lg:p-3 shadow-md hover:shadow-2xl transition-all duration-300 hover:-translate-y-1.5 cursor-pointer"
       >
-        {/* Photo Frame Box - Square Aspect Ratio 1:1 Full Size Image */}
-        <div className="relative aspect-square w-full overflow-hidden rounded-xl sm:rounded-2xl border border-zinc-200 bg-zinc-100 shadow-xs">
+        {/* Admin Edit Button on Category Card */}
+        {isAdmin && onEditCategory && (
+          <button
+            type="button"
+            onClick={(e) => {
+              e.stopPropagation();
+              onEditCategory(cat);
+            }}
+            className="absolute top-3 left-3 z-30 px-2.5 py-1.5 rounded-xl bg-amber-400 hover:bg-amber-300 text-black font-black text-xs shadow-xl flex items-center gap-1.5 active:scale-95 transition-all border border-black/20"
+            title="Şəkli və Slayderi Dəyiş"
+          >
+            <Pencil className="w-3.5 h-3.5 text-black" />
+            <span>Şəkli Dəyiş</span>
+          </button>
+        )}
+
+        {/* Photo Frame Box - Clean photo without border, enlarged aspect ratio */}
+        <div className="relative aspect-[4/3] sm:aspect-[16/11] w-full overflow-hidden rounded-xl sm:rounded-2xl bg-zinc-100 shadow-xs">
           <img
-            src={cat.image}
+            src={cat.image || (DEFAULT_CATEGORY_SLIDES[cat.id]?.[0]) || 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&q=80&w=600'}
             alt={cat.name}
             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
             loading="lazy"
@@ -115,21 +133,21 @@ export const CategoriesAndGallerySection: React.FC<CategoriesAndGallerySectionPr
           <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-60 group-hover:opacity-40 transition-opacity" />
 
           {/* Badge & Action Indicator */}
-          <div className="absolute bottom-2.5 right-2.5 sm:bottom-4 sm:right-4 z-10 flex items-center gap-1.5 px-3 py-1.5 sm:px-4 sm:py-2 rounded-xl bg-white text-black font-black text-xs sm:text-base shadow-lg group-hover:bg-amber-400 transition-colors">
+          <div className="absolute bottom-2 right-2 sm:bottom-3 sm:right-3 z-10 flex items-center gap-1 px-2.5 py-1 sm:px-3.5 sm:py-1.5 rounded-lg sm:rounded-xl bg-white text-black font-black text-[11px] sm:text-xs shadow-md group-hover:bg-amber-400 transition-colors">
             <span className="text-black font-black">Baxın</span>
-            <ChevronRight className="w-4 h-4 sm:w-5 sm:h-5 stroke-[3] text-black" />
+            <ChevronRight className="w-3.5 h-3.5 sm:w-4 sm:h-4 stroke-[3] text-black" />
           </div>
         </div>
 
         {/* Text directly under photo frame - Title Name and Feature Sentences */}
-        <div className="mt-2.5 sm:mt-4 px-0.5 text-left space-y-1">
-          <h3 className="text-sm sm:text-2xl lg:text-3xl font-black text-black group-hover:text-emerald-800 transition-colors flex items-center gap-1 line-clamp-1">
+        <div className="mt-2 sm:mt-3 px-1 pb-1 text-left space-y-0.5 sm:space-y-1">
+          <h3 className="text-sm sm:text-lg lg:text-xl font-black text-black group-hover:text-emerald-800 transition-colors flex items-center gap-1 line-clamp-1">
             <span className="text-black font-black tracking-tight">
               {cat.name.replace(/[\u{1F300}-\u{1F9FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}\u{1F600}-\u{1F64F}\u{1F680}-\u{1F6FF}\u{1F1E0}-\u{1F1FF}]/gu, '').trim()}
             </span>
           </h3>
           {descriptionText && (
-            <p className="text-[11px] sm:text-sm lg:text-base font-medium text-zinc-600 line-clamp-2 leading-snug">
+            <p className="text-[11px] sm:text-xs lg:text-sm font-medium text-zinc-600 line-clamp-2 leading-tight">
               {descriptionText}
             </p>
           )}
@@ -190,8 +208,8 @@ export const CategoriesAndGallerySection: React.FC<CategoriesAndGallerySectionPr
           </div>
         </div>
 
-        {/* All categories grid together (Enlarged cards on Desktop) */}
-        <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-3.5 sm:gap-8 lg:gap-10">
+        {/* All categories grid together (Compact 2-3 col layout) */}
+        <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-3.5 sm:gap-6 lg:gap-8">
           {displayedCategories.map(renderCategoryCard)}
         </div>
       </div>
@@ -205,6 +223,7 @@ export const CategoriesAndGallerySection: React.FC<CategoriesAndGallerySectionPr
           onOpenAiAssistant={onOpenAiAssistant}
           isAdmin={isAdmin}
           onEditHero={onEditMiddleHero}
+          isMiddleHero={true}
         />
       </div>
     </section>

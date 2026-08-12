@@ -946,7 +946,7 @@ export const MENU_ITEMS: MenuItem[] = [
     id: 'des-3',
     name: 'HAVUÇ DİLİM',
     category: 'desertler',
-    description: 'Böyük dilim Antep fıstıqlı havuç dilim paxlava, dondurma ilə servis olunur',
+    description: 'Böyük dilim Antep fıstıqlı havuç dilim paxlava',
     ingredients: 'Antep fıstığı, Yufka, Kərə yağı, Şərbət',
     price: 3.00,
     image: 'https://images.unsplash.com/photo-1519676867240-f03562e64548?auto=format&fit=crop&q=80&w=800',
@@ -1104,36 +1104,6 @@ export const MENU_ITEMS: MenuItem[] = [
     ingredients: 'Ananas dilimləri, Şəkər şərbəti',
     price: 4.00,
     image: 'https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?auto=format&fit=crop&q=80&w=800',
-    prepTime: '3 dəq'
-  },
-  {
-    id: 'des-19',
-    name: 'DONDURMA ÇİYƏLƏKLİ',
-    category: 'desertler',
-    description: 'Təbii çiyələk püreli sərin zərif dondurma şarları',
-    ingredients: 'Təbii süd, Çiyələk püresi, Qaymaq',
-    price: 3.00,
-    image: 'https://images.unsplash.com/photo-1560008511-11c63416e52d?auto=format&fit=crop&q=80&w=800',
-    prepTime: '3 dəq'
-  },
-  {
-    id: 'des-20',
-    name: 'DONDURMA ŞOKOLADLI',
-    category: 'desertler',
-    description: 'Zəngin kakao və şokoladlı kremsi dondurma',
-    ingredients: 'Təbii süd, Kakao, Şokolad parçaları',
-    price: 3.00,
-    image: 'https://images.unsplash.com/photo-1570197788417-0e82375c9371?auto=format&fit=crop&q=80&w=800',
-    prepTime: '3 dəq'
-  },
-  {
-    id: 'des-21',
-    name: 'DONDURMA VANİLLİ',
-    category: 'desertler',
-    description: 'Klassik vanil ətirli zərif sütlü dondurma',
-    ingredients: 'Təbii süd, Madaqaskar vanili, Qaymaq',
-    price: 3.00,
-    image: 'https://images.unsplash.com/photo-1570197788417-0e82375c9371?auto=format&fit=crop&q=80&w=800',
     prepTime: '3 dəq'
   },
 

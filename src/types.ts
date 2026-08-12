@@ -75,6 +75,8 @@ export interface CategoryCard {
   id: string;
   name: string;
   image: string;
+  images?: string[];
+  mobileImages?: string[];
   description?: string;
   order?: number;
   icon?: string;

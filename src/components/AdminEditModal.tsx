@@ -1,22 +1,25 @@
 import React, { useState, useEffect } from 'react';
 import { X, Sparkles, Upload, Eye, Save, Image, Tag, DollarSign, FileText, Layers, CheckCircle, Trash2 } from 'lucide-react';
-import { MenuItem, CategoryId, HeroConfig } from '../types';
+import { MenuItem, CategoryId, HeroConfig, CategoryCard } from '../types';
 import { formatImageUrl } from '../lib/imageUtils';
 import { compressImageFile } from '../lib/imageCompressor';
 import { DEFAULT_HERO, DEFAULT_MIDDLE_HERO } from '../lib/cmsStore';
+import { DEFAULT_CATEGORY_SLIDES } from './MenuSection';
 
 interface AdminEditModalProps {
   isOpen: boolean;
   onClose: () => void;
-  type: 'logo' | 'menuItem' | 'hero' | 'middleHero';
+  type: 'logo' | 'menuItem' | 'hero' | 'middleHero' | 'categoryHero';
   logoUrl?: string;
   menuItem?: MenuItem | null;
   heroConfig?: HeroConfig;
+  categoryCard?: CategoryCard | null;
   initialSlideIndex?: number;
   onSaveLogo?: (newUrl: string) => Promise<void> | void;
   onSaveMenuItem?: (updatedItem: MenuItem) => Promise<void> | void;
   onDeleteMenuItem?: (itemId: string) => Promise<void> | void;
   onSaveHero?: (hero: HeroConfig) => Promise<void> | void;
+  onSaveCategory?: (updatedCategory: CategoryCard) => Promise<void> | void;
   onShowToast?: (msg: string) => void;
 }
 
@@ -27,11 +30,13 @@ export const AdminEditModal: React.FC<AdminEditModalProps> = ({
   logoUrl = '',
   menuItem,
   heroConfig,
+  categoryCard,
   initialSlideIndex = 0,
   onSaveLogo,
   onSaveMenuItem,
   onDeleteMenuItem,
   onSaveHero,
+  onSaveCategory,
   onShowToast
 }) => {
   const [activeTab, setActiveTab] = useState<'info' | 'cloud'>('info');
@@ -54,47 +59,50 @@ export const AdminEditModal: React.FC<AdminEditModalProps> = ({
   const [heroSubtitle, setHeroSubtitle] = useState('');
   const [heroVideoUrl, setHeroVideoUrl] = useState('');
   const [heroIsVideoEnabled, setHeroIsVideoEnabled] = useState(false);
-  const [heroSlide1, setHeroSlide1] = useState('');
-  const [heroSlide2, setHeroSlide2] = useState('');
-  const [heroSlide3, setHeroSlide3] = useState('');
-  const [heroSlide4, setHeroSlide4] = useState('');
-  // Mobile Hero Fields
-  const [mobileHeroSlide1, setMobileHeroSlide1] = useState('');
-  const [mobileHeroSlide2, setMobileHeroSlide2] = useState('');
-  const [mobileHeroSlide3, setMobileHeroSlide3] = useState('');
-  const [mobileHeroSlide4, setMobileHeroSlide4] = useState('');
+  const [slidesList, setSlidesList] = useState<{ deskUrl: string; mobUrl: string }[]>([]);
+  const [categoryMainImage, setCategoryMainImage] = useState('');
 
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
     if (type === 'logo') {
       setImageUrl(logoUrl || '');
-    } else if (type === 'hero' || type === 'middleHero') {
-      const defaultList = type === 'middleHero' ? DEFAULT_MIDDLE_HERO.images : DEFAULT_HERO.images;
-      setHeroTitle(heroConfig?.title || (type === 'middleHero' ? 'Təzə Və Xüsusi Şirniyyatlar, İsti Və Soyuq İçkilər' : 'Qaynar İsti Ocaqdan Qapınıza Çatdırılan Ən Ləzzətli Fast Food'));
-      setHeroSubtitle(heroConfig?.subtitle || 'Sizlər üçün xüsusi olaraq hazırlanan təbii içkilər və ləzzətli desertlər');
-      
-      const imgs = Array.isArray(heroConfig?.images) ? heroConfig.images : [];
-      const s1 = imgs[0] !== undefined && imgs[0] !== null ? imgs[0] : (heroConfig?.imageUrl || defaultList[0]);
-      const s2 = imgs[1] !== undefined && imgs[1] !== null ? imgs[1] : defaultList[1];
-      const s3 = imgs[2] !== undefined && imgs[2] !== null ? imgs[2] : defaultList[2];
-      const s4 = imgs[3] !== undefined && imgs[3] !== null ? imgs[3] : defaultList[3];
+    } else if (type === 'hero' || type === 'middleHero' || type === 'categoryHero') {
+      let defaultList: string[] = [];
+      if (type === 'categoryHero') {
+        const catId = categoryCard?.id || 'all';
+        defaultList = DEFAULT_CATEGORY_SLIDES[catId] || [categoryCard?.image || ''];
+        setHeroTitle(categoryCard?.name ? `${categoryCard.name} Slayderi` : 'Kateqoriya Slayderi');
+        setHeroSubtitle(categoryCard?.description || 'Bu kateqoriyaya aid xüsusi slayd şəkilləri');
+        setCategoryMainImage(categoryCard?.image || '');
+      } else if (type === 'middleHero') {
+        defaultList = DEFAULT_MIDDLE_HERO.images || [];
+        setHeroTitle(heroConfig?.title || 'Təzə Və Xüsusi Şirniyyatlar, İsti Və Soyuq İçkilər');
+        setHeroSubtitle(heroConfig?.subtitle || 'Sizlər üçün xüsusi olaraq hazırlanan təbii içkilər və ləzzətli desertlər');
+      } else {
+        defaultList = DEFAULT_HERO.images || [];
+        setHeroTitle(heroConfig?.title || 'Qaynar İsti Ocaqdan Qapınıza Çatdırılan Ən Ləzzətli Fast Food');
+        setHeroSubtitle(heroConfig?.subtitle || 'Təzə kəsilmiş halal ət, isti ocağın əvəzolunmaz qoxusu...');
+      }
 
-      setHeroSlide1(s1);
-      setHeroSlide2(s2);
-      setHeroSlide3(s3);
-      setHeroSlide4(s4);
+      const imgs = type === 'categoryHero'
+        ? (Array.isArray(categoryCard?.images) && categoryCard.images.length > 0 ? categoryCard.images : defaultList)
+        : (Array.isArray(heroConfig?.images) && heroConfig.images.length > 0 ? heroConfig.images : defaultList);
 
-      const mImgs = Array.isArray(heroConfig?.mobileImages) ? heroConfig.mobileImages : [];
-      setMobileHeroSlide1(mImgs[0] || '');
-      setMobileHeroSlide2(mImgs[1] || '');
-      setMobileHeroSlide3(mImgs[2] || '');
-      setMobileHeroSlide4(mImgs[3] || '');
+      const mImgs = type === 'categoryHero'
+        ? (Array.isArray(categoryCard?.mobileImages) ? categoryCard.mobileImages : [])
+        : (Array.isArray(heroConfig?.mobileImages) ? heroConfig.mobileImages : []);
 
-      const initIdx = initialSlideIndex ?? 0;
+      const initialSlides = imgs.map((imgUrl, idx) => ({
+        deskUrl: imgUrl || '',
+        mobUrl: mImgs[idx] || ''
+      }));
+
+      setSlidesList(initialSlides);
+
+      const initIdx = Math.min(initialSlideIndex ?? 0, Math.max(0, initialSlides.length - 1));
       setSelectedSlideIndex(initIdx);
-      const slideVals = [s1, s2, s3, s4];
-      setImageUrl(slideVals[initIdx] || '');
+      setImageUrl(initialSlides[initIdx]?.deskUrl || '');
 
       setHeroVideoUrl(heroConfig?.videoUrl || '');
       setHeroIsVideoEnabled(heroConfig?.isVideoEnabled ?? false);
@@ -122,17 +130,61 @@ export const AdminEditModal: React.FC<AdminEditModalProps> = ({
       setPrepTime('12 dəq');
       setIsOutOfStock(false);
     }
-  }, [type, logoUrl, menuItem, heroConfig, isOpen, initialSlideIndex]);
+  }, [type, logoUrl, menuItem, heroConfig, categoryCard, isOpen, initialSlideIndex]);
 
   if (!isOpen) return null;
 
+  const handleAddSlide = () => {
+    setSlidesList(prev => {
+      const newList = [...prev, { deskUrl: '', mobUrl: '' }];
+      const newIdx = newList.length - 1;
+      setSelectedSlideIndex(newIdx);
+      setImageUrl('');
+      return newList;
+    });
+  };
+
+  const handleRemoveSlide = (idxToRemove: number) => {
+    if (slidesList.length <= 1) {
+      alert('Ən azı 1 slayd qalmalıdır!');
+      return;
+    }
+    setSlidesList(prev => {
+      const newList = prev.filter((_, i) => i !== idxToRemove);
+      const nextSelected = Math.max(0, Math.min(selectedSlideIndex, newList.length - 1));
+      setSelectedSlideIndex(nextSelected);
+      setImageUrl(newList[nextSelected]?.deskUrl || '');
+      return newList;
+    });
+  };
+
+  const updateDeskUrl = (idx: number, val: string) => {
+    setSlidesList(prev => {
+      const newList = [...prev];
+      if (newList[idx]) {
+        newList[idx] = { ...newList[idx], deskUrl: val };
+      }
+      return newList;
+    });
+    if (idx === selectedSlideIndex) {
+      setImageUrl(val);
+    }
+  };
+
+  const updateMobUrl = (idx: number, val: string) => {
+    setSlidesList(prev => {
+      const newList = [...prev];
+      if (newList[idx]) {
+        newList[idx] = { ...newList[idx], mobUrl: val };
+      }
+      return newList;
+    });
+  };
+
   const handleImageUrlChange = (val: string) => {
     setImageUrl(val);
-    if (type === 'hero' || type === 'middleHero') {
-      if (selectedSlideIndex === 0) setHeroSlide1(val);
-      else if (selectedSlideIndex === 1) setHeroSlide2(val);
-      else if (selectedSlideIndex === 2) setHeroSlide3(val);
-      else if (selectedSlideIndex === 3) setHeroSlide4(val);
+    if (type === 'hero' || type === 'middleHero' || type === 'categoryHero') {
+      updateDeskUrl(selectedSlideIndex, val);
     }
   };
 
@@ -159,30 +211,34 @@ export const AdminEditModal: React.FC<AdminEditModalProps> = ({
         if (onShowToast) onShowToast('Yuxarı Logo uğurla yeniləndi!');
       } else if (type === 'hero' || type === 'middleHero') {
         if (onSaveHero) {
-          const s1 = heroSlide1.trim() ? formatImageUrl(heroSlide1.trim()) : '';
-          const s2 = heroSlide2.trim() ? formatImageUrl(heroSlide2.trim()) : '';
-          const s3 = heroSlide3.trim() ? formatImageUrl(heroSlide3.trim()) : '';
-          const s4 = heroSlide4.trim() ? formatImageUrl(heroSlide4.trim()) : '';
-          const slideImgs = [s1, s2, s3, s4];
-
-          const m1 = mobileHeroSlide1.trim() ? formatImageUrl(mobileHeroSlide1.trim()) : '';
-          const m2 = mobileHeroSlide2.trim() ? formatImageUrl(mobileHeroSlide2.trim()) : '';
-          const m3 = mobileHeroSlide3.trim() ? formatImageUrl(mobileHeroSlide3.trim()) : '';
-          const m4 = mobileHeroSlide4.trim() ? formatImageUrl(mobileHeroSlide4.trim()) : '';
-          const mobileSlideImgs = [m1, m2, m3, m4];
+          const slideImgs = slidesList.map(s => s.deskUrl.trim() ? formatImageUrl(s.deskUrl.trim()) : '');
+          const mobileSlideImgs = slidesList.map(s => s.mobUrl.trim() ? formatImageUrl(s.mobUrl.trim()) : '');
 
           await onSaveHero({
             title: heroTitle.trim() || (type === 'middleHero' ? 'Təzə Və Xüsusi Şirniyyatlar, İsti Və Soyuq İçkilər' : 'Qaynar İsti Ocaqdan Qapınıza Çatdırılan Ən Ləzzətli Fast Food'),
             subtitle: heroSubtitle.trim() || 'Sizlər üçün xüsusi olaraq hazırlanan təbii içkilər və ləzzətli desertlər',
-            imageUrl: s1,
+            imageUrl: slideImgs[0] || '',
             images: slideImgs,
             mobileImages: mobileSlideImgs,
             videoUrl: heroVideoUrl.trim(),
             isVideoEnabled: heroIsVideoEnabled
           });
-          if (onShowToast) onShowToast(type === 'middleHero' ? 'Orta Slayder Banneri uğurla yeniləndi!' : 'Giriş Slayderi uğurla yeniləndi!');
+          if (onShowToast) onShowToast(type === 'middleHero' ? `Orta Slayder Banneri (${slideImgs.length} Slayd) uğurla yeniləndi!` : `Giriş Slayderi (${slideImgs.length} Slayd) uğurla yeniləndi!`);
         }
-        if (onShowToast) onShowToast('Hero Banner və 4 Slider Şəkli uğurla yeniləndi!');
+      } else if (type === 'categoryHero') {
+        if (onSaveCategory && categoryCard) {
+          const slideImgs = slidesList.map(s => s.deskUrl.trim() ? formatImageUrl(s.deskUrl.trim()) : '');
+          const mobileSlideImgs = slidesList.map(s => s.mobUrl.trim() ? formatImageUrl(s.mobUrl.trim()) : '');
+
+          const updatedCat: CategoryCard = {
+            ...categoryCard,
+            image: categoryMainImage.trim() ? formatImageUrl(categoryMainImage.trim()) : (slideImgs[0] || categoryCard.image || ''),
+            images: slideImgs,
+            mobileImages: mobileSlideImgs
+          };
+          await onSaveCategory(updatedCat);
+          if (onShowToast) onShowToast(`"${categoryCard.name}" Kateqoriyası (${slideImgs.length} Slayd) uğurla yeniləndi!`);
+        }
       } else if (onSaveMenuItem) {
         const itemToSave: MenuItem = {
           id: menuItem?.id || `item_${Date.now()}`,
@@ -407,7 +463,7 @@ export const AdminEditModal: React.FC<AdminEditModalProps> = ({
                     </div>
                   </div>
                 </>
-              ) : type === 'hero' ? (
+              ) : (type === 'hero' || type === 'middleHero' || type === 'categoryHero') ? (
                 <div className="space-y-3.5">
                   <div>
                     <label className="block text-xs font-extrabold uppercase text-amber-400 mb-1">
@@ -437,44 +493,110 @@ export const AdminEditModal: React.FC<AdminEditModalProps> = ({
                     />
                   </div>
 
+                  {type === 'categoryHero' && (
+                    <div className="bg-emerald-950/60 p-3.5 rounded-2xl border border-emerald-500/40 space-y-2.5">
+                      <div className="flex items-center justify-between">
+                        <label className="block text-xs font-black uppercase text-amber-300 flex items-center gap-1.5">
+                          📸 Ana Səhifə Kart Foto Şəkli
+                        </label>
+                        <span className="text-[10px] bg-emerald-800 text-white font-bold px-2 py-0.5 rounded-full">
+                          Ana Səhifədə Görünür
+                        </span>
+                      </div>
+                      <p className="text-[11px] text-zinc-300">
+                        Ana səhifədəki kateqoriya bölməsinin üzərində görünən əsas şəkli buradan dəyişin:
+                      </p>
+                      <div className="space-y-2">
+                        <div className="flex gap-2">
+                          <input
+                            type="text"
+                            value={categoryMainImage}
+                            onChange={(e) => setCategoryMainImage(e.target.value)}
+                            placeholder="https://res.cloudinary.com/... şəkil URL"
+                            className="flex-1 px-3 py-2 rounded-xl bg-black/80 border border-zinc-700 text-white font-mono text-xs focus:border-amber-400 focus:outline-none"
+                          />
+                          <button
+                            type="button"
+                            onClick={async () => {
+                              try {
+                                const text = await navigator.clipboard.readText();
+                                if (text) setCategoryMainImage(text);
+                              } catch {
+                                const pasted = prompt('Kart şəklinin URL-ni daxil edin:');
+                                if (pasted) setCategoryMainImage(pasted);
+                              }
+                            }}
+                            className="px-3 py-2 rounded-xl bg-amber-400 hover:bg-amber-300 text-black font-black text-xs cursor-pointer active:scale-95 transition-transform"
+                          >
+                            Yapışdır
+                          </button>
+                        </div>
+                        <div className="flex items-center gap-3 pt-1">
+                          <input
+                            type="file"
+                            accept="image/*"
+                            onChange={async (e) => {
+                              const file = e.target.files?.[0];
+                              if (file) {
+                                try {
+                                  const compressed = await compressImageFile(file);
+                                  setCategoryMainImage(compressed);
+                                  if (onShowToast) onShowToast('Kateqoriya kart şəkli yükləndi!');
+                                } catch (err: any) {
+                                  alert(err.message || 'Xəta baş verdi');
+                                }
+                              }
+                            }}
+                            className="text-[11px] text-zinc-300 file:mr-2 file:py-1 file:px-3 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-emerald-500 file:text-black cursor-pointer"
+                          />
+                          {categoryMainImage && (
+                            <img
+                              src={categoryMainImage}
+                              alt="Kart Önizləmə"
+                              className="w-12 h-12 rounded-xl object-cover border border-amber-400/60 shadow-md"
+                            />
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
                   <div className="space-y-2">
                     <div className="flex items-center justify-between">
                       <label className="block text-xs font-extrabold uppercase text-amber-400">
-                        Slider Şəkilləri (Kompüter Və Mobil Xüsusi)
+                        Slider Şəkilləri ({slidesList.length} Slayd)
                       </label>
-                      <button
-                        type="button"
-                        onClick={() => {
-                          setHeroSlide1(''); setHeroSlide2(''); setHeroSlide3(''); setHeroSlide4('');
-                          setMobileHeroSlide1(''); setMobileHeroSlide2(''); setMobileHeroSlide3(''); setMobileHeroSlide4('');
-                          setImageUrl('');
-                        }}
-                        className="text-[11px] text-red-400 hover:text-red-300 font-bold underline cursor-pointer"
-                      >
-                        Bütün Şəkilləri Sil / Sıfırla
-                      </button>
+                      <div className="flex items-center gap-2">
+                        <button
+                          type="button"
+                          onClick={handleAddSlide}
+                          className="px-2.5 py-1 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-[11px] font-black flex items-center gap-1 cursor-pointer shadow"
+                        >
+                          + Yeni Slayd Əlavə Et
+                        </button>
+                      </div>
                     </div>
                     <p className="text-[11px] text-zinc-400">
-                      Hər slayd üçün Kompüter (Masaüstü) və Mobil (Telefon) şəkillərini ayrı-ayrı təyin edə bilərsiniz. Mobil şəkil daxil edildikdə telefonlarda yalnız mobil şəkil, kompüterdə isə masaüstü şəkil göstəriləcək.
+                      İstədiyiniz qədər slayd elave edə və ya silə bilərsiniz. Hər slayd üçün Kompüter və Mobil şəkillərini ayrı-ayrı təyin edə bilərsiniz.
                     </p>
 
                     <div className="space-y-2.5">
-                      {[
-                        { id: 1, deskVal: heroSlide1, setDesk: setHeroSlide1, mobVal: mobileHeroSlide1, setMob: setMobileHeroSlide1 },
-                        { id: 2, deskVal: heroSlide2, setDesk: setHeroSlide2, mobVal: mobileHeroSlide2, setMob: setMobileHeroSlide2 },
-                        { id: 3, deskVal: heroSlide3, setDesk: setHeroSlide3, mobVal: mobileHeroSlide3, setMob: setMobileHeroSlide3 },
-                        { id: 4, deskVal: heroSlide4, setDesk: setHeroSlide4, mobVal: mobileHeroSlide4, setMob: setMobileHeroSlide4 },
-                      ].map((slide) => (
-                        <div key={slide.id} className="bg-black/50 p-2.5 rounded-2xl border border-zinc-800 space-y-2">
+                      {slidesList.map((slide, idx) => (
+                        <div key={idx} className="bg-black/50 p-2.5 rounded-2xl border border-zinc-800 space-y-2">
                           <div className="flex items-center justify-between border-b border-zinc-800/80 pb-1">
-                            <span className="text-xs text-amber-400 font-black">Slayd {slide.id}</span>
-                            {(slide.deskVal || slide.mobVal) && (
+                            <div className="flex items-center gap-2">
+                              <span className="text-xs text-amber-400 font-black">Slayd {idx + 1}</span>
+                              {idx === selectedSlideIndex && (
+                                <span className="text-[9px] bg-amber-400 text-black font-black px-1.5 py-0.5 rounded">Seçilib</span>
+                              )}
+                            </div>
+                            {slidesList.length > 1 && (
                               <button
                                 type="button"
-                                onClick={() => { slide.setDesk(''); slide.setMob(''); }}
-                                className="text-[10px] text-red-400 hover:text-red-300 font-bold cursor-pointer"
+                                onClick={() => handleRemoveSlide(idx)}
+                                className="text-[10px] text-red-400 hover:text-red-300 font-bold flex items-center gap-1 cursor-pointer bg-red-950/40 px-2 py-0.5 rounded border border-red-800/50"
                               >
-                                Sıfırla
+                                <Trash2 className="w-3 h-3" /> Slaydı Sil
                               </button>
                             )}
                           </div>
@@ -487,8 +609,8 @@ export const AdminEditModal: React.FC<AdminEditModalProps> = ({
                               </span>
                               <input
                                 type="text"
-                                value={slide.deskVal}
-                                onChange={(e) => slide.setDesk(e.target.value)}
+                                value={slide.deskUrl}
+                                onChange={(e) => updateDeskUrl(idx, e.target.value)}
                                 placeholder="Kompüter üçün şəkil URL..."
                                 className="w-full px-2 py-1 rounded-lg bg-black/80 border border-zinc-700 text-white font-mono text-[11px] focus:border-amber-400 focus:outline-none"
                               />
@@ -500,8 +622,8 @@ export const AdminEditModal: React.FC<AdminEditModalProps> = ({
                                   if (file) {
                                     try {
                                       const compressed = await compressImageFile(file);
-                                      slide.setDesk(compressed);
-                                      if (onShowToast) onShowToast(`Slayd ${slide.id} Kompüter şəkli yükləndi!`);
+                                      updateDeskUrl(idx, compressed);
+                                      if (onShowToast) onShowToast(`Slayd ${idx + 1} Kompüter şəkli yükləndi!`);
                                     } catch (err: any) {
                                       alert(err.message || 'Xəta baş verdi');
                                     }
@@ -518,8 +640,8 @@ export const AdminEditModal: React.FC<AdminEditModalProps> = ({
                               </span>
                               <input
                                 type="text"
-                                value={slide.mobVal}
-                                onChange={(e) => slide.setMob(e.target.value)}
+                                value={slide.mobUrl}
+                                onChange={(e) => updateMobUrl(idx, e.target.value)}
                                 placeholder="Telefon üçün xüsusi şəkil URL..."
                                 className="w-full px-2 py-1 rounded-lg bg-black/80 border border-zinc-700 text-white font-mono text-[11px] focus:border-emerald-400 focus:outline-none"
                               />
@@ -531,8 +653,8 @@ export const AdminEditModal: React.FC<AdminEditModalProps> = ({
                                   if (file) {
                                     try {
                                       const compressed = await compressImageFile(file);
-                                      slide.setMob(compressed);
-                                      if (onShowToast) onShowToast(`Slayd ${slide.id} Mobil şəkli yükləndi!`);
+                                      updateMobUrl(idx, compressed);
+                                      if (onShowToast) onShowToast(`Slayd ${idx + 1} Mobil şəkli yükləndi!`);
                                     } catch (err: any) {
                                       alert(err.message || 'Xəta baş verdi');
                                     }
@@ -544,6 +666,14 @@ export const AdminEditModal: React.FC<AdminEditModalProps> = ({
                           </div>
                         </div>
                       ))}
+
+                      <button
+                        type="button"
+                        onClick={handleAddSlide}
+                        className="w-full py-2.5 rounded-xl border border-dashed border-amber-400/60 hover:border-amber-400 bg-amber-400/10 hover:bg-amber-400/20 text-amber-300 font-bold text-xs flex items-center justify-center gap-2 cursor-pointer transition-all"
+                      >
+                        <span>+ YENİ SLAYD ƏLAVƏ ET ({slidesList.length + 1}-ci Slayd)</span>
+                      </button>
                     </div>
                   </div>
 
@@ -590,16 +720,26 @@ export const AdminEditModal: React.FC<AdminEditModalProps> = ({
                     <span className="text-[11px] font-black uppercase text-amber-400">
                       Redaktə Edilən Slaydı Seçin:
                     </span>
-                    <span className="text-[11px] font-extrabold text-amber-300 bg-amber-900/40 px-2 py-0.5 rounded-md border border-amber-500/30">
-                      Slayd {selectedSlideIndex + 1} / 4
-                    </span>
+                    <div className="flex items-center gap-2">
+                      <span className="text-[11px] font-extrabold text-amber-300 bg-amber-900/40 px-2 py-0.5 rounded-md border border-amber-500/30">
+                        Slayd {selectedSlideIndex + 1} / {slidesList.length}
+                      </span>
+                      {slidesList.length > 1 && (
+                        <button
+                          type="button"
+                          onClick={() => handleRemoveSlide(selectedSlideIndex)}
+                          className="text-[10px] text-red-400 hover:text-red-300 font-bold bg-red-950/50 px-2 py-0.5 rounded border border-red-500/30 cursor-pointer flex items-center gap-1"
+                        >
+                          <Trash2 className="w-3 h-3" /> Sil
+                        </button>
+                      )}
+                    </div>
                   </div>
 
-                  <div className="grid grid-cols-4 gap-1.5">
-                    {[0, 1, 2, 3].map((idx) => {
-                      const slideVals = [heroSlide1, heroSlide2, heroSlide3, heroSlide4];
+                  <div className="flex flex-wrap gap-1.5">
+                    {slidesList.map((s, idx) => {
                       const isSelected = selectedSlideIndex === idx;
-                      const hasVal = Boolean(slideVals[idx] && slideVals[idx].trim());
+                      const hasVal = Boolean(s.deskUrl && s.deskUrl.trim());
 
                       return (
                         <button
@@ -607,21 +747,28 @@ export const AdminEditModal: React.FC<AdminEditModalProps> = ({
                           type="button"
                           onClick={() => {
                             setSelectedSlideIndex(idx);
-                            setImageUrl(slideVals[idx] || '');
+                            setImageUrl(s.deskUrl || '');
                           }}
-                          className={`py-2 px-1 rounded-xl text-xs font-black transition-all cursor-pointer border flex flex-col items-center justify-center gap-0.5 ${
+                          className={`py-2 px-3 rounded-xl text-xs font-black transition-all cursor-pointer border flex items-center gap-1.5 ${
                             isSelected
-                              ? 'bg-amber-400 text-black border-amber-300 shadow-lg scale-[1.02]'
+                              ? 'bg-amber-400 text-black border-amber-300 shadow-lg'
                               : 'bg-zinc-900 text-zinc-300 border-zinc-800 hover:border-zinc-700 hover:text-white'
                           }`}
                         >
                           <span>Slayd {idx + 1}</span>
                           <span className={`text-[9px] font-bold ${isSelected ? 'text-black/80' : 'text-zinc-500'}`}>
-                            {hasVal ? '✓ Şəkil var' : 'Standart'}
+                            {hasVal ? '✓' : '—'}
                           </span>
                         </button>
                       );
                     })}
+                    <button
+                      type="button"
+                      onClick={handleAddSlide}
+                      className="py-2 px-3 rounded-xl text-xs font-bold bg-emerald-900/60 hover:bg-emerald-800 text-emerald-300 border border-emerald-500/40 flex items-center gap-1 cursor-pointer"
+                    >
+                      <span>+ Slayd Əlavə Et</span>
+                    </button>
                   </div>
                 </div>
               )}
@@ -699,7 +846,7 @@ export const AdminEditModal: React.FC<AdminEditModalProps> = ({
                       className="max-h-full max-w-full object-contain p-2"
                       onError={(e) => {
                         const defaultList = type === 'middleHero' ? DEFAULT_MIDDLE_HERO.images : DEFAULT_HERO.images;
-                        (e.target as HTMLImageElement).src = defaultList[selectedSlideIndex] || 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&q=80&w=600';
+                        (e.target as HTMLImageElement).src = defaultList[selectedSlideIndex % defaultList.length] || 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&q=80&w=600';
                       }}
                     />
                   ) : (

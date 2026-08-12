@@ -23,16 +23,16 @@ export const SplashScreen: React.FC<SplashScreenProps> = ({
       });
     }
 
-    // Trigger smooth fade out at 3.2s
+    // Trigger smooth fade out at 4.3s (so total splash display is exactly 5 seconds)
     const fadeTimer = setTimeout(() => {
       setIsFadingOut(true);
-    }, 3200);
+    }, 4300);
 
-    // Remove from DOM completely at 3.8s
+    // Remove from DOM completely at 5.0s
     const hideTimer = setTimeout(() => {
       setIsVisible(false);
       if (onFinish) onFinish();
-    }, 3800);
+    }, 5000);
 
     return () => {
       clearTimeout(fadeTimer);

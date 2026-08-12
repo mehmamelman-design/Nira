@@ -21,6 +21,8 @@ interface MenuSectionProps {
   setTitle?: string;
   initialSearchQuery?: string;
   onSearchQueryChange?: (query: string) => void;
+  highlightedItemId?: string | null;
+  onEditCategoryBanner?: (category: CategoryId, slideIndex: number) => void;
 }
 
 const DEFAULT_CATEGORY_IMAGES: Record<string, { image: string; desc: string }> = {
@@ -67,7 +69,7 @@ const DEFAULT_CATEGORY_IMAGES: Record<string, { image: string; desc: string }> =
   },
   desertler: {
     image: 'https://images.unsplash.com/photo-1551024709-8f23befc6f87?auto=format&fit=crop&q=80&w=1200',
-    desc: 'Xüsusi paxlavalar, San Sebastian, cheesecake, sütlaç, künefe, dondurma və leziz tortlar',
+    desc: 'Xüsusi paxlavalar, San Sebastian, cheesecake, sütlaç, künefe və leziz tortlar',
   },
   kofe: {
     image: 'https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&q=80&w=1200',
@@ -83,7 +85,7 @@ const DEFAULT_CATEGORY_IMAGES: Record<string, { image: string; desc: string }> =
   },
 };
 
-const DEFAULT_CATEGORY_SLIDES: Record<string, string[]> = {
+export const DEFAULT_CATEGORY_SLIDES: Record<string, string[]> = {
   fastfood: [
     'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&q=80&w=1200',
     'https://images.unsplash.com/photo-1550547660-d9450f859349?auto=format&fit=crop&q=80&w=1200',
@@ -171,11 +173,24 @@ export const MenuSection: React.FC<MenuSectionProps> = ({
   setTitle,
   initialSearchQuery = '',
   onSearchQueryChange,
+  highlightedItemId,
+  onEditCategoryBanner,
 }) => {
   const [activeCategory, setActiveCategory] = useState<CategoryId>(selectedCategory || 'all');
   const [searchQuery, setSearchQuery] = useState(initialSearchQuery);
   const [selectedCustomizerItem, setSelectedCustomizerItem] = useState<MenuItem | null>(null);
   const [deletingItem, setDeletingItem] = useState<MenuItem | null>(null);
+
+  useEffect(() => {
+    if (highlightedItemId) {
+      setTimeout(() => {
+        const el = document.getElementById(`food-card-${highlightedItemId}`);
+        if (el) {
+          el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+      }, 200);
+    }
+  }, [highlightedItemId, activeCategory]);
 
   useEffect(() => {
     if (selectedCategory) {
@@ -312,8 +327,8 @@ export const MenuSection: React.FC<MenuSectionProps> = ({
           />
         ))}
 
-        {/* Floating Top Controls Bar (Back Button) */}
-        <div className="relative z-20 flex items-center justify-between">
+        {/* Floating Top Controls Bar (Back Button & Admin Edit Slide Button) */}
+        <div className="relative z-20 flex items-center justify-between gap-2">
           {onBackToHome && (
             <button
               type="button"
@@ -322,6 +337,17 @@ export const MenuSection: React.FC<MenuSectionProps> = ({
             >
               <ArrowLeft className="w-3 h-3 text-white shrink-0" />
               <span>Ana Səhifəyə Qayıt</span>
+            </button>
+          )}
+
+          {isAdmin && onEditCategoryBanner && (
+            <button
+              type="button"
+              onClick={() => onEditCategoryBanner(activeCategory, currentBannerSlide)}
+              className="px-2.5 py-1.5 sm:px-3 sm:py-1.5 rounded-xl bg-amber-400 hover:bg-amber-500 text-black font-extrabold text-[10px] sm:text-xs flex items-center gap-1.5 shadow-xl transition-all cursor-pointer backdrop-blur-md border border-amber-300 ml-auto"
+            >
+              <Pencil className="w-3.5 h-3.5 text-black" />
+              <span>Slaydı Redaktə Et ({currentBannerSlide + 1}/{activeCatSlides.length})</span>
             </button>
           )}
         </div>
@@ -483,8 +509,13 @@ export const MenuSection: React.FC<MenuSectionProps> = ({
               return (
                 <div
                   key={item.id}
+                  id={`food-card-${item.id}`}
                   onClick={handleItemClick}
-                  className="bg-white border border-zinc-200 hover:border-emerald-600 rounded-2xl lg:rounded-3xl p-3.5 sm:p-5 lg:p-6 shadow-xs hover:shadow-xl transition-all duration-300 group flex items-center gap-3.5 sm:gap-4 lg:gap-6 cursor-pointer relative"
+                  className={`rounded-2xl lg:rounded-3xl p-3.5 sm:p-5 lg:p-6 transition-all duration-300 group flex items-center gap-3.5 sm:gap-4 lg:gap-6 cursor-pointer relative ${
+                    item.id === highlightedItemId
+                      ? 'bg-amber-50/40 border-2 border-zinc-950 ring-2 ring-zinc-950 shadow-2xl scale-[1.01]'
+                      : 'bg-white border border-zinc-200 hover:border-emerald-600 shadow-xs hover:shadow-xl'
+                  }`}
                 >
                   {/* Left Side: Photo Box - Enlarged on Mobile & Desktop */}
                   <div className="relative w-28 h-28 sm:w-36 sm:h-36 md:w-44 md:h-44 lg:w-52 lg:h-52 rounded-xl sm:rounded-2xl overflow-hidden bg-black shrink-0 border border-zinc-200 shadow-xs">

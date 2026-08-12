@@ -36,7 +36,7 @@ export const FAQ_ITEMS: FaqItem[] = [
 ];
 
 export const FaqSection: React.FC = () => {
-  const [openId, setOpenId] = useState<string | null>('faq-1');
+  const [openId, setOpenId] = useState<string | null>(null);
 
   const toggleItem = (id: string) => {
     setOpenId((prev) => (prev === id ? null : id));

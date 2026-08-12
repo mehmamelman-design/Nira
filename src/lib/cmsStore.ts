@@ -126,7 +126,7 @@ export const DEFAULT_CATEGORIES: CategoryCard[] = [
     id: "desertler",
     name: "DESERTLƏR",
     image: "https://images.unsplash.com/photo-1551024709-8f23befc6f87?auto=format&fit=crop&q=80&w=800",
-    description: "Xüsusi paxlavalar, San Sebastian, cheesecake, künefe, dondurma və tortlar",
+    description: "Xüsusi paxlavalar, San Sebastian, cheesecake, künefe və tortlar",
     order: 11,
     icon: ""
   },
@@ -166,7 +166,7 @@ export const DEFAULT_GALLERY: GalleryPhoto[] = [
   {
     id: "gal-3",
     title: "DESERTLƏR",
-    description: "Xüsusi paxlavalar, San Sebastian, cheesecake, sütlaç, künefe, dondurma və tortlar",
+    description: "Xüsusi paxlavalar, San Sebastian, cheesecake, sütlaç, künefe və tortlar",
     imageUrl: "https://images.unsplash.com/photo-1551024709-8f23befc6f87?auto=format&fit=crop&q=80&w=800",
     order: 3
   }

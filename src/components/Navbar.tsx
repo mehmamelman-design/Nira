@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Flame, ShoppingBag, Phone, Menu, X, MessageCircle, User, ShieldCheck, Lock, Pencil } from 'lucide-react';
+import { Flame, ShoppingBag, Phone, Menu, X, MessageCircle, User, ShieldCheck, Lock, Pencil, Search } from 'lucide-react';
 import { CartItem } from '../types';
 import { auth } from '../lib/firebase';
 import { onAuthStateChanged, User as FirebaseUser } from 'firebase/auth';
@@ -13,6 +13,7 @@ interface NavbarProps {
   onOpenAdminPanel?: () => void;
   onOpenAuthModal?: () => void;
   onOpenEditLogo?: () => void;
+  onOpenSearch?: () => void;
   isAdmin?: boolean;
 }
 
@@ -24,6 +25,7 @@ export const Navbar: React.FC<NavbarProps> = ({
   onOpenAdminPanel,
   onOpenAuthModal,
   onOpenEditLogo,
+  onOpenSearch,
   isAdmin: propIsAdmin
 }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -49,6 +51,7 @@ export const Navbar: React.FC<NavbarProps> = ({
   const isAdmin = propIsAdmin || currentEmail === 'mehmamelman@gmail.com' || currentEmail === 'admin@alov.az' || currentEmail === 'admin';
 
   const totalCartCount = cartItems.reduce((acc, item) => acc + item.quantity, 0);
+  const totalCartPrice = cartItems.reduce((acc, item) => acc + (item.price * item.quantity), 0);
 
   const navLinks = [
     { id: 'menu', label: 'Menyu' },
@@ -91,7 +94,7 @@ export const Navbar: React.FC<NavbarProps> = ({
           <div className="flex items-center justify-between min-h-[48px] py-1">
             
             {/* Logo */}
-            <div className="relative flex items-center gap-2 group">
+            <div className="relative flex items-center gap-2 group -ml-2 sm:-ml-3">
               <button 
                 onClick={() => handleNavClick('hero')}
                 className="flex items-center group focus:outline-none cursor-pointer"
@@ -100,7 +103,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                 <img
                   src={siteConfig?.logoUrl || 'https://res.cloudinary.com/dq8xegykm/image/upload/v1786184761/Ba%C5%9Fl%C4%B1qs%C4%B1z_dizayn-Photoroom_t4omj6.png'}
                   alt={siteConfig?.siteName || "NIRA-Fest&Food Restorani Logo"}
-                  className="h-[70px] sm:h-[84px] w-auto object-contain max-w-[280px] sm:max-w-[340px] scale-[1.25] origin-left group-hover:scale-[1.32] transition-transform duration-300"
+                  className="h-[52px] sm:h-[64px] w-auto object-contain max-w-[260px] sm:max-w-[340px] scale-[2.0] sm:scale-[2.2] origin-left group-hover:scale-[2.3] transition-transform duration-300"
                 />
               </button>
 
@@ -150,10 +153,23 @@ export const Navbar: React.FC<NavbarProps> = ({
                 <span>(051) 635 94 74</span>
               </a>
 
-              {/* Profile / Registration Button */}
+              {/* Search Button (Clean icon) */}
+              <button
+                onClick={() => {
+                  if (onOpenSearch) onOpenSearch();
+                  else handleNavClick('menu');
+                }}
+                className="flex items-center justify-center p-2 rounded-xl text-zinc-700 hover:text-emerald-800 hover:bg-zinc-100 transition-all duration-200 cursor-pointer"
+                title="Axtarış"
+                aria-label="Axtarış"
+              >
+                <Search className="w-5 h-5 stroke-[2]" />
+              </button>
+
+              {/* Profile / Registration Button (Clean icon) */}
               <button
                 onClick={onOpenAuthModal}
-                className="flex items-center justify-center p-1.5 rounded-xl bg-emerald-50 border border-emerald-300 text-emerald-900 hover:bg-emerald-100 transition-all duration-200 cursor-pointer overflow-hidden"
+                className="flex items-center justify-center p-2 rounded-xl text-zinc-700 hover:text-emerald-800 hover:bg-zinc-100 transition-all duration-200 cursor-pointer overflow-hidden"
                 title={authUser ? (authUser.displayName || authUser.email || "Şəxsi Kabinet") : "Qeydiyyat və Giriş"}
                 aria-label="Qeydiyyat və Giriş"
               >
@@ -164,29 +180,20 @@ export const Navbar: React.FC<NavbarProps> = ({
                     {authUser.displayName.charAt(0).toUpperCase()}
                   </span>
                 ) : (
-                  <User className="w-4 h-4 text-emerald-800 stroke-[2]" />
+                  <User className="w-5 h-5 stroke-[2]" />
                 )}
               </button>
 
-              {/* Cart Button with Circle Count */}
+              {/* Cart Button with Dynamic Total AZN Price */}
               <button
                 onClick={onOpenCart}
-                className="flex items-center justify-center gap-2 px-2.5 py-1.5 rounded-xl bg-emerald-600 border border-emerald-700 text-white hover:bg-emerald-700 transition-all duration-200 cursor-pointer shadow-sm"
+                className="flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-600 border border-emerald-700 text-white hover:bg-emerald-700 transition-all duration-200 cursor-pointer shadow-sm"
                 aria-label="Səbət"
               >
                 <ShoppingBag className="w-4 h-4 text-white stroke-[2]" />
-                <span className="w-5 h-5 rounded-full bg-amber-400 text-black border border-amber-300 flex items-center justify-center text-[11px] font-extrabold">
-                  {totalCartCount}
+                <span className="px-2 py-0.5 rounded-full bg-white text-black border border-zinc-200 flex items-center justify-center text-[11px] font-black shadow-xs min-w-[28px]">
+                  {totalCartPrice > 0 ? `${totalCartPrice.toFixed(2)} ₼` : '0 ₼'}
                 </span>
-              </button>
-
-              {/* Mobile menu trigger */}
-              <button
-                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                className="flex items-center justify-center p-2 rounded-xl bg-emerald-50 border border-emerald-300 text-emerald-900 lg:hidden cursor-pointer"
-                aria-label="Menu"
-              >
-                {mobileMenuOpen ? <X className="w-4 h-4 text-emerald-900 stroke-[2]" /> : <Menu className="w-4 h-4 text-emerald-900 stroke-[2]" />}
               </button>
             </div>
           </div>

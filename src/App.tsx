@@ -13,8 +13,9 @@ import { AiAssistantModal } from './components/AiAssistantModal';
 import { AdminPanelModal } from './components/AdminPanelModal';
 import { AuthModal } from './components/AuthModal';
 import { AdminEditModal } from './components/AdminEditModal';
+import { SearchModal } from './components/SearchModal';
 import { SplashScreen } from './components/SplashScreen';
-import { CartItem, MenuItem, CategoryId } from './types';
+import { CartItem, MenuItem, CategoryId, CategoryCard } from './types';
 import { auth } from './lib/firebase';
 import { onAuthStateChanged, User as FirebaseUser } from 'firebase/auth';
 import {
@@ -29,6 +30,7 @@ import {
   saveMenuItem,
   saveHeroConfig,
   saveMiddleHeroConfig,
+  saveCategory,
   deleteMenuItem
 } from './lib/cmsStore';
 
@@ -43,19 +45,40 @@ export default function App() {
   const [isAiModalOpen, setIsAiModalOpen] = useState(false);
   const [isAdminModalOpen, setIsAdminModalOpen] = useState(false);
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
+  const [isSearchModalOpen, setIsSearchModalOpen] = useState(false);
+  const [highlightedItemId, setHighlightedItemId] = useState<string | null>(null);
   const [activeSection, setActiveSection] = useState('hero');
   const [toastMessage, setToastMessage] = useState<string | null>(null);
+
+  const handleSelectSearchItem = (item: MenuItem) => {
+    setCurrentView('menu');
+    setSelectedMenuCategory((item.category as any) || 'all');
+    setHighlightedItemId(item.id);
+    setSearchQuery('');
+    setIsSetView(false);
+    setActiveSetTitle(null);
+    setTimeout(() => {
+      const el = document.getElementById(`food-card-${item.id}`);
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      } else {
+        window.scrollTo({ top: 300, behavior: 'smooth' });
+      }
+    }, 150);
+  };
 
   // Admin Quick Edit Modal State
   const [adminEditState, setAdminEditState] = useState<{
     isOpen: boolean;
-    type: 'logo' | 'menuItem' | 'hero' | 'middleHero';
+    type: 'logo' | 'menuItem' | 'hero' | 'middleHero' | 'categoryHero';
     menuItem?: MenuItem | null;
+    categoryCard?: CategoryCard | null;
     slideIndex?: number;
   }>({
     isOpen: false,
     type: 'logo',
     menuItem: null,
+    categoryCard: null,
     slideIndex: 0,
   });
 
@@ -92,25 +115,24 @@ export default function App() {
   const preloadImages = useMemo(() => {
     const urls: string[] = [];
     if (siteConfig?.logoUrl) urls.push(siteConfig.logoUrl);
-    if (heroConfig?.slides) {
-      heroConfig.slides.forEach((s) => {
-        if (s.imageUrl) urls.push(s.imageUrl);
-        if (s.mobileImageUrl) urls.push(s.mobileImageUrl);
-      });
-    }
+    if (heroConfig?.imageUrl) urls.push(heroConfig.imageUrl);
+    if (heroConfig?.images) urls.push(...heroConfig.images);
+    if (middleHeroConfig?.imageUrl) urls.push(middleHeroConfig.imageUrl);
+    if (middleHeroConfig?.images) urls.push(...middleHeroConfig.images);
+    
     if (categories) {
       categories.forEach((c) => {
-        if (c.imageUrl) urls.push(c.imageUrl);
+        if (c.image) urls.push(c.image);
         if (c.images) urls.push(...c.images);
       });
     }
     if (menuItems) {
-      menuItems.slice(0, 25).forEach((m) => {
-        if (m.imageUrl) urls.push(m.imageUrl);
+      menuItems.forEach((m) => {
+        if (m.image) urls.push(m.image);
       });
     }
-    return Array.from(new Set(urls));
-  }, [siteConfig, heroConfig, categories, menuItems]);
+    return Array.from(new Set(urls.filter(Boolean)));
+  }, [siteConfig, heroConfig, middleHeroConfig, categories, menuItems]);
 
   const showToast = (msg: string) => {
     setToastMessage(msg);
@@ -233,6 +255,7 @@ export default function App() {
         onOpenAdminPanel={() => setIsAdminModalOpen(true)}
         onOpenAuthModal={() => setIsAuthModalOpen(true)}
         onOpenEditLogo={() => setAdminEditState({ isOpen: true, type: 'logo' })}
+        onOpenSearch={() => setIsSearchModalOpen(true)}
         isAdmin={isAdmin}
       />
 
@@ -266,6 +289,9 @@ export default function App() {
               onOpenReviews={() => scrollToSection('reviews')}
               onOpenAiAssistant={() => setIsAiModalOpen(true)}
               onEditMiddleHero={(idx) => setAdminEditState({ isOpen: true, type: 'middleHero', slideIndex: idx ?? 0 })}
+              onEditCategory={(catCard) =>
+                setAdminEditState({ isOpen: true, type: 'categoryHero', categoryCard: catCard, slideIndex: 0 })
+              }
             />
 
             {/* 3. Customer Reviews Section */}
@@ -310,9 +336,36 @@ export default function App() {
             }
             isSetView={isSetView}
             setTitle={activeSetTitle || undefined}
+            highlightedItemId={highlightedItemId}
+            onEditCategoryBanner={(catId, slideIndex) => {
+              const existingCat = categories.find((c) => c.id === catId);
+              const catName = categories.find((c) => c.id === catId)?.name || catId;
+              const catCard: CategoryCard = existingCat || {
+                id: catId,
+                name: catName,
+                image: '',
+                images: [],
+                mobileImages: [],
+                description: ''
+              };
+              setAdminEditState({
+                isOpen: true,
+                type: 'categoryHero',
+                categoryCard: catCard,
+                slideIndex
+              });
+            }}
           />
         )}
       </main>
+
+      {/* Live Top Search Popup Modal */}
+      <SearchModal
+        isOpen={isSearchModalOpen}
+        onClose={() => setIsSearchModalOpen(false)}
+        menuItems={menuItems}
+        onSelectItem={handleSelectSearchItem}
+      />
 
       {/* Footer */}
       <Footer
@@ -328,6 +381,7 @@ export default function App() {
         logoUrl={siteConfig.logoUrl}
         menuItem={adminEditState.menuItem}
         heroConfig={adminEditState.type === 'middleHero' ? middleHeroConfig : heroConfig}
+        categoryCard={adminEditState.categoryCard}
         initialSlideIndex={adminEditState.slideIndex ?? 0}
         onSaveLogo={async (newUrl) => {
           await saveSiteConfig({ ...siteConfig, logoUrl: newUrl });
@@ -345,6 +399,9 @@ export default function App() {
           } else {
             await saveHeroConfig(updatedHero);
           }
+        }}
+        onSaveCategory={async (updatedCat) => {
+          await saveCategory(updatedCat);
         }}
         onShowToast={showToast}
       />

@@ -10,6 +10,7 @@ interface HeroProps {
   onOpenAiAssistant: () => void;
   isAdmin?: boolean;
   onEditHero?: (slideIndex?: number) => void;
+  isMiddleHero?: boolean;
 }
 
 const DEFAULT_SLIDES = [
@@ -26,46 +27,42 @@ export const Hero: React.FC<HeroProps> = ({
   onOpenAiAssistant,
   isAdmin,
   onEditHero,
+  isMiddleHero = false,
 }) => {
   const title = heroConfig?.title || "Qaynar İsti Ocaqdan Qapınıza Çatdırılan Ən Ləzzətli Fast Food";
   const subtitle = heroConfig?.subtitle || "Təzə kəsilmiş halal ət, isti ocağın əvəzolunmaz qoxusu və xüsusi reseptlə hazırlanan çıtır qızarmış toyuqlar. Sifarişiniz xüsusi termo-qutularda 30 dəqiqəyə qaynar halda çatdırılır!";
   const isVideoEnabled = heroConfig?.isVideoEnabled ?? false;
   const videoUrl = heroConfig?.videoUrl || "https://assets.mixkit.co/videos/preview/mixkit-chef-cooking-food-in-a-pan-40292-large.mp4";
 
-  // Build desktop slide images array (ensure 4 independent slides)
+  // Build desktop slide images array (dynamic slide count support)
   const desktopSlideImages: string[] = React.useMemo(() => {
     const userImgs = heroConfig?.images || [];
-    const result: string[] = [];
-
-    for (let i = 0; i < 4; i++) {
-      const rawUrl = userImgs[i] !== undefined && userImgs[i] !== null ? userImgs[i].trim() : '';
-      if (rawUrl) {
-        result.push(formatImageUrl(rawUrl) || DEFAULT_SLIDES[i]);
-      } else if (i === 0 && heroConfig?.imageUrl && heroConfig.imageUrl.trim()) {
-        result.push(formatImageUrl(heroConfig.imageUrl.trim()) || DEFAULT_SLIDES[0]);
-      } else {
-        result.push(DEFAULT_SLIDES[i]);
-      }
+    if (userImgs.length > 0) {
+      const formatted = userImgs
+        .map((img, i) => {
+          const raw = img ? img.trim() : '';
+          if (raw) return formatImageUrl(raw);
+          return DEFAULT_SLIDES[i % DEFAULT_SLIDES.length] || '';
+        })
+        .filter(Boolean);
+      if (formatted.length > 0) return formatted;
     }
-
-    return result;
+    if (heroConfig?.imageUrl && heroConfig.imageUrl.trim()) {
+      return [formatImageUrl(heroConfig.imageUrl.trim())];
+    }
+    return DEFAULT_SLIDES;
   }, [heroConfig?.images, heroConfig?.imageUrl]);
 
   // Build mobile slide images array (if specified, otherwise fallback to desktop image)
   const mobileSlideImages: string[] = React.useMemo(() => {
     const userMobileImgs = heroConfig?.mobileImages || [];
-    const result: string[] = [];
-
-    for (let i = 0; i < 4; i++) {
+    return desktopSlideImages.map((desktopImg, i) => {
       const rawUrl = userMobileImgs[i] !== undefined && userMobileImgs[i] !== null ? userMobileImgs[i].trim() : '';
       if (rawUrl) {
-        result.push(formatImageUrl(rawUrl) || desktopSlideImages[i]);
-      } else {
-        result.push(desktopSlideImages[i]);
+        return formatImageUrl(rawUrl) || desktopImg;
       }
-    }
-
-    return result;
+      return desktopImg;
+    });
   }, [heroConfig?.mobileImages, desktopSlideImages]);
 
   const slideImages = desktopSlideImages;
@@ -113,11 +110,15 @@ export const Hero: React.FC<HeroProps> = ({
       onMouseLeave={() => setIsPaused(false)}
       onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}
-      className="relative bg-black overflow-hidden w-full aspect-[16/9] sm:aspect-auto sm:min-h-[480px] md:min-h-[720px] lg:min-h-[820px] flex items-center group select-none"
+      className={`relative overflow-hidden w-full group select-none ${
+        isMiddleHero
+          ? 'bg-zinc-950 aspect-[16/9] sm:aspect-[21/9] sm:max-h-[620px] lg:max-h-[720px] flex items-center justify-center transition-all duration-300'
+          : 'bg-black aspect-[16/9] sm:aspect-auto sm:min-h-[480px] md:min-h-[720px] lg:min-h-[820px] flex items-center'
+      }`}
     >
       
       {/* Background Video or Slider Images (Original bright colors, high resolution) */}
-      <div className="absolute inset-0 z-0">
+      <div className={`absolute inset-0 z-0 ${isMiddleHero ? 'flex items-center justify-center' : ''}`}>
         {isVideoEnabled && videoUrl ? (
           <video
             src={videoUrl}
@@ -125,7 +126,7 @@ export const Hero: React.FC<HeroProps> = ({
             loop
             muted
             playsInline
-            className="w-full h-full object-cover object-center opacity-100"
+            className={`w-full h-full object-center opacity-100 ${isMiddleHero ? 'object-contain' : 'object-cover'}`}
           />
         ) : (
           desktopSlideImages.map((desktopImg, index) => {
@@ -134,10 +135,30 @@ export const Hero: React.FC<HeroProps> = ({
               <div
                 key={index}
                 className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${
+                  isMiddleHero ? 'flex items-center justify-center' : ''
+                } ${
                   index === currentSlide ? 'opacity-100 z-10' : 'opacity-0 z-0'
                 }`}
               >
-                {/* Desktop Image (hidden on mobile, visible on sm and larger) */}
+                {/* Ambient Blurred Backdrops for Middle Hero */}
+                {isMiddleHero && (
+                  <>
+                    <img
+                      src={desktopImg}
+                      alt=""
+                      aria-hidden="true"
+                      className="hidden sm:block absolute inset-0 w-full h-full object-cover blur-3xl opacity-40 scale-110 pointer-events-none"
+                    />
+                    <img
+                      src={mobileImg}
+                      alt=""
+                      aria-hidden="true"
+                      className="block sm:hidden absolute inset-0 w-full h-full object-cover blur-2xl opacity-40 scale-110 pointer-events-none"
+                    />
+                  </>
+                )}
+
+                {/* Desktop Image */}
                 <img
                   src={desktopImg}
                   alt={`Alov Fast Food Slide ${index + 1} Desktop`}
@@ -156,10 +177,12 @@ export const Hero: React.FC<HeroProps> = ({
                       target.src = DEFAULT_SLIDES[index % DEFAULT_SLIDES.length];
                     }
                   }}
-                  className="hidden sm:block w-full h-full object-cover object-center"
+                  className={`hidden sm:block ${
+                    isMiddleHero ? 'relative z-10 w-full h-full object-contain object-center' : 'w-full h-full object-cover object-center'
+                  }`}
                 />
 
-                {/* Mobile Image (visible on mobile < sm, hidden on sm and larger) */}
+                {/* Mobile Image */}
                 <img
                   src={mobileImg}
                   alt={`Alov Fast Food Slide ${index + 1} Mobile`}
@@ -178,7 +201,9 @@ export const Hero: React.FC<HeroProps> = ({
                       target.src = DEFAULT_SLIDES[index % DEFAULT_SLIDES.length];
                     }
                   }}
-                  className="block sm:hidden w-full h-full object-cover object-center"
+                  className={`block sm:hidden ${
+                    isMiddleHero ? 'relative z-10 w-full h-full object-contain object-center' : 'w-full h-full object-cover object-center'
+                  }`}
                 />
               </div>
             );
