@@ -13,6 +13,10 @@ export const SplashScreen: React.FC<SplashScreenProps> = ({
   const [isFadingOut, setIsFadingOut] = useState(false);
 
   useEffect(() => {
+    // Lock background page scroll while Preloader is active
+    document.body.style.overflow = 'hidden';
+    document.documentElement.style.overflow = 'hidden';
+
     // Fast-preload key image URLs in the browser cache
     if (imageUrlsToPreload && imageUrlsToPreload.length > 0) {
       imageUrlsToPreload.forEach((url) => {
@@ -28,15 +32,20 @@ export const SplashScreen: React.FC<SplashScreenProps> = ({
       setIsFadingOut(true);
     }, 4300);
 
-    // Remove from DOM completely at 5.0s
+    // Remove from DOM completely at 5.0s and unlock body scroll
     const hideTimer = setTimeout(() => {
       setIsVisible(false);
+      document.body.style.overflow = '';
+      document.documentElement.style.overflow = '';
       if (onFinish) onFinish();
     }, 5000);
 
     return () => {
       clearTimeout(fadeTimer);
       clearTimeout(hideTimer);
+      // Restore scrolling on cleanup
+      document.body.style.overflow = '';
+      document.documentElement.style.overflow = '';
     };
   }, [imageUrlsToPreload, onFinish]);
 
@@ -44,7 +53,9 @@ export const SplashScreen: React.FC<SplashScreenProps> = ({
 
   return (
     <div
-      className={`fixed inset-0 z-[99999] bg-white flex flex-col items-center justify-center p-6 text-center select-none transition-opacity duration-700 ease-in-out ${
+      onTouchMove={(e) => e.preventDefault()}
+      onWheel={(e) => e.preventDefault()}
+      className={`fixed inset-0 z-[99999] bg-white flex flex-col items-center justify-center p-6 text-center select-none touch-none overscroll-none transition-opacity duration-700 ease-in-out ${
         isFadingOut ? 'opacity-0 pointer-events-none' : 'opacity-100'
       }`}
     >
