@@ -206,29 +206,42 @@ export const MenuSection: React.FC<MenuSectionProps> = ({
 
   const handleCategoryChange = (catId: CategoryId) => {
     setActiveCategory(catId);
+    setSearchQuery('');
+    if (onSearchQueryChange) {
+      onSearchQueryChange('');
+    }
     if (onCategoryChange) {
       onCategoryChange(catId);
     }
   };
 
-  const itemsToDisplay = menuItems && menuItems.length > 0 ? menuItems : MENU_ITEMS;
+  const itemsToDisplay = useMemo(() => {
+    const list = menuItems && menuItems.length > 0 ? menuItems : MENU_ITEMS;
+    const itemMap = new Map<string, MenuItem>(list.map((i) => [i.id, i]));
+    MENU_ITEMS.forEach((defaultItem) => {
+      if (!itemMap.has(defaultItem.id)) {
+        itemMap.set(defaultItem.id, defaultItem);
+      }
+    });
+    return Array.from(itemMap.values());
+  }, [menuItems]);
 
   // All Requested Categories + "Hamsı"
   const categories: { id: CategoryId; name: string; icon: string }[] = [
     { id: 'all', name: 'Hamsı', icon: '' },
-    { id: 'fastfood', name: 'FAST FOOD', icon: '' },
-    { id: 'pizza', name: 'PİZZA', icon: '' },
-    { id: 'pide', name: 'PİDƏ', icon: '' },
-    { id: 'kabablar', name: 'KABABLAR', icon: '' },
-    { id: 'isti_yemekler', name: 'İSTİ YEMƏKLƏR', icon: '' },
-    { id: 'icikil', name: 'SOYUQ İÇKİLƏR', icon: '' },
-    { id: 'sorbalar', name: 'ŞORBALAR', icon: '' },
-    { id: 'salat', name: 'SALAT', icon: '' },
-    { id: 'cig_kofte', name: 'ÇİY KÖFTƏ', icon: '' },
-    { id: 'qelyanaltilar', name: 'QƏLYANALTILAR', icon: '' },
-    { id: 'desertler', name: 'DESERTLƏR', icon: '' },
-    { id: 'kofe', name: 'KOFE', icon: '' },
-    { id: 'kokteyl', name: 'KOKTEYL', icon: '' },
+    { id: 'fastfood', name: 'Fast food', icon: '' },
+    { id: 'pizza', name: 'Pizza', icon: '' },
+    { id: 'pide', name: 'Pidə', icon: '' },
+    { id: 'kabablar', name: 'Kabablar', icon: '' },
+    { id: 'isti_yemekler', name: 'İsti yeməklər', icon: '' },
+    { id: 'icikil', name: 'Soyuq içkilər', icon: '' },
+    { id: 'sorbalar', name: 'Şorbalar', icon: '' },
+    { id: 'salat', name: 'Salat', icon: '' },
+    { id: 'cig_kofte', name: 'Çiy köftə', icon: '' },
+    { id: 'qelyanaltilar', name: 'Qəlyanaltılar', icon: '' },
+    { id: 'desertler', name: 'Desertlər', icon: '' },
+    { id: 'kofe', name: 'Kofe', icon: '' },
+    { id: 'kokteyl', name: 'Kokteyl', icon: '' },
   ];
 
   // Resolve Category Image & Description
@@ -281,18 +294,33 @@ export const MenuSection: React.FC<MenuSectionProps> = ({
     return itemsToDisplay.filter((item) => {
       // Category matching
       let matchesCategory = false;
-      if (activeCategory === 'all') {
+      const cat = activeCategory || 'all';
+
+      if (cat === 'all') {
         matchesCategory = true;
-      } else if (activeCategory === 'icikil') {
-        matchesCategory = item.category === 'icikil' || item.category === 'ickiler';
+      } else if (cat === 'esas_yemekler') {
+        matchesCategory = ['kabablar', 'kabab', 'sorbalar', 'isti_yemekler', 'qelyanaltilar', 'qelyanalti', 'cig_kofte', 'salat'].includes(item.category);
+      } else if (cat === 'festfood') {
+        matchesCategory = ['fastfood', 'pizza', 'pide', 'calzone', 'doner'].includes(item.category);
+      } else if (cat === 'ickiler' || cat === 'icikil') {
+        matchesCategory = ['icikil', 'ickiler', 'kofe', 'kokteyl'].includes(item.category);
+      } else if (cat === 'desertler_group' || cat === 'desertler') {
+        matchesCategory = item.category === 'desertler';
+      } else if (cat === 'qelyanaltilar' || cat === 'qelyanalti') {
+        matchesCategory = item.category === 'qelyanaltilar' || item.category === 'qelyanalti';
+      } else if (cat === 'kabablar' || cat === 'kabab') {
+        matchesCategory = item.category === 'kabablar' || item.category === 'kabab';
       } else {
-        matchesCategory = item.category === activeCategory;
+        matchesCategory = item.category === cat;
       }
 
       // Search matching
+      const query = searchQuery.trim().toLowerCase();
       const matchesSearch =
-        item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        item.description.toLowerCase().includes(searchQuery.toLowerCase());
+        !query ||
+        item.name.toLowerCase().includes(query) ||
+        item.description.toLowerCase().includes(query) ||
+        (item.ingredients && item.ingredients.toLowerCase().includes(query));
 
       return matchesCategory && matchesSearch;
     });
@@ -313,18 +341,31 @@ export const MenuSection: React.FC<MenuSectionProps> = ({
 
   return (
     <div className="min-h-screen bg-white text-zinc-900 pb-8 sm:pb-12 animate-fadeIn">
-      {/* Full-width Category Hero Banner (stretched to site borders, taller height, no dark photo overlays) */}
-      <div className="relative w-full h-64 sm:h-80 md:h-[420px] lg:h-[480px] overflow-hidden bg-zinc-900 flex flex-col justify-between p-4 sm:p-6 lg:p-8 transition-all duration-300">
-        {/* Background Slides of Selected Category with smooth fade transition (Bright, clear full resolution photos without dark mask) */}
+      {/* Full-width Category Hero Banner (100% original uncropped image view preserved) */}
+      <div className="relative w-full aspect-[16/9] sm:aspect-[21/9] sm:max-h-[520px] overflow-hidden bg-zinc-950 flex flex-col justify-between p-4 sm:p-6 lg:p-8 transition-all duration-300">
+        {/* Background Slides of Selected Category with smooth fade transition */}
         {activeCatSlides.map((imgUrl, idx) => (
-          <img
+          <div
             key={imgUrl + idx}
-            src={imgUrl}
-            alt={titleText}
-            className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ease-in-out hover:scale-105 ${
+            className={`absolute inset-0 transition-opacity duration-1000 ease-in-out flex items-center justify-center ${
               idx === currentBannerSlide ? 'opacity-100 z-0' : 'opacity-0 z-0'
             }`}
-          />
+          >
+            {/* Ambient Blurred Backdrop */}
+            <img
+              src={imgUrl}
+              alt=""
+              aria-hidden="true"
+              className="absolute inset-0 w-full h-full object-cover blur-2xl opacity-40 scale-105 pointer-events-none"
+            />
+
+            {/* Main Sharp Image - object-contain ensures 100% of photo is visible without cropping sides */}
+            <img
+              src={imgUrl}
+              alt={titleText}
+              className="relative z-10 w-full h-full object-contain object-center transition-transform duration-500 hover:scale-102"
+            />
+          </div>
         ))}
 
         {/* Floating Top Controls Bar (Back Button & Admin Edit Slide Button) */}
@@ -376,19 +417,31 @@ export const MenuSection: React.FC<MenuSectionProps> = ({
             </div>
 
             <div className="flex items-center justify-center flex-wrap gap-1.5 sm:gap-2">
+              <button
+                type="button"
+                onClick={() => handleCategoryChange('all')}
+                className={`px-3 py-1.5 sm:px-4 sm:py-2 rounded-xl font-black text-[11px] sm:text-xs md:text-sm transition-all duration-200 cursor-pointer flex items-center gap-1.5 shadow-2xs ${
+                  activeCategory === 'all'
+                    ? 'bg-emerald-800 text-white shadow-md ring-1 ring-emerald-900 scale-102'
+                    : 'bg-white hover:bg-emerald-50 text-zinc-800 border border-zinc-200'
+                }`}
+              >
+                <span>Hamsı</span>
+              </button>
+
               {CATEGORY_GROUPS.map((group) => {
                 const IconComp = group.icon;
-                const isGroupActive = group.subCategories.some(sc => sc.id === activeCategory);
+                const isGroupActive = activeCategory === group.id || group.subCategories.some(sc => sc.id === activeCategory);
 
                 return (
                   <button
                     type="button"
                     key={group.id}
                     onClick={() => {
-                      if (group.subCategories.length > 0) {
+                      if (group.subCategories && group.subCategories.length > 0) {
                         handleCategoryChange(group.subCategories[0].id);
                       } else {
-                        handleCategoryChange('all');
+                        handleCategoryChange(group.id as CategoryId);
                       }
                     }}
                     className={`px-3 py-1.5 sm:px-4 sm:py-2 rounded-xl font-black text-[11px] sm:text-xs md:text-sm transition-all duration-200 cursor-pointer flex items-center gap-1.5 shadow-2xs ${
@@ -403,6 +456,8 @@ export const MenuSection: React.FC<MenuSectionProps> = ({
                 );
               })}
             </div>
+
+
           </div>
 
           {/* Search Box below the Banner Header */}
@@ -517,8 +572,8 @@ export const MenuSection: React.FC<MenuSectionProps> = ({
                       : 'bg-white border border-zinc-200 hover:border-emerald-600 shadow-xs hover:shadow-xl'
                   }`}
                 >
-                  {/* Left Side: Photo Box - Enlarged on Mobile & Desktop */}
-                  <div className="relative w-28 h-28 sm:w-36 sm:h-36 md:w-44 md:h-44 lg:w-52 lg:h-52 rounded-xl sm:rounded-2xl overflow-hidden bg-black shrink-0 border border-zinc-200 shadow-xs">
+                  {/* Left Side: Photo Box - Enlarged Food Photo */}
+                  <div className="relative w-28 h-28 sm:w-36 sm:h-36 md:w-44 md:h-44 lg:w-52 lg:h-52 rounded-xl sm:rounded-2xl overflow-hidden bg-zinc-900 shrink-0 border border-zinc-200 shadow-xs flex items-center justify-center">
                     <img
                       src={item.image}
                       alt={item.name}

@@ -112,13 +112,13 @@ export const Hero: React.FC<HeroProps> = ({
       onTouchEnd={handleTouchEnd}
       className={`relative overflow-hidden w-full group select-none ${
         isMiddleHero
-          ? 'bg-zinc-950 aspect-[16/9] sm:aspect-[21/9] sm:max-h-[620px] lg:max-h-[720px] flex items-center justify-center transition-all duration-300'
-          : 'bg-black aspect-[16/9] sm:aspect-auto sm:min-h-[480px] md:min-h-[720px] lg:min-h-[820px] flex items-center'
+          ? 'bg-zinc-950 aspect-[16/9] sm:aspect-[21/9] sm:max-h-[520px] lg:max-h-[620px] flex items-center justify-center transition-all duration-300'
+          : 'bg-zinc-950 aspect-[16/9] sm:aspect-[21/9] sm:min-h-[480px] md:min-h-[620px] lg:min-h-[720px] flex items-center justify-center'
       }`}
     >
       
-      {/* Background Video or Slider Images (Original bright colors, high resolution) */}
-      <div className={`absolute inset-0 z-0 ${isMiddleHero ? 'flex items-center justify-center' : ''}`}>
+      {/* Background Video or Slider Images (Original bright colors, high resolution, 100% full uncropped view) */}
+      <div className="absolute inset-0 z-0">
         {isVideoEnabled && videoUrl ? (
           <video
             src={videoUrl}
@@ -126,7 +126,7 @@ export const Hero: React.FC<HeroProps> = ({
             loop
             muted
             playsInline
-            className={`w-full h-full object-center opacity-100 ${isMiddleHero ? 'object-contain' : 'object-cover'}`}
+            className="w-full h-full object-cover object-center opacity-100"
           />
         ) : (
           desktopSlideImages.map((desktopImg, index) => {
@@ -135,29 +135,9 @@ export const Hero: React.FC<HeroProps> = ({
               <div
                 key={index}
                 className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${
-                  isMiddleHero ? 'flex items-center justify-center' : ''
-                } ${
                   index === currentSlide ? 'opacity-100 z-10' : 'opacity-0 z-0'
                 }`}
               >
-                {/* Ambient Blurred Backdrops for Middle Hero */}
-                {isMiddleHero && (
-                  <>
-                    <img
-                      src={desktopImg}
-                      alt=""
-                      aria-hidden="true"
-                      className="hidden sm:block absolute inset-0 w-full h-full object-cover blur-3xl opacity-40 scale-110 pointer-events-none"
-                    />
-                    <img
-                      src={mobileImg}
-                      alt=""
-                      aria-hidden="true"
-                      className="block sm:hidden absolute inset-0 w-full h-full object-cover blur-2xl opacity-40 scale-110 pointer-events-none"
-                    />
-                  </>
-                )}
-
                 {/* Desktop Image */}
                 <img
                   src={desktopImg}
@@ -177,9 +157,7 @@ export const Hero: React.FC<HeroProps> = ({
                       target.src = DEFAULT_SLIDES[index % DEFAULT_SLIDES.length];
                     }
                   }}
-                  className={`hidden sm:block ${
-                    isMiddleHero ? 'relative z-10 w-full h-full object-contain object-center' : 'w-full h-full object-cover object-center'
-                  }`}
+                  className="hidden sm:block w-full h-full object-cover object-center"
                 />
 
                 {/* Mobile Image */}
@@ -201,9 +179,7 @@ export const Hero: React.FC<HeroProps> = ({
                       target.src = DEFAULT_SLIDES[index % DEFAULT_SLIDES.length];
                     }
                   }}
-                  className={`block sm:hidden ${
-                    isMiddleHero ? 'relative z-10 w-full h-full object-contain object-center' : 'w-full h-full object-cover object-center'
-                  }`}
+                  className="block sm:hidden w-full h-full object-cover object-center"
                 />
               </div>
             );

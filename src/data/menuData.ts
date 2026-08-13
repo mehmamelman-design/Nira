@@ -4,7 +4,7 @@ export const MENU_ITEMS: MenuItem[] = [
   // ==================== 1. FAST FOOD ====================
   {
     id: 'ff-1',
-    name: 'BEEF BURGER',
+    name: 'Et Burger',
     category: 'fastfood',
     description: 'Xüsusi xırçıltılı bulkada dana köftəsi, turşu xiyar, təzə pomidor və xüsusi burger sousu',
     ingredients: 'Dana əti köftəsi, Burger bulkası, Çedder pendiri, Marul, Turşu xiyar, Xüsusi sous',
@@ -16,7 +16,7 @@ export const MENU_ITEMS: MenuItem[] = [
   },
   {
     id: 'ff-2',
-    name: 'CHEESE BURGER',
+    name: 'Cheeseburger',
     category: 'fastfood',
     description: 'Ərimiş bol çedder pendirli şirəli dana burger, kahı və Alov burger sousu',
     ingredients: 'Dana əti, Çedder pendiri, Xüsusi sous, Karamelizə soğan, Turşu xiyar',
@@ -28,7 +28,7 @@ export const MENU_ITEMS: MenuItem[] = [
   },
   {
     id: 'ff-3',
-    name: 'TOYUQ BURGER',
+    name: 'Toyuq Burgeri',
     category: 'fastfood',
     description: 'Çıtır panko panerovkalı toyuq file, kahı, pomidor və mayonez sousu',
     ingredients: 'Toyuq file, Çıtır panerovka, Marul, Pomidor, Mayonez, Burger bulkası',
@@ -39,7 +39,7 @@ export const MENU_ITEMS: MenuItem[] = [
   },
   {
     id: 'ff-4',
-    name: 'NİRA BURGER DOUBLE',
+    name: 'Nira İkiqat Burger (Double)',
     category: 'fastfood',
     description: 'İki qat şirəli dana köftəsi, iki qat çedder pendiri və iki qat ləzzət',
     ingredients: '2x Dana köftə, 2x Çedder pendiri, Alov imzalı sous, Karamelizə olunmuş soğan',
@@ -51,7 +51,7 @@ export const MENU_ITEMS: MenuItem[] = [
   },
   {
     id: 'ff-5',
-    name: 'NUGGETS 5ƏDƏD',
+    name: 'Naqgets (5 ədəd)',
     category: 'fastfood',
     description: 'Qızılı xırçıltılı panko panerovkasında 5 ədəd təzə toyuq naggetsi',
     ingredients: 'Toyuq file, Çıtır panerovka, Barbekyu və ya Sarımsaq sousu',
@@ -62,7 +62,7 @@ export const MENU_ITEMS: MenuItem[] = [
   },
   {
     id: 'ff-6',
-    name: 'KARTOF FRİ',
+    name: 'Kartof Fri',
     category: 'fastfood',
     description: 'Xırçıltılı və isti qızılı kartof fri çubuqları, ketçup və mayonez ilə',
     ingredients: 'Kartof, Dəniz duzu, Ketçup, Mayonez',
@@ -73,7 +73,7 @@ export const MENU_ITEMS: MenuItem[] = [
   },
   {
     id: 'ff-7',
-    name: 'TOYUQ CHICKEN CRISPY',
+    name: 'Qızardılmış Toyuq',
     category: 'fastfood',
     description: 'Xüsusi ədviyyatlı çıtır panerovkalı toyuq tikələri',
     ingredients: 'Toyuq file tikələri, Xüsusi ədviyyat, Sous',
@@ -84,7 +84,7 @@ export const MENU_ITEMS: MenuItem[] = [
   },
   {
     id: 'ff-8',
-    name: 'SENDVİÇ',
+    name: 'Sendviç',
     category: 'fastfood',
     description: 'Təzə çörək arasında kolbasa, pendir, pomidor və xiyar ilə ləzzətli sendviç',
     ingredients: 'Təzə çörək, Halal kolbasa, Pendir, Pomidor, Xiyar, Sous',
@@ -95,7 +95,7 @@ export const MENU_ITEMS: MenuItem[] = [
   },
   {
     id: 'ff-9',
-    name: 'CLUB SENDVİÇ',
+    name: 'Klab Sendviç',
     category: 'fastfood',
     description: 'Üç qat tost çörəyi arasında toyuq file, yumurta, pomidor, xiyar və xırçıltılı fri',
     ingredients: 'Tost çörəyi, Toyuq file, Qızartma yumurta, Pendir, Fri kartof',
@@ -107,7 +107,7 @@ export const MENU_ITEMS: MenuItem[] = [
   },
   {
     id: 'ff-10',
-    name: 'TOST SADƏ',
+    name: 'Sadə Tost',
     category: 'fastfood',
     description: 'Qızardılmış tost çörəyi arasında bol ərimiş kaşar pendiri',
     ingredients: 'Tost çörəyi, Kaşar pendiri, Kərə yağı',
@@ -117,7 +117,7 @@ export const MENU_ITEMS: MenuItem[] = [
   },
   {
     id: 'ff-11',
-    name: 'TOST SUCUQLU',
+    name: 'Sucuklu Toast',
     category: 'fastfood',
     description: 'Tost çörəyində qızardılmış halal sucuq və ərimiş kaşar pendiri',
     ingredients: 'Tost çörəyi, Halal sucuq, Kaşar pendiri, Kərə yağı',
@@ -128,7 +128,7 @@ export const MENU_ITEMS: MenuItem[] = [
   },
   {
     id: 'ff-12',
-    name: 'HOT-DOG',
+    name: 'Hot dog',
     category: 'fastfood',
     description: 'Yumşaq hot-dog bulkasında qızardılmış sosis, xardal, ketçup və turşu xiyar',
     ingredients: 'Hot-dog bulkası, Halal sosis, Xardal, Ketçup, Çıtır soğan',
@@ -139,7 +139,7 @@ export const MENU_ITEMS: MenuItem[] = [
   },
   {
     id: 'ff-13',
-    name: 'KOL BÖREK',
+    name: 'Kol Böreği',
     category: 'fastfood',
     description: 'Xırçıltılı yufka qatları arasında leziz qiyməli və ya pendirli fırın börəyi',
     ingredients: 'Təzə yufka, Qiymə və ya Pendir, Kərə yağı, Çörəkotu',

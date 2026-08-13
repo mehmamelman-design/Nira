@@ -143,6 +143,7 @@ export default function App() {
 
   const handleOpenMenuWithCategory = (catId: CategoryId = 'all') => {
     setSelectedMenuCategory(catId);
+    setSearchQuery('');
     setIsSetView(false);
     setActiveSetTitle(null);
     setCurrentView('menu');

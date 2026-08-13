@@ -44,7 +44,7 @@ export const DEFAULT_MIDDLE_HERO: HeroConfig = {
 export const DEFAULT_CATEGORIES: CategoryCard[] = [
   {
     id: "fastfood",
-    name: "FAST FOOD",
+    name: "Fast food",
     image: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&q=80&w=800",
     description: "Xırçıltılı smash burgerlər, dadlı naggetslər və kartof fri",
     order: 1,
@@ -52,7 +52,7 @@ export const DEFAULT_CATEGORIES: CategoryCard[] = [
   },
   {
     id: "pizza",
-    name: "PİZZA",
+    name: "Pizza",
     image: "https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&q=80&w=800",
     description: "İsti daş fırında bişən bol xammallı pizzalar",
     order: 2,
@@ -60,7 +60,7 @@ export const DEFAULT_CATEGORIES: CategoryCard[] = [
   },
   {
     id: "kabablar",
-    name: "KABABLAR",
+    name: "Kabablar",
     image: "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&q=80&w=800",
     description: "Közdə bişən ləzzətli ət, tikə və lülə kabablar",
     order: 3,
@@ -68,7 +68,7 @@ export const DEFAULT_CATEGORIES: CategoryCard[] = [
   },
   {
     id: "isti_yemekler",
-    name: "İSTİ YEMƏKLƏR",
+    name: "İsti yeməklər",
     image: "https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&q=80&w=800",
     description: "Təzə bişmiş ləzzətli isti ana yeməklər və fırın yeməkləri",
     order: 4,
@@ -76,7 +76,7 @@ export const DEFAULT_CATEGORIES: CategoryCard[] = [
   },
   {
     id: "icikil",
-    name: "SOYUQ İÇKİLƏR",
+    name: "Soyuq içkilər",
     image: "https://images.unsplash.com/photo-1622483767028-3f66f32aef97?auto=format&fit=crop&q=80&w=800",
     description: "Buz kimi sərinləşdirici təbii içkilər və limonadlar",
     order: 5,
@@ -84,7 +84,7 @@ export const DEFAULT_CATEGORIES: CategoryCard[] = [
   },
   {
     id: "sorbalar",
-    name: "ŞORBALAR",
+    name: "Şorbalar",
     image: "https://images.unsplash.com/photo-1547592166-23ac45744acd?auto=format&fit=crop&q=80&w=800",
     description: "Xüsusi reseptlə hazırlanan isti ev şorbaları",
     order: 6,
@@ -92,7 +92,7 @@ export const DEFAULT_CATEGORIES: CategoryCard[] = [
   },
   {
     id: "salat",
-    name: "SALAT",
+    name: "Salat",
     image: "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&q=80&w=800",
     description: "Təravətli tərəvəzlərdən hazırlanan xüsusi salatlar",
     order: 7,
@@ -100,7 +100,7 @@ export const DEFAULT_CATEGORIES: CategoryCard[] = [
   },
   {
     id: "cig_kofte",
-    name: "ÇİY KÖFTƏ",
+    name: "Çiy köftə",
     image: "https://images.unsplash.com/photo-1626777552726-4a6b54c97e46?auto=format&fit=crop&q=80&w=800",
     description: "Xüsusi ədviyyatlı və acılı təzə çiy köftələr",
     order: 8,
@@ -108,7 +108,7 @@ export const DEFAULT_CATEGORIES: CategoryCard[] = [
   },
   {
     id: "qelyanaltilar",
-    name: "QƏLYANALTILAR",
+    name: "Qəlyanaltılar",
     image: "https://images.unsplash.com/photo-1626082927389-6cd097cdc6ec?auto=format&fit=crop&q=80&w=800",
     description: "Çıtır toyuq kanatları, fri, soğan halqaları və souslar",
     order: 9,
@@ -116,7 +116,7 @@ export const DEFAULT_CATEGORIES: CategoryCard[] = [
   },
   {
     id: "pide",
-    name: "PİDƏ",
+    name: "Pidə",
     image: "https://images.unsplash.com/photo-1541529086526-db283c563270?auto=format&fit=crop&q=80&w=800",
     description: "İsti daş fırında bişmiş bol kaşar pendirli, qiyməli və kuşbaşılı pidelər",
     order: 10,
@@ -124,7 +124,7 @@ export const DEFAULT_CATEGORIES: CategoryCard[] = [
   },
   {
     id: "desertler",
-    name: "DESERTLƏR",
+    name: "Desertlər",
     image: "https://images.unsplash.com/photo-1551024709-8f23befc6f87?auto=format&fit=crop&q=80&w=800",
     description: "Xüsusi paxlavalar, San Sebastian, cheesecake, künefe və tortlar",
     order: 11,
@@ -132,7 +132,7 @@ export const DEFAULT_CATEGORIES: CategoryCard[] = [
   },
   {
     id: "kofe",
-    name: "KOFE",
+    name: "Kofe",
     image: "https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&q=80&w=800",
     description: "Espresso, Americano, Latte, Cappucino, Raf, Mokka və zəngin kofe çeşidləri",
     order: 12,
@@ -140,13 +140,51 @@ export const DEFAULT_CATEGORIES: CategoryCard[] = [
   },
   {
     id: "kokteyl",
-    name: "KOKTEYL",
+    name: "Kokteyl",
     image: "https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?auto=format&fit=crop&q=80&w=800",
     description: "Sərinləşdirici Mojito, Mix Shake və xüsusi Nira kokteyli",
     order: 13,
     icon: ""
   }
 ];
+
+export function formatAzTitle(text: string, id?: string): string {
+  if (!text && !id) return '';
+  let str = (text || id || '').replace(/_/g, ' ').trim();
+  if (!str) return '';
+
+  const lowerStr = str.toLowerCase();
+  if (lowerStr === 'isti_yemekler' || lowerStr === 'isti yemekler' || lowerStr === 'isti yemek' || id === 'isti_yemekler') return 'İsti yeməklər';
+  if (lowerStr === 'kabablar' || lowerStr === 'kabab' || id === 'kabablar') return 'Kabablar';
+  if (lowerStr === 'sorbalar' || lowerStr === 'şorbalar' || id === 'sorbalar') return 'Şorbalar';
+  if (lowerStr === 'qelyanaltilar' || lowerStr === 'qəlyanaltılar' || lowerStr === 'qelyanalti' || id === 'qelyanaltilar') return 'Qəlyanaltılar';
+  if (lowerStr === 'fastfood' || lowerStr === 'fast food' || id === 'fastfood') return 'Fast food';
+  if (lowerStr === 'soyuq içkilər' || lowerStr === 'soyuq ickiler' || lowerStr === 'icikil' || id === 'icikil') return 'Soyuq içkilər';
+  if (lowerStr === 'cig_kofte' || lowerStr === 'çiy köftə' || id === 'cig_kofte') return 'Çiy köftə';
+  if (lowerStr === 'desertler' || lowerStr === 'desertlər' || id === 'desertler') return 'Desertlər';
+  if (lowerStr === 'salat' || id === 'salat') return 'Salat';
+  if (lowerStr === 'pizza' || id === 'pizza') return 'Pizza';
+  if (lowerStr === 'pide' || id === 'pide') return 'Pidə';
+  if (lowerStr === 'kofe' || id === 'kofe') return 'Kofe';
+  if (lowerStr === 'kokteyl' || id === 'kokteyl') return 'Kokteyl';
+
+  return str.split(' ').map((word) => {
+    if (!word) return '';
+    const firstChar = word.charAt(0);
+    const upperFirst = (firstChar === 'i' || firstChar === 'I') ? 'İ' : firstChar.toUpperCase();
+    const rest = word.slice(1)
+      .replace(/İ/g, 'i')
+      .replace(/I/g, 'ı')
+      .replace(/Ə/g, 'ə')
+      .replace(/Ş/g, 'ş')
+      .replace(/Ç/g, 'ç')
+      .replace(/Ğ/g, 'ğ')
+      .replace(/Ö/g, 'ö')
+      .replace(/Ü/g, 'ü')
+      .toLowerCase();
+    return upperFirst + rest;
+  }).join(' ');
+}
 
 export const DEFAULT_GALLERY: GalleryPhoto[] = [
   {
@@ -231,18 +269,27 @@ export function subscribeToCategories(callback: (cats: CategoryCard[]) => void) 
   return onSnapshot(docRef, (snapshot) => {
     let items: CategoryCard[] = [];
     if (snapshot.exists() && snapshot.data().items && Array.isArray(snapshot.data().items) && snapshot.data().items.length > 0) {
-      items = snapshot.data().items as CategoryCard[];
+      items = (snapshot.data().items as CategoryCard[]).map(c => ({
+        ...c,
+        name: formatAzTitle(c.name, c.id)
+      }));
       setStoredLocal('alov_categories_config', items);
       callback(items);
     } else {
-      items = getStoredLocal('alov_categories_config', DEFAULT_CATEGORIES);
+      items = getStoredLocal('alov_categories_config', DEFAULT_CATEGORIES).map(c => ({
+        ...c,
+        name: formatAzTitle(c.name, c.id)
+      }));
       setStoredLocal('alov_categories_config', items);
       setDoc(docRef, { items }).catch(console.error);
       callback(items);
     }
   }, (err) => {
     console.warn('Categories snapshot error:', err);
-    callback(getStoredLocal('alov_categories_config', DEFAULT_CATEGORIES));
+    callback(getStoredLocal('alov_categories_config', DEFAULT_CATEGORIES).map(c => ({
+      ...c,
+      name: formatAzTitle(c.name, c.id)
+    })));
   });
 }
 
@@ -252,18 +299,54 @@ export function subscribeToMenu(callback: (items: MenuItem[]) => void) {
     let items: MenuItem[] = [];
     if (snapshot.exists() && snapshot.data().items && Array.isArray(snapshot.data().items) && snapshot.data().items.length > 0) {
       items = snapshot.data().items as MenuItem[];
-      setStoredLocal('alov_menu_items', items);
-      callback(items);
     } else {
       items = getStoredLocal('alov_menu_items', MENU_ITEMS);
-      setStoredLocal('alov_menu_items', items);
-      setDoc(docRef, { items }).catch(console.error);
-      callback(items);
     }
+
+    // Always merge default MENU_ITEMS to guarantee no items are lost
+    const itemMap = new Map<string, MenuItem>(items.map(i => [i.id, i]));
+    MENU_ITEMS.forEach(defaultItem => {
+      if (!itemMap.has(defaultItem.id)) {
+        itemMap.set(defaultItem.id, defaultItem);
+      } else if (defaultItem.id.startsWith('ff-')) {
+        const existing = itemMap.get(defaultItem.id)!;
+        itemMap.set(defaultItem.id, {
+          ...existing,
+          name: defaultItem.name,
+          price: defaultItem.price
+        });
+      }
+    });
+    const mergedItems = Array.from(itemMap.values());
+
+    const formattedMerged = mergedItems.map(item => ({
+      ...item,
+      name: formatAzTitle(item.name)
+    }));
+
+    setStoredLocal('alov_menu_items', formattedMerged);
+    callback(formattedMerged);
   }, (err) => {
     console.warn('Menu snapshot error:', err);
     const stored = getStoredLocal('alov_menu_items', MENU_ITEMS);
-    callback(stored);
+    const itemMap = new Map<string, MenuItem>(stored.map(i => [i.id, i]));
+    MENU_ITEMS.forEach(defaultItem => {
+      if (!itemMap.has(defaultItem.id)) {
+        itemMap.set(defaultItem.id, defaultItem);
+      } else if (defaultItem.id.startsWith('ff-')) {
+        const existing = itemMap.get(defaultItem.id)!;
+        itemMap.set(defaultItem.id, {
+          ...existing,
+          name: defaultItem.name,
+          price: defaultItem.price
+        });
+      }
+    });
+    const fallbackList = Array.from(itemMap.values()).map(item => ({
+      ...item,
+      name: formatAzTitle(item.name)
+    }));
+    callback(fallbackList);
   });
 }
 

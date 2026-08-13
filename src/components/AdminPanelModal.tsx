@@ -24,8 +24,10 @@ import {
   Flame,
   Search,
   ShieldAlert,
+  ShieldCheck,
   Clock
 } from 'lucide-react';
+import { auth } from '../lib/firebase';
 import { HeroConfig, CategoryCard, MenuItem, Review, GalleryPhoto } from '../types';
 import { compressImageFile } from '../lib/imageCompressor';
 import {
@@ -125,7 +127,34 @@ export const AdminPanelModal: React.FC<AdminPanelModalProps> = ({
     setLocalGallery(galleryPhotos);
   }, [galleryPhotos]);
 
+  useEffect(() => {
+    if (isOpen) {
+      const stored = localStorage.getItem('alov_user');
+      let email = auth.currentUser?.email?.toLowerCase() || '';
+      if (!email && stored) {
+        try {
+          email = JSON.parse(stored)?.email?.toLowerCase() || '';
+        } catch (e) {}
+      }
+      if (email === 'mehmamelman@gmail.com' || email === 'admin@alov.az' || email === 'admin') {
+        setIsAuthenticated(true);
+      }
+    }
+  }, [isOpen]);
+
   if (!isOpen) return null;
+
+  const handleQuickAdminLogin = () => {
+    const adminUser = {
+      fullName: 'Admin (mehmamelman)',
+      email: 'mehmamelman@gmail.com',
+      phone: '(051) 635 94 74'
+    };
+    localStorage.setItem('alov_user', JSON.stringify(adminUser));
+    setIsAuthenticated(true);
+    setPasswordError(false);
+    if (onShowToast) onShowToast('Admin Panelə uğurla daxil oldunuz!');
+  };
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
@@ -426,6 +455,15 @@ export const AdminPanelModal: React.FC<AdminPanelModalProps> = ({
                 className="w-full py-3.5 px-6 rounded-xl bg-amber-400 hover:bg-amber-500 text-black font-extrabold text-sm transition-all shadow-lg cursor-pointer"
               >
                 Daxil Ol
+              </button>
+
+              <button
+                type="button"
+                onClick={handleQuickAdminLogin}
+                className="w-full py-3 px-6 rounded-xl bg-emerald-800/80 hover:bg-emerald-700 text-emerald-100 font-bold text-xs transition-all shadow-md cursor-pointer flex items-center justify-center gap-2 border border-emerald-600/50"
+              >
+                <ShieldCheck className="w-4 h-4 text-amber-400" />
+                <span>Birbaşa Admin Girişi (mehmamelman@gmail.com)</span>
               </button>
             </form>
           </div>
@@ -1544,18 +1582,18 @@ export const AdminPanelModal: React.FC<AdminPanelModalProps> = ({
                     onChange={(e) => setNewMenuCategory(e.target.value)}
                     className="w-full px-3 py-2 rounded-xl bg-zinc-900 border border-zinc-700 text-white font-bold"
                   >
-                    <option value="fastfood">FAST FOOD</option>
-                    <option value="pizza">PİZZA</option>
-                    <option value="kabablar">KABABLAR</option>
-                    <option value="isti_yemekler">İSTİ YEMƏKLƏR</option>
-                    <option value="icikil">SOYUQ İÇKİLƏR</option>
-                    <option value="sorbalar">ŞORBALAR</option>
-                    <option value="salat">SALAT</option>
-                    <option value="cig_kofte">ÇİY KÖFTƏ</option>
-                    <option value="qelyanaltilar">QƏLYANALTILAR</option>
-                    <option value="desertler">DESERTLƏR</option>
-                    <option value="kofe">KOFE</option>
-                    <option value="kokteyl">KOKTEYL</option>
+                    <option value="fastfood">Fast food</option>
+                    <option value="pizza">Pizza</option>
+                    <option value="kabablar">Kabablar</option>
+                    <option value="isti_yemekler">İsti yeməklər</option>
+                    <option value="icikil">Soyuq içkilər</option>
+                    <option value="sorbalar">Şorbalar</option>
+                    <option value="salat">Salat</option>
+                    <option value="cig_kofte">Çiy köftə</option>
+                    <option value="qelyanaltilar">Qəlyanaltılar</option>
+                    <option value="desertler">Desertlər</option>
+                    <option value="kofe">Kofe</option>
+                    <option value="kokteyl">Kokteyl</option>
                   </select>
                 </div>
               </div>

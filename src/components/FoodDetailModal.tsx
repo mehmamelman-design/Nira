@@ -22,18 +22,18 @@ export const FoodDetailModal: React.FC<FoodDetailModalProps> = ({
   const [notes, setNotes] = useState('');
 
   const categoryNameMap: { [key: string]: string } = {
-    pizza: 'PIZZA SEÇİMİ',
-    fastfood: 'FAST FOOD',
-    kabablar: 'KABAB SEÇİMİ',
-    isti_yemekler: 'İSTİ YEMƏK',
-    salat: 'TƏZƏ SALAT',
-    cig_kofte: 'ÇİĞ KÖFTE',
-    sorbalar: 'İSTİ ŞORBA',
-    qelyanaltilar: 'QƏLYANALTI',
-    desertler: 'LƏZZƏTLİ DESERT',
-    kofe: 'KOFE',
-    kokteyl: 'SƏRİNLƏŞDİRİCİ KOKTEYL',
-    ickiler: 'SƏRİNLƏŞDİRİCİ İÇKİ'
+    pizza: 'Pizza seçimi',
+    fastfood: 'Fast food',
+    kabablar: 'Kabab seçimi',
+    isti_yemekler: 'İsti yemək',
+    salat: 'Təzə salat',
+    cig_kofte: 'Çiy köftə',
+    sorbalar: 'İsti şorba',
+    qelyanaltilar: 'Qəlyanaltı',
+    desertler: 'Ləzzətli desert',
+    kofe: 'Kofe',
+    kokteyl: 'Sərinləşdirici kokteyl',
+    ickiler: 'Sərinləşdirici içki'
   };
 
   // Derive ingredients if not explicitly supplied

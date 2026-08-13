@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { CategoryCard, GalleryPhoto, CategoryId, HeroConfig } from '../types';
 import { ChevronRight, Utensils, Coffee, Pizza, Flame, Package, Pencil } from 'lucide-react';
 import { Hero } from './Hero';
-import { DEFAULT_CATEGORIES } from '../lib/cmsStore';
+import { DEFAULT_CATEGORIES, formatAzTitle } from '../lib/cmsStore';
+import { DEFAULT_CATEGORY_SLIDES } from './MenuSection';
 
 interface CategoriesAndGallerySectionProps {
   categories: CategoryCard[];
@@ -27,8 +28,8 @@ export const CATEGORY_GROUPS = [
     icon: Flame,
     subCategories: [
       { id: 'kabablar' as CategoryId, label: 'Kabablar' },
-      { id: 'isti_yemekler' as CategoryId, label: 'İsti Yeməklər' },
       { id: 'sorbalar' as CategoryId, label: 'Şorbalar' },
+      { id: 'isti_yemekler' as CategoryId, label: 'İsti Yeməklər' },
       { id: 'qelyanaltilar' as CategoryId, label: 'Qəlyanaltı' },
       { id: 'cig_kofte' as CategoryId, label: 'Çiy Köftə' },
       { id: 'salat' as CategoryId, label: 'Salat' },
@@ -49,7 +50,8 @@ export const CATEGORY_GROUPS = [
     name: 'İçkilər',
     icon: Coffee,
     subCategories: [
-      { id: 'icikil' as CategoryId, label: 'Soyuq İçkilər (Cola, Fanta, Sprite)' },
+      { id: 'ickiler' as CategoryId, label: 'İçkilər' },
+      { id: 'icikil' as CategoryId, label: 'Soyuq İçkilər' },
       { id: 'kofe' as CategoryId, label: 'Kofe' },
       { id: 'kokteyl' as CategoryId, label: 'Kokteyl' },
     ]
@@ -90,11 +92,47 @@ export const CategoriesAndGallerySection: React.FC<CategoriesAndGallerySectionPr
 
   const activeGroup = CATEGORY_GROUPS.find(g => g.id === selectedGroupId) || CATEGORY_GROUPS[0];
 
-  // Filter categories based on selected group
+  // Filter categories based on selected group with strict matching
   const displayedCategories = React.useMemo(() => {
-    if (!activeGroup || activeGroup.subCategories.length === 0) return categories;
+    const sourceList = (categories && categories.length > 0) ? categories : DEFAULT_CATEGORIES;
+
+    if (activeGroup.id === 'esas_yemekler') {
+      const allowedIds = ['kabablar', 'sorbalar', 'isti_yemekler', 'qelyanaltilar', 'cig_kofte', 'salat'];
+      const result: CategoryCard[] = [];
+      allowedIds.forEach(id => {
+        const found = sourceList.find(c => c.id === id) || DEFAULT_CATEGORIES.find(dc => dc.id === id);
+        if (found) result.push(found);
+      });
+      return result;
+    }
+
+    if (activeGroup.id === 'festfood') {
+      const allowedIds = ['fastfood', 'pizza', 'pide'];
+      const result: CategoryCard[] = [];
+      allowedIds.forEach(id => {
+        const found = sourceList.find(c => c.id === id) || DEFAULT_CATEGORIES.find(dc => dc.id === id);
+        if (found) result.push(found);
+      });
+      return result;
+    }
+
+    if (activeGroup.id === 'ickiler') {
+      const allowedIds = ['icikil', 'kofe', 'kokteyl'];
+      const result: CategoryCard[] = [];
+      allowedIds.forEach(id => {
+        const found = sourceList.find(c => c.id === id) || DEFAULT_CATEGORIES.find(dc => dc.id === id);
+        if (found) result.push(found);
+      });
+      return result;
+    }
+
+    if (activeGroup.id === 'desertler_group') {
+      const found = sourceList.find(c => c.id === 'desertler') || DEFAULT_CATEGORIES.find(dc => dc.id === 'desertler');
+      return found ? [found] : [];
+    }
+
     const activeSubCatIds = activeGroup.subCategories.map(sc => sc.id);
-    return categories.filter(c => activeSubCatIds.includes(c.id as CategoryId));
+    return sourceList.filter(c => activeSubCatIds.includes(c.id as CategoryId));
   }, [categories, activeGroup]);
 
   const renderCategoryCard = (cat: CategoryCard) => {
@@ -122,18 +160,26 @@ export const CategoriesAndGallerySection: React.FC<CategoriesAndGallerySectionPr
           </button>
         )}
 
-        {/* Photo Frame Box - Clean photo without border, enlarged aspect ratio */}
-        <div className="relative aspect-[4/3] sm:aspect-[16/11] w-full overflow-hidden rounded-xl sm:rounded-2xl bg-zinc-100 shadow-xs">
+        {/* Photo Frame Box - Enlarged photo frame preserving full original photo resolution */}
+        <div className="relative aspect-[4/3] sm:aspect-[16/11] w-full overflow-hidden rounded-xl sm:rounded-2xl bg-zinc-950 shadow-md flex items-center justify-center">
+          {/* Ambient blurred backdrop so any aspect ratio fills frame smoothly */}
+          <img
+            src={cat.image || (DEFAULT_CATEGORY_SLIDES[cat.id]?.[0]) || 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&q=80&w=600'}
+            alt=""
+            aria-hidden="true"
+            className="absolute inset-0 w-full h-full object-cover blur-xl opacity-40 scale-110 pointer-events-none"
+          />
+          {/* Main Category Image - object-contain ensures 100% of uploaded photo is shown without cropping or distortion */}
           <img
             src={cat.image || (DEFAULT_CATEGORY_SLIDES[cat.id]?.[0]) || 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&q=80&w=600'}
             alt={cat.name}
-            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+            className="relative z-10 w-full h-full object-contain group-hover:scale-105 transition-transform duration-500"
             loading="lazy"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-60 group-hover:opacity-40 transition-opacity" />
+          <div className="absolute inset-0 z-10 bg-gradient-to-t from-black/50 via-transparent to-transparent opacity-40 group-hover:opacity-20 transition-opacity pointer-events-none" />
 
           {/* Badge & Action Indicator */}
-          <div className="absolute bottom-2 right-2 sm:bottom-3 sm:right-3 z-10 flex items-center gap-1 px-2.5 py-1 sm:px-3.5 sm:py-1.5 rounded-lg sm:rounded-xl bg-white text-black font-black text-[11px] sm:text-xs shadow-md group-hover:bg-amber-400 transition-colors">
+          <div className="absolute bottom-2 right-2 sm:bottom-3 sm:right-3 z-20 flex items-center gap-1 px-2.5 py-1 sm:px-3.5 sm:py-1.5 rounded-lg sm:rounded-xl bg-white text-black font-black text-[11px] sm:text-xs shadow-md group-hover:bg-amber-400 transition-colors">
             <span className="text-black font-black">Baxın</span>
             <ChevronRight className="w-3.5 h-3.5 sm:w-4 sm:h-4 stroke-[3] text-black" />
           </div>
@@ -143,7 +189,7 @@ export const CategoriesAndGallerySection: React.FC<CategoriesAndGallerySectionPr
         <div className="mt-2 sm:mt-3 px-1 pb-1 text-left space-y-0.5 sm:space-y-1">
           <h3 className="text-sm sm:text-lg lg:text-xl font-black text-black group-hover:text-emerald-800 transition-colors flex items-center gap-1 line-clamp-1">
             <span className="text-black font-black tracking-tight">
-              {cat.name.replace(/[\u{1F300}-\u{1F9FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}\u{1F600}-\u{1F64F}\u{1F680}-\u{1F6FF}\u{1F1E0}-\u{1F1FF}]/gu, '').trim()}
+              {formatAzTitle(cat.name.replace(/[\u{1F300}-\u{1F9FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}\u{1F600}-\u{1F64F}\u{1F680}-\u{1F6FF}\u{1F1E0}-\u{1F1FF}]/gu, '').trim(), cat.id)}
             </span>
           </h3>
           {descriptionText && (

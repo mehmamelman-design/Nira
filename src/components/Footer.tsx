@@ -13,15 +13,15 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate, onSelectCategory }) 
   const logoUrl = siteConfig?.logoUrl || 'https://res.cloudinary.com/dq8xegykm/image/upload/v1786184761/Ba%C5%9Fl%C4%B1qs%C4%B1z_dizayn-Photoroom_t4omj6.png';
 
   const menuCategories: { id: CategoryId; name: string }[] = [
-    { id: 'fastfood', name: 'FAST FOOD' },
-    { id: 'pizza', name: 'PİZZA' },
-    { id: 'kabablar', name: 'KABABLAR' },
-    { id: 'isti_yemekler', name: 'İSTİ YEMƏKLƏR' },
-    { id: 'icikil', name: 'SOYUQ İÇKİLƏR' },
-    { id: 'sorbalar', name: 'ŞORBALAR' },
-    { id: 'salat', name: 'SALAT' },
-    { id: 'cig_kofte', name: 'ÇİY KÖFTƏ' },
-    { id: 'qelyanaltilar', name: 'QƏLYANALTILAR' },
+    { id: 'fastfood', name: 'Fast food' },
+    { id: 'pizza', name: 'Pizza' },
+    { id: 'kabablar', name: 'Kabablar' },
+    { id: 'isti_yemekler', name: 'İsti yeməklər' },
+    { id: 'icikil', name: 'Soyuq içkilər' },
+    { id: 'sorbalar', name: 'Şorbalar' },
+    { id: 'salat', name: 'Salat' },
+    { id: 'cig_kofte', name: 'Çiy köftə' },
+    { id: 'qelyanaltilar', name: 'Qəlyanaltılar' },
   ];
 
   const handleCategoryClick = (catId: CategoryId) => {
