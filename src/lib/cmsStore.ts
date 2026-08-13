@@ -150,7 +150,7 @@ export const DEFAULT_CATEGORIES: CategoryCard[] = [
 
 export function formatAzTitle(text: string, id?: string): string {
   if (!text && !id) return '';
-  let str = (text || id || '').replace(/_/g, ' ').trim();
+  const str = (text || id || '').replace(/_/g, ' ').trim();
   if (!str) return '';
 
   const lowerStr = str.toLowerCase();
@@ -168,22 +168,7 @@ export function formatAzTitle(text: string, id?: string): string {
   if (lowerStr === 'kofe' || id === 'kofe') return 'Kofe';
   if (lowerStr === 'kokteyl' || id === 'kokteyl') return 'Kokteyl';
 
-  return str.split(' ').map((word) => {
-    if (!word) return '';
-    const firstChar = word.charAt(0);
-    const upperFirst = (firstChar === 'i' || firstChar === 'I') ? 'İ' : firstChar.toUpperCase();
-    const rest = word.slice(1)
-      .replace(/İ/g, 'i')
-      .replace(/I/g, 'ı')
-      .replace(/Ə/g, 'ə')
-      .replace(/Ş/g, 'ş')
-      .replace(/Ç/g, 'ç')
-      .replace(/Ğ/g, 'ğ')
-      .replace(/Ö/g, 'ö')
-      .replace(/Ü/g, 'ü')
-      .toLowerCase();
-    return upperFirst + rest;
-  }).join(' ');
+  return str;
 }
 
 export const DEFAULT_GALLERY: GalleryPhoto[] = [
@@ -298,55 +283,34 @@ export function subscribeToMenu(callback: (items: MenuItem[]) => void) {
   return onSnapshot(docRef, (snapshot) => {
     let items: MenuItem[] = [];
     if (snapshot.exists() && snapshot.data().items && Array.isArray(snapshot.data().items) && snapshot.data().items.length > 0) {
-      items = snapshot.data().items as MenuItem[];
+      const remoteItems = snapshot.data().items as MenuItem[];
+      const defaultMap = new Map<string, MenuItem>(MENU_ITEMS.map(m => [m.id, m]));
+      items = remoteItems.map(it => {
+        const def = defaultMap.get(it.id);
+        if (def) {
+          return {
+            ...def,
+            ...it,
+            name: def.name,
+            image: def.image && def.image.startsWith('https://res.cloudinary.com') ? def.image : (it.image || def.image),
+            price: it.price !== undefined ? it.price : def.price,
+            variants: def.variants || it.variants,
+            category: def.category || it.category
+          };
+        }
+        return it;
+      });
     } else {
       items = getStoredLocal('alov_menu_items', MENU_ITEMS);
+      setDoc(docRef, { items }).catch(console.error);
     }
 
-    // Always merge default MENU_ITEMS to guarantee no items are lost
-    const itemMap = new Map<string, MenuItem>(items.map(i => [i.id, i]));
-    MENU_ITEMS.forEach(defaultItem => {
-      if (!itemMap.has(defaultItem.id)) {
-        itemMap.set(defaultItem.id, defaultItem);
-      } else if (defaultItem.id.startsWith('ff-')) {
-        const existing = itemMap.get(defaultItem.id)!;
-        itemMap.set(defaultItem.id, {
-          ...existing,
-          name: defaultItem.name,
-          price: defaultItem.price
-        });
-      }
-    });
-    const mergedItems = Array.from(itemMap.values());
-
-    const formattedMerged = mergedItems.map(item => ({
-      ...item,
-      name: formatAzTitle(item.name)
-    }));
-
-    setStoredLocal('alov_menu_items', formattedMerged);
-    callback(formattedMerged);
+    setStoredLocal('alov_menu_items', items);
+    callback(items);
   }, (err) => {
     console.warn('Menu snapshot error:', err);
     const stored = getStoredLocal('alov_menu_items', MENU_ITEMS);
-    const itemMap = new Map<string, MenuItem>(stored.map(i => [i.id, i]));
-    MENU_ITEMS.forEach(defaultItem => {
-      if (!itemMap.has(defaultItem.id)) {
-        itemMap.set(defaultItem.id, defaultItem);
-      } else if (defaultItem.id.startsWith('ff-')) {
-        const existing = itemMap.get(defaultItem.id)!;
-        itemMap.set(defaultItem.id, {
-          ...existing,
-          name: defaultItem.name,
-          price: defaultItem.price
-        });
-      }
-    });
-    const fallbackList = Array.from(itemMap.values()).map(item => ({
-      ...item,
-      name: formatAzTitle(item.name)
-    }));
-    callback(fallbackList);
+    callback(stored);
   });
 }
 
