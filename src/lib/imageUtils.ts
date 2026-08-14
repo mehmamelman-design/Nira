@@ -9,8 +9,11 @@ export function formatImageUrl(url: string | undefined | null): string {
 
   if (!cleanUrl) return '';
 
-  // Data URLs (base64) or Blob URLs - pass through directly
-  if (cleanUrl.startsWith('data:') || cleanUrl.startsWith('blob:')) {
+  // 0. Cloudinary Links optimization
+  if (cleanUrl.includes('res.cloudinary.com') && cleanUrl.includes('/upload/')) {
+    if (!cleanUrl.includes('/upload/f_auto') && !cleanUrl.includes('/upload/q_auto')) {
+      cleanUrl = cleanUrl.replace('/upload/', '/upload/f_auto,q_auto/');
+    }
     return cleanUrl;
   }
 

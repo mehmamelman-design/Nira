@@ -375,6 +375,10 @@ export const MenuSection: React.FC<MenuSectionProps> = ({
               src={imgUrl}
               alt={titleText}
               className="relative z-10 w-full h-full object-cover object-center transition-transform duration-500 hover:scale-102"
+              loading="eager"
+              onError={(e) => {
+                (e.currentTarget as HTMLImageElement).src = 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&q=80&w=1200';
+              }}
             />
           </div>
         ))}
@@ -559,7 +563,7 @@ export const MenuSection: React.FC<MenuSectionProps> = ({
           </div>
         ) : (
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 lg:gap-8">
-            {filteredItems.map((item) => {
+            {filteredItems.map((item, index) => {
               const ingredients = getIngredients(item);
               const hasVariants = item.variants && item.variants.length > 0;
 
@@ -590,7 +594,12 @@ export const MenuSection: React.FC<MenuSectionProps> = ({
                       src={item.image}
                       alt={item.name}
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                      loading="lazy"
+                      loading={index < 4 ? "eager" : "lazy"}
+                      // @ts-ignore
+                      fetchPriority={index < 4 ? "high" : "auto"}
+                      onError={(e) => {
+                        (e.currentTarget as HTMLImageElement).src = 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&q=80&w=600';
+                      }}
                     />
 
                     {/* Admin Edit & Delete Buttons over image */}

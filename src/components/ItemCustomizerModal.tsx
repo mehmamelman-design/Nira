@@ -128,6 +128,10 @@ export const ItemCustomizerModal: React.FC<ItemCustomizerModalProps> = ({
             src={item.image}
             alt={item.name}
             className="w-full h-full object-cover object-center"
+            loading="eager"
+            onError={(e) => {
+              (e.currentTarget as HTMLImageElement).src = 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&q=80&w=800';
+            }}
           />
           <div className="absolute inset-0 bg-gradient-to-t from-white via-white/30 to-transparent" />
 

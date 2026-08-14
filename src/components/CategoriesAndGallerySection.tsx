@@ -166,6 +166,9 @@ export const CategoriesAndGallerySection: React.FC<CategoriesAndGallerySectionPr
             alt={cat.name}
             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
             loading="lazy"
+            onError={(e) => {
+              (e.currentTarget as HTMLImageElement).src = 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&q=80&w=600';
+            }}
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent opacity-20 group-hover:opacity-0 transition-opacity pointer-events-none" />
 
