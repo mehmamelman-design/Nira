@@ -986,7 +986,7 @@ export const MENU_ITEMS: MenuItem[] = [
     category: 'desertler',
     description: 'İtalyan resepti: Kofe şərbətli Savoiardi biskviti və Maskarpone kremi',
     ingredients: 'Maskarpone, Espresso kofe, Kakao, Savoiardi',
-    price: 5.00,
+    price: 6.00,
     image: 'https://res.cloudinary.com/dq8xegykm/image/upload/v1786705859/Tiramisu_frhrcy.jpg',
     prepTime: '5 dəq'
   },

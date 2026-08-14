@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { CategoryCard, GalleryPhoto, CategoryId, HeroConfig } from '../types';
-import { ChevronRight, Utensils, Coffee, Pizza, Flame, Package, Pencil } from 'lucide-react';
+import { ChevronRight, Coffee, Pizza, Flame, Package, Pencil } from 'lucide-react';
+import { DessertLayerIcon } from './DessertLayerIcon';
 import { Hero } from './Hero';
 import { DEFAULT_CATEGORIES, formatAzTitle } from '../lib/cmsStore';
 import { DEFAULT_CATEGORY_SLIDES } from './MenuSection';
@@ -59,7 +60,7 @@ export const CATEGORY_GROUPS = [
   {
     id: 'desertler_group',
     name: 'Desertlər',
-    icon: Utensils,
+    icon: DessertLayerIcon,
     subCategories: [
       { id: 'desertler' as CategoryId, label: 'Desertlər' },
     ]
