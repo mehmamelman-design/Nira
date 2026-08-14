@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { ArrowLeft, Star, Clock, Flame, ShieldCheck, Plus, Minus, ShoppingBag, Sparkles } from 'lucide-react';
 import { MenuItem } from '../types';
+import { formatImageUrl } from '../lib/imageUtils';
 
 interface FoodDetailModalProps {
   item: MenuItem | null;
@@ -63,10 +64,11 @@ export const FoodDetailModal: React.FC<FoodDetailModalProps> = ({
         {/* Top Hero Image Banner */}
         <div className="relative h-64 sm:h-80 lg:h-96 w-full overflow-hidden bg-zinc-950">
           <img
-            src={item.image}
+            src={formatImageUrl(item.image)}
             alt={item.name}
             className="w-full h-full object-cover object-center"
             loading="eager"
+            decoding="async"
             onError={(e) => {
               (e.currentTarget as HTMLImageElement).src = 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&q=80&w=800';
             }}

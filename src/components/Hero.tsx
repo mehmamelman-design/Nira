@@ -13,14 +13,14 @@ interface HeroProps {
   isMiddleHero?: boolean;
 }
 
-const DEFAULT_SLIDES = [
+export const DEFAULT_SLIDES = [
   "https://res.cloudinary.com/dq8xegykm/image/upload/v1786350674/ChatGPT_Image_10_A%C4%9Fu_2026_12_06_26_c6pwbt.png",
   "https://res.cloudinary.com/dq8xegykm/image/upload/v1786350671/ChatGPT_Image_10_A%C4%9Fu_2026_11_57_20_yrph6f.png",
   "https://res.cloudinary.com/dq8xegykm/image/upload/v1786350673/ChatGPT_Image_10_A%C4%9Fu_2026_12_04_24_zwwfvx.png",
   "https://res.cloudinary.com/dq8xegykm/image/upload/v1786350672/ChatGPT_Image_10_A%C4%9Fu_2026_12_07_18_viesgt.png"
 ];
 
-const DEFAULT_MIDDLE_SLIDES = [
+export const DEFAULT_MIDDLE_SLIDES = [
   "https://res.cloudinary.com/dq8xegykm/image/upload/v1786351544/ChatGPT_Image_9_A%C4%9Fu_2026_22_25_23_zcqmky.png",
   "https://res.cloudinary.com/dq8xegykm/image/upload/v1786351502/ChatGPT_Image_9_A%C4%9Fu_2026_22_36_26_stqwzb.png",
   "https://res.cloudinary.com/dq8xegykm/image/upload/v1786351567/ChatGPT_Image_9_A%C4%9Fu_2026_22_28_28_cfwplx.png",
@@ -151,6 +151,10 @@ export const Hero: React.FC<HeroProps> = ({
                   src={desktopImg}
                   alt={`Alov Fast Food Slide ${index + 1} Desktop`}
                   referrerPolicy="no-referrer"
+                  loading="eager"
+                  decoding="async"
+                  // @ts-ignore
+                  fetchPriority={index === 0 ? "high" : "auto"}
                   onError={(e) => {
                     const target = e.currentTarget;
                     if (target.src.includes('drive.google.com/thumbnail')) {
@@ -173,6 +177,10 @@ export const Hero: React.FC<HeroProps> = ({
                   src={mobileImg}
                   alt={`Alov Fast Food Slide ${index + 1} Mobile`}
                   referrerPolicy="no-referrer"
+                  loading="eager"
+                  decoding="async"
+                  // @ts-ignore
+                  fetchPriority={index === 0 ? "high" : "auto"}
                   onError={(e) => {
                     const target = e.currentTarget;
                     if (target.src.includes('drive.google.com/thumbnail')) {

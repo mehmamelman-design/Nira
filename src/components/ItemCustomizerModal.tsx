@@ -1,6 +1,7 @@
 import React, { useState, useMemo } from 'react';
 import { X, Star, Clock, ShieldCheck, Plus, Minus, ShoppingBag, Sparkles, Check } from 'lucide-react';
 import { MenuItem } from '../types';
+import { formatImageUrl } from '../lib/imageUtils';
 
 interface ItemCustomizerModalProps {
   item: MenuItem | null;
@@ -125,10 +126,11 @@ export const ItemCustomizerModal: React.FC<ItemCustomizerModalProps> = ({
         {/* Modal Top Banner with Image */}
         <div className="relative h-40 sm:h-48 md:h-52 w-full bg-zinc-100 shrink-0">
           <img
-            src={item.image}
+            src={formatImageUrl(item.image)}
             alt={item.name}
             className="w-full h-full object-cover object-center"
             loading="eager"
+            decoding="async"
             onError={(e) => {
               (e.currentTarget as HTMLImageElement).src = 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&q=80&w=800';
             }}

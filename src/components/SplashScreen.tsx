@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from 'react';
+import { formatImageUrl } from '../lib/imageUtils';
+import { preloadImages } from '../lib/imagePreloader';
 
 interface SplashScreenProps {
   imageUrlsToPreload?: string[];
@@ -17,14 +19,10 @@ export const SplashScreen: React.FC<SplashScreenProps> = ({
     document.body.style.overflow = 'hidden';
     document.documentElement.style.overflow = 'hidden';
 
-    // Fast-preload key image URLs in the browser cache
+    // Fast-preload key image URLs in the browser cache with optimizations
     if (imageUrlsToPreload && imageUrlsToPreload.length > 0) {
-      imageUrlsToPreload.forEach((url) => {
-        if (url) {
-          const img = new Image();
-          img.src = url;
-        }
-      });
+      const formattedUrls = imageUrlsToPreload.map(u => formatImageUrl(u)).filter(Boolean);
+      preloadImages(formattedUrls, true);
     }
 
     // Trigger smooth fade out at 4.3s (so total splash display is exactly 5 seconds)

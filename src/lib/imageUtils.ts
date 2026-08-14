@@ -11,8 +11,9 @@ export function formatImageUrl(url: string | undefined | null): string {
 
   // 0. Cloudinary Links optimization
   if (cleanUrl.includes('res.cloudinary.com') && cleanUrl.includes('/upload/')) {
+    // If not already parameterized, inject modern auto format, auto compression and max width constraints
     if (!cleanUrl.includes('/upload/f_auto') && !cleanUrl.includes('/upload/q_auto')) {
-      cleanUrl = cleanUrl.replace('/upload/', '/upload/f_auto,q_auto/');
+      cleanUrl = cleanUrl.replace('/upload/', '/upload/f_auto,q_auto:good,w_1000,c_limit/');
     }
     return cleanUrl;
   }

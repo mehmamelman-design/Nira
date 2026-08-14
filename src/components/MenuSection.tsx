@@ -5,6 +5,8 @@ import { MENU_ITEMS } from '../data/menuData';
 import { ItemCustomizerModal } from './ItemCustomizerModal';
 import { FaqSection } from './FaqSection';
 import { CATEGORY_GROUPS } from './CategoriesAndGallerySection';
+import { formatImageUrl } from '../lib/imageUtils';
+import { preloadImages } from '../lib/imagePreloader';
 
 interface MenuSectionProps {
   menuItems?: MenuItem[];
@@ -338,6 +340,14 @@ export const MenuSection: React.FC<MenuSectionProps> = ({
   }, [itemsToDisplay, activeCategory, searchQuery]);
 
   // Extract or derive ingredients array
+  // Preload visible and upcoming food item images in background
+  useEffect(() => {
+    if (filteredItems && filteredItems.length > 0) {
+      const urls = filteredItems.map(it => it.image);
+      preloadImages(urls, false);
+    }
+  }, [filteredItems]);
+
   const getIngredients = (item: MenuItem): string[] => {
     if (item.ingredients) {
       return item.ingredients.split(',').map((s) => s.trim());
@@ -364,7 +374,7 @@ export const MenuSection: React.FC<MenuSectionProps> = ({
           >
             {/* Ambient Blurred Backdrop */}
             <img
-              src={imgUrl}
+              src={formatImageUrl(imgUrl)}
               alt=""
               aria-hidden="true"
               className="absolute inset-0 w-full h-full object-cover blur-2xl opacity-40 scale-105 pointer-events-none"
@@ -372,10 +382,13 @@ export const MenuSection: React.FC<MenuSectionProps> = ({
 
             {/* Main Sharp Image - Cleanly covers banner without dark gaps */}
             <img
-              src={imgUrl}
+              src={formatImageUrl(imgUrl)}
               alt={titleText}
               className="relative z-10 w-full h-full object-cover object-center transition-transform duration-500 hover:scale-102"
               loading="eager"
+              decoding="async"
+              // @ts-ignore
+              fetchPriority="high"
               onError={(e) => {
                 (e.currentTarget as HTMLImageElement).src = 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&q=80&w=1200';
               }}
@@ -589,14 +602,15 @@ export const MenuSection: React.FC<MenuSectionProps> = ({
                   }`}
                 >
                   {/* Left Side: Photo Box - Enlarged Food Photo */}
-                  <div className="relative w-28 h-28 sm:w-36 sm:h-36 md:w-44 md:h-44 lg:w-52 lg:h-52 rounded-xl sm:rounded-2xl overflow-hidden bg-zinc-900 shrink-0 border border-zinc-200 shadow-xs flex items-center justify-center">
+                  <div className="relative w-28 h-28 sm:w-36 sm:h-36 md:w-44 md:h-44 lg:w-52 lg:h-52 rounded-xl sm:rounded-2xl overflow-hidden bg-gradient-to-br from-zinc-100 via-amber-50/50 to-zinc-200 shrink-0 border border-zinc-200 shadow-xs flex items-center justify-center">
                     <img
-                      src={item.image}
+                      src={formatImageUrl(item.image)}
                       alt={item.name}
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                      loading={index < 4 ? "eager" : "lazy"}
+                      loading={index < 6 ? "eager" : "lazy"}
+                      decoding="async"
                       // @ts-ignore
-                      fetchPriority={index < 4 ? "high" : "auto"}
+                      fetchPriority={index < 6 ? "high" : "auto"}
                       onError={(e) => {
                         (e.currentTarget as HTMLImageElement).src = 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&q=80&w=600';
                       }}

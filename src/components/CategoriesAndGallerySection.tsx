@@ -4,6 +4,7 @@ import { ChevronRight, Utensils, Coffee, Pizza, Flame, Package, Pencil } from 'l
 import { Hero } from './Hero';
 import { DEFAULT_CATEGORIES, formatAzTitle } from '../lib/cmsStore';
 import { DEFAULT_CATEGORY_SLIDES } from './MenuSection';
+import { formatImageUrl } from '../lib/imageUtils';
 
 interface CategoriesAndGallerySectionProps {
   categories: CategoryCard[];
@@ -160,12 +161,15 @@ export const CategoriesAndGallerySection: React.FC<CategoriesAndGallerySectionPr
         )}
 
         {/* Photo Frame Box - Matches 16:9 banner photo aspect ratio cleanly without any black borders */}
-        <div className="relative aspect-[16/9] w-full overflow-hidden rounded-xl sm:rounded-2xl bg-zinc-900 shadow-md flex items-center justify-center">
+        <div className="relative aspect-[16/9] w-full overflow-hidden rounded-xl sm:rounded-2xl bg-gradient-to-br from-zinc-100 via-amber-50/50 to-zinc-200 shadow-md flex items-center justify-center">
           <img
-            src={cat.image || (DEFAULT_CATEGORY_SLIDES[cat.id]?.[0]) || 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&q=80&w=600'}
+            src={formatImageUrl(cat.image || (DEFAULT_CATEGORY_SLIDES[cat.id]?.[0])) || 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&q=80&w=600'}
             alt={cat.name}
             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-            loading="lazy"
+            loading="eager"
+            decoding="async"
+            // @ts-ignore
+            fetchPriority="high"
             onError={(e) => {
               (e.currentTarget as HTMLImageElement).src = 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&q=80&w=600';
             }}
