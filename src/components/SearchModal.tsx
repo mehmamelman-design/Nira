@@ -45,7 +45,7 @@ export const SearchModal: React.FC<SearchModalProps> = ({
 
   const getCategoryName = (cat: string) => {
     switch (cat) {
-      case 'fastfood': return 'Fast Food';
+      case 'fastfood': return 'Burger və Nugget';
       case 'pizza': return 'Pizzalar';
       case 'pide': return 'Pidelər';
       case 'kabablar': return 'Kabablar';

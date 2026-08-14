@@ -9,7 +9,7 @@ export const MENU_ITEMS: MenuItem[] = [
     description: 'Xüsusi xırçıltılı bulkada dana köftəsi, turşu xiyar, təzə pomidor və xüsusi burger sousu',
     ingredients: 'Dana əti köftəsi, Burger bulkası, Çedder pendiri, Marul, Turşu xiyar, Xüsusi sous',
     price: 6.00,
-    image: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&q=80&w=800',
+    image: 'https://res.cloudinary.com/dq8xegykm/image/upload/v1786429805/ESASASASASASASA_ww26hz.png',
     isPopular: true,
     isHalal: true,
     prepTime: '10-15 dəq'
@@ -21,7 +21,7 @@ export const MENU_ITEMS: MenuItem[] = [
     description: 'Ərimiş bol çedder pendirli şirəli dana burger, kahı və Alov burger sousu',
     ingredients: 'Dana əti, Çedder pendiri, Xüsusi sous, Karamelizə soğan, Turşu xiyar',
     price: 7.00,
-    image: 'https://images.unsplash.com/photo-1586190848861-99aa4a171e90?auto=format&fit=crop&q=80&w=800',
+    image: 'https://res.cloudinary.com/dq8xegykm/image/upload/v1786429797/ChatGPT_Image_11_A%C4%9Fu_2026_10_11_37_lvax3e.png',
     isPopular: true,
     isHalal: true,
     prepTime: '10-15 dəq'
@@ -33,7 +33,7 @@ export const MENU_ITEMS: MenuItem[] = [
     description: 'Çıtır panko panerovkalı toyuq file, kahı, pomidor və mayonez sousu',
     ingredients: 'Toyuq file, Çıtır panerovka, Marul, Pomidor, Mayonez, Burger bulkası',
     price: 5.00,
-    image: 'https://images.unsplash.com/photo-1625813506062-0aeb1d7a094b?auto=format&fit=crop&q=80&w=800',
+    image: 'https://res.cloudinary.com/dq8xegykm/image/upload/v1786429802/ChatGPT_Image_11_A%C4%9Fu_2026_10_09_36_ugqu02.png',
     isHalal: true,
     prepTime: '10-12 dəq'
   },
@@ -44,10 +44,22 @@ export const MENU_ITEMS: MenuItem[] = [
     description: 'İki qat şirəli dana köftəsi, iki qat çedder pendiri və iki qat ləzzət',
     ingredients: '2x Dana köftə, 2x Çedder pendiri, Alov imzalı sous, Karamelizə olunmuş soğan',
     price: 8.00,
-    image: 'https://images.unsplash.com/photo-1553979459-d2229ba7433b?auto=format&fit=crop&q=80&w=800',
+    image: 'https://res.cloudinary.com/dq8xegykm/image/upload/v1786429803/ChatGPT_Image_11_A%C4%9Fu_2026_10_10_39_hfrq1n.png',
     isPopular: true,
     isHalal: true,
     prepTime: '12-15 dəq'
+  },
+  {
+    id: 'ff-5',
+    name: 'Naqgets (5 ədəd)',
+    category: 'fastfood',
+    description: 'Qızılı xırçıltılı panerovkada şirəli toyuq naggetsləri, xüsusi sous ilə',
+    ingredients: 'Toyuq filesi, Xüsusi panerovka, Dəniz duzu, Sous',
+    price: 5.00,
+    image: 'https://res.cloudinary.com/dq8xegykm/image/upload/v1786429786/ChatGPT_Image_11_A%C4%9Fu_2026_10_14_27_wqzv9a.png',
+    isPopular: true,
+    isHalal: true,
+    prepTime: '8-10 dəq'
   },
   {
     id: 'ff-6',
@@ -56,20 +68,9 @@ export const MENU_ITEMS: MenuItem[] = [
     description: 'Xırçıltılı və isti qızılı kartof fri çubuqları, ketçup və mayonez ilə',
     ingredients: 'Kartof, Dəniz duzu, Ketçup, Mayonez',
     price: 3.00,
-    image: 'https://images.unsplash.com/photo-1573080496219-bb080dd4f877?auto=format&fit=crop&q=80&w=800',
+    image: 'https://res.cloudinary.com/dq8xegykm/image/upload/v1786429782/ChatGPT_Image_11_A%C4%9Fu_2026_10_15_16_ko9j2r.png',
     isPopular: true,
     prepTime: '5-8 dəq'
-  },
-  {
-    id: 'ff-7',
-    name: 'Qızardılmış Toyuq',
-    category: 'fastfood',
-    description: 'Xüsusi ədviyyatlı çıtır panerovkalı toyuq tikələri',
-    ingredients: 'Toyuq file tikələri, Xüsusi ədviyyat, Sous',
-    price: 6.00,
-    image: 'https://images.unsplash.com/photo-1626082927389-6cd097cdc6ec?auto=format&fit=crop&q=80&w=800',
-    isHalal: true,
-    prepTime: '10 dəq'
   },
   {
     id: 'ff-8',
@@ -78,7 +79,7 @@ export const MENU_ITEMS: MenuItem[] = [
     description: 'Təzə çörək arasında kolbasa, pendir, pomidor və xiyar ilə ləzzətli sendviç',
     ingredients: 'Təzə çörək, Halal kolbasa, Pendir, Pomidor, Xiyar, Sous',
     price: 4.00,
-    image: 'https://images.unsplash.com/photo-1528735602780-2552fd46c7af?auto=format&fit=crop&q=80&w=800',
+    image: 'https://res.cloudinary.com/dq8xegykm/image/upload/v1786429785/ChatGPT_Image_11_A%C4%9Fu_2026_10_24_02_ul3qa1.png',
     isHalal: true,
     prepTime: '5-8 dəq'
   },
@@ -89,7 +90,7 @@ export const MENU_ITEMS: MenuItem[] = [
     description: 'Üç qat tost çörəyi arasında toyuq file, yumurta, pomidor, xiyar və xırçıltılı fri',
     ingredients: 'Tost çörəyi, Toyuq file, Qızartma yumurta, Pendir, Fri kartof',
     price: 6.00,
-    image: 'https://images.unsplash.com/photo-1567234669003-dce7a7a88821?auto=format&fit=crop&q=80&w=800',
+    image: 'https://res.cloudinary.com/dq8xegykm/image/upload/v1786429812/ChatGPT_Image_11_A%C4%9Fu_2026_10_19_27_ywakni.png',
     isPopular: true,
     isHalal: true,
     prepTime: '10-12 dəq'
@@ -101,28 +102,28 @@ export const MENU_ITEMS: MenuItem[] = [
     description: 'Qızardılmış tost çörəyi arasında bol ərimiş kaşar pendiri',
     ingredients: 'Tost çörəyi, Kaşar pendiri, Kərə yağı',
     price: 3.00,
-    image: 'https://images.unsplash.com/photo-1525351484163-7529414344d8?auto=format&fit=crop&q=80&w=800',
+    image: 'https://res.cloudinary.com/dq8xegykm/image/upload/v1786429785/ChatGPT_Image_11_A%C4%9Fu_2026_10_23_16_q1vuwn.png',
     prepTime: '5 dəq'
   },
   {
     id: 'ff-11',
-    name: 'Sucuklu Tost',
+    name: 'Sucuklu Toast',
     category: 'fastfood',
     description: 'Tost çörəyində qızardılmış halal sucuq və ərimiş kaşar pendiri',
     ingredients: 'Tost çörəyi, Halal sucuq, Kaşar pendiri, Kərə yağı',
     price: 4.00,
-    image: 'https://images.unsplash.com/photo-1509722747041-616f39b57569?auto=format&fit=crop&q=80&w=800',
+    image: 'https://res.cloudinary.com/dq8xegykm/image/upload/v1786429772/ChatGPT_Image_11_A%C4%9Fu_2026_10_22_36_fwnt1j.png',
     isHalal: true,
     prepTime: '5-7 dəq'
   },
   {
     id: 'ff-12',
-    name: 'Hot-dog',
+    name: 'Hot dog',
     category: 'fastfood',
     description: 'Yumşaq hot-dog bulkasında qızardılmış sosis, xardal, ketçup və turşu xiyar',
     ingredients: 'Hot-dog bulkası, Halal sosis, Xardal, Ketçup, Çıtır soğan',
     price: 3.00,
-    image: 'https://images.unsplash.com/photo-1619740455993-9e612b1af08a?auto=format&fit=crop&q=80&w=800',
+    image: 'https://res.cloudinary.com/dq8xegykm/image/upload/v1786429812/ChatGPT_Image_11_A%C4%9Fu_2026_10_21_02_pulnqf.png',
     isHalal: true,
     prepTime: '5 dəq'
   },
@@ -133,7 +134,7 @@ export const MENU_ITEMS: MenuItem[] = [
     description: 'Xırçıltılı yufka qatları arasında leziz qiyməli və ya pendirli fırın börəyi',
     ingredients: 'Təzə yufka, Qiymə və ya Pendir, Kərə yağı, Çörəkotu',
     price: 5.00,
-    image: 'https://images.unsplash.com/photo-1541529086526-db283c563270?auto=format&fit=crop&q=80&w=800',
+    image: 'https://res.cloudinary.com/dq8xegykm/image/upload/v1786429812/ChatGPT_Image_11_A%C4%9Fu_2026_10_20_31_jxlavj.png',
     isPopular: true,
     prepTime: '5-8 dəq'
   },
@@ -146,7 +147,7 @@ export const MENU_ITEMS: MenuItem[] = [
     description: 'Klassik İtalyan resepti: Xüsusi pomidor sousu, bol Mozzarella pendiri və təzə fesleğen',
     ingredients: 'Pizza xəmiri, Pomidor sousu, Mozzarella pendiri, Təzə fesleğen, Zeytun yağı',
     price: 8.00,
-    image: 'https://images.unsplash.com/photo-1574071318508-1cdbab80d002?auto=format&fit=crop&q=80&w=800',
+    image: 'https://res.cloudinary.com/dq8xegykm/image/upload/v1786432442/ChatGPT_Image_11_A%C4%9Fu_2026_10_55_48_obso67.png',
     isPopular: true,
     prepTime: '15-20 dəq'
   },
@@ -157,7 +158,7 @@ export const MENU_ITEMS: MenuItem[] = [
     description: 'Soba qızartması toyuq dilimləri, göbələk, bibər, zeytun və Mozzarella',
     ingredients: 'Pizza xəmiri, Toyuq əti, Göbələk, Rəngli bibərlər, Mozzarella, Oreqano',
     price: 10.00,
-    image: 'https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&q=80&w=800',
+    image: 'https://res.cloudinary.com/dq8xegykm/image/upload/v1786432437/ChatGPT_Image_11_A%C4%9Fu_2026_11_06_46_ps4b3y.png',
     isPopular: true,
     isHalal: true,
     prepTime: '15-20 dəq'
@@ -169,7 +170,7 @@ export const MENU_ITEMS: MenuItem[] = [
     description: 'Ədviyyatlı halal sucuq dilimləri, xüsusi pomidor sousu və bol Mozzarella',
     ingredients: 'Pizza xəmiri, Halal sucuq, Mozzarella, Pomidor sousu, Zeytun',
     price: 10.00,
-    image: 'https://images.unsplash.com/photo-1534308983496-4fabb1a015ee?auto=format&fit=crop&q=80&w=800',
+    image: 'https://res.cloudinary.com/dq8xegykm/image/upload/v1786432445/ChatGPT_Image_11_A%C4%9Fu_2026_11_00_57_ko6taw.png',
     isHalal: true,
     prepTime: '15-20 dəq'
   },
@@ -180,7 +181,7 @@ export const MENU_ITEMS: MenuItem[] = [
     description: 'Uşaqların və böyüklərin sevimlisi: Halal sosis dilimləri, qarğıdalı və Mozzarella',
     ingredients: 'Pizza xəmiri, Halal sosis, Şirin qarğıdalı, Mozzarella pendiri, Pomidor sousu',
     price: 9.00,
-    image: 'https://images.unsplash.com/photo-1541745537411-b8046dc6d66c?auto=format&fit=crop&q=80&w=800',
+    image: 'https://res.cloudinary.com/dq8xegykm/image/upload/v1786432447/ChatGPT_Image_11_A%C4%9Fu_2026_11_04_13_hdkcsc.png',
     isHalal: true,
     prepTime: '15-20 dəq'
   },
@@ -191,7 +192,7 @@ export const MENU_ITEMS: MenuItem[] = [
     description: 'Acılı acısız orijinal pepperoni dilimləri, Mozzarella və İtalyan sousu',
     ingredients: 'Pizza xəmiri, Pepperoni, Mozzarella pendiri, Xüsusi pomidor sousu',
     price: 10.00,
-    image: 'https://images.unsplash.com/photo-1628840042765-356cda07504e?auto=format&fit=crop&q=80&w=800',
+    image: 'https://res.cloudinary.com/dq8xegykm/image/upload/v1786432442/ChatGPT_Image_11_A%C4%9Fu_2026_11_05_08_wszy49.png',
     isPopular: true,
     isHalal: true,
     prepTime: '15-20 dəq'
@@ -203,7 +204,7 @@ export const MENU_ITEMS: MenuItem[] = [
     description: 'Ən bol xammallı pizza: Sucuq, sosis, toyuq, göbələk, zeytun, bibər və qarğıdalı',
     ingredients: 'Sucuq, Sosis, Toyuq, Göbələk, Qara zeytun, Bibər, Qarğıdalı, Mozzarella',
     price: 11.00,
-    image: 'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?auto=format&fit=crop&q=80&w=800',
+    image: 'https://res.cloudinary.com/dq8xegykm/image/upload/v1786432447/ChatGPT_Image_11_A%C4%9Fu_2026_11_02_01_zjql0p.png',
     isPopular: true,
     isHalal: true,
     prepTime: '15-20 dəq'
@@ -215,91 +216,93 @@ export const MENU_ITEMS: MenuItem[] = [
     description: 'Təzə şampinyon göbələkləri, fesleğen, sarımsaq yağı və ərimiş Mozzarella',
     ingredients: 'Pizza xəmiri, Şampinyon göbələk, Mozzarella, Fesleğen, Sarımsaq yağı',
     price: 9.00,
-    image: 'https://images.unsplash.com/photo-1590947132387-155cc02f3212?auto=format&fit=crop&q=80&w=800',
+    image: 'https://res.cloudinary.com/dq8xegykm/image/upload/v1786432445/ChatGPT_Image_11_A%C4%9Fu_2026_10_55_54_quinxj.png',
     prepTime: '15-20 dəq'
   },
 
   // ==================== 3. PİDƏ ====================
   {
     id: 'pd-1',
-    name: 'Pidə Sadə Pendirli',
+    name: 'Pide kıymalı',
     category: 'pide',
-    description: 'Xüsusi daş fırında bişmiş bol ərimiş kaşar pendirli orijinal İncə Anadolu pidesi',
-    ingredients: 'Fırın xəmiri, Təzə Kaşar pendiri, Kərə yağı',
-    price: 6.00,
-    image: 'https://images.unsplash.com/photo-1541529086526-db283c563270?auto=format&fit=crop&q=80&w=800',
+    description: 'Xüsusi fırında bişmiş ədviyyatlı dana qiyməsi, soğan, bibər və pomidorlu pide',
+    ingredients: 'Dana kıyması, soğan, biber, pomidor',
+    price: 7.00,
+    image: 'https://res.cloudinary.com/dq8xegykm/image/upload/v1786702685/Minced_Meat_Pide_th75yy.jpg',
     isPopular: true,
     isHalal: true,
     prepTime: '12-15 dəq'
   },
   {
     id: 'pd-2',
-    name: 'Pidə Qiyməli',
+    name: 'Pide pendirli',
     category: 'pide',
-    description: 'Ədviyyatlı dana qiyməsi, pomidor, bibər və soğanlı fırın pidesi',
-    ingredients: 'Fırın xəmiri, Dana qiyməsi, Pomidor, Biber, Soğan, Ədviyyat',
-    price: 7.00,
-    image: 'https://images.unsplash.com/photo-1626777552726-4a6b54c97e46?auto=format&fit=crop&q=80&w=800',
+    description: 'Daş fırında nar kimi qızarmış xüsusi pendir, mozzarella və kərə yağlı pide',
+    ingredients: 'Pendir, mozzarella, kərə yağı',
+    price: 6.00,
+    image: 'https://res.cloudinary.com/dq8xegykm/image/upload/v1786702708/Minced_Meat_Cheese_Pide_arusf7.jpg',
     isPopular: true,
     isHalal: true,
     prepTime: '12-15 dəq'
   },
   {
     id: 'pd-3',
-    name: 'Pidə Qiyməli Pendirli',
+    name: 'Pide kuşbaşı',
     category: 'pide',
-    description: 'Nəfis dana qiyməsi və üzərində ərimiş bol kaşar pendirli pidesi',
-    ingredients: 'Fırın xəmiri, Dana qiyməsi, Kaşar pendiri, Kərə yağı',
+    description: 'Xırda doğranmış dana kuşbaşı əti, soğan, bibər və pomidorlu fırın pidesi',
+    ingredients: 'Dana kuşbaşı, soğan, biber, pomidor',
     price: 8.00,
-    image: 'https://images.unsplash.com/photo-1541529086526-db283c563270?auto=format&fit=crop&q=80&w=800',
-    isHalal: true,
-    prepTime: '12-15 dəq'
-  },
-  {
-    id: 'pd-4',
-    name: 'Pidə Tikə Ətli (Kuşbaşılı)',
-    category: 'pide',
-    description: 'İncə doğranmış marinad olunmuş dana can əti, pomidor və bibərli daş fırın pidesi',
-    ingredients: 'Fırın xəmiri, Dana can əti, Pomidor, Biber, Kərə yağı',
-    price: 9.00,
-    image: 'https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&q=80&w=800',
+    image: 'https://res.cloudinary.com/dq8xegykm/image/upload/v1786702685/Diced_Meat_Pide_s7sek8.jpg',
     isPopular: true,
     isHalal: true,
     prepTime: '15 dəq'
   },
   {
-    id: 'pd-5',
-    name: 'Pidə Tikə Ətli Pendirli',
+    id: 'pd-4',
+    name: 'Pide sucuklu',
     category: 'pide',
-    description: 'Xırda doğranmış dana əti, rəngli bibərlər və üzərində nar kimi qızarmış kaşar pendiri',
-    ingredients: 'Fırın xəmiri, Dana əti, Kaşar pendiri, Pomidor, Bibər, Kərə yağı',
-    price: 10.00,
-    image: 'https://images.unsplash.com/photo-1541529086526-db283c563270?auto=format&fit=crop&q=80&w=800',
+    description: 'Qızardılmış halal sucuk dilimləri, ərimiş mozzarella pendiri və xüsusi pomidor sousu',
+    ingredients: 'Sucuk, mozzarella, pomidor sosu',
+    price: 6.00,
+    image: 'https://res.cloudinary.com/dq8xegykm/image/upload/v1786702709/Sausage_Pide_m0cawf.jpg',
+    isHalal: true,
+    prepTime: '12-15 dəq'
+  },
+  {
+    id: 'pd-5',
+    name: 'Pide kıymalı pendirli',
+    category: 'pide',
+    description: 'Dana kıyması, ərimiş bol mozzarella, soğan, bibər və təzə pomidor harmoniyası',
+    ingredients: 'Dana kıyması, mozzarella, soğan, biber, pomidor',
+    price: 7.00,
+    image: 'https://res.cloudinary.com/dq8xegykm/image/upload/v1786702710/Cheese_Pide_zhndym.jpg',
+    isPopular: true,
     isHalal: true,
     prepTime: '15 dəq'
   },
   {
     id: 'pd-6',
-    name: 'Pidə Sucuklu Pendirli',
+    name: 'Şaurma toyuq',
     category: 'pide',
-    description: 'Qızardılmış halal sucuq dilimləri və bol ərimiş kaşar pendiri ilə ləzzətli pide',
-    ingredients: 'Fırın xəmiri, Halal sucuq, Kaşar pendiri, Kərə yağı',
-    price: 7.50,
-    image: 'https://images.unsplash.com/photo-1534308983496-4fabb1a015ee?auto=format&fit=crop&q=80&w=800',
+    description: 'Lavaşda qızardılmış şirəli toyuq filesi, xırçıltılı turşu xiyar və xüsusi sarımsaqlı sous',
+    ingredients: 'Toyuq filesi, turşu, sous, lavaş',
+    price: 4.00,
+    image: 'https://res.cloudinary.com/dq8xegykm/image/upload/v1786702703/Chicken_Shawarma_xddbfs.jpg',
+    isPopular: true,
     isHalal: true,
-    prepTime: '12-15 dəq'
+    prepTime: '5-8 dəq'
   },
   {
     id: 'pd-7',
-    name: 'Pidə Qarışıq (Alov Special)',
+    name: 'Şaurma ət',
     category: 'pide',
-    description: 'Hər şeydən bol: Kuşbaşı dana əti, qiymə, sucuq, göbələk və iki qat kaşar pendiri',
-    ingredients: 'Kuşbaşı ət, Qiymə, Sucuq, Göbələk, Kaşar pendiri, Kərə yağı',
-    price: 11.00,
-    image: 'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?auto=format&fit=crop&q=80&w=800',
+    description: 'Lavaş bükümündə ləzzətli dana mal əti, ev üsulu turşu və xüsusi ət sousu',
+    ingredients: 'Mal əti, turşu, sous, lavaş',
+    price: 5.00,
+    image: 'https://res.cloudinary.com/dq8xegykm/image/upload/v1786702709/Meat_Shawarma_xvlsud.jpg',
     isPopular: true,
     isHalal: true,
-    prepTime: '15 dəq'
+    prepTime: '5-8 dəq'
   },
 
   // ==================== 4. KABABLAR ====================
@@ -542,40 +545,38 @@ export const MENU_ITEMS: MenuItem[] = [
     category: 'icikil',
     description: 'Buz kimi sərinləşdirici Coca-Cola (həcm və qablaşdırma seçimi ilə)',
     price: 1.50,
-    image: 'https://images.unsplash.com/photo-1622483767028-3f66f32aef97?auto=format&fit=crop&q=80&w=800',
-    isPopular: true,
+    image: 'https://res.cloudinary.com/dq8xegykm/image/upload/v1786701520/Cola_katfrv.jpg',
     variants: [
-      { name: '0.5L', price: 1.50 },
-      { name: '1L', price: 2.50 },
-      { name: 'Ədəd Bankada', price: 2.20 },
-      { name: 'Şüşə Qab', price: 2.50 }
+      { name: 'Cola (0.5L)', price: 1.50 },
+      { name: 'Cola (1L)', price: 2.50 },
+      { name: 'Cola (Can - Original Taste)', price: 2.20 },
+      { name: 'Cola (Şüşə)', price: 2.50 }
     ]
   },
   {
     id: 'ic-fanta',
     name: 'Fanta',
     category: 'icikil',
-    description: 'Portağal aromalı sərinləşdirici Fanta (həcm seçimi ilə)',
+    description: 'Portağal aromalı sərinləşdirici Fanta (həcm və qablaşdırma seçimi ilə)',
     price: 1.50,
-    image: 'https://images.unsplash.com/photo-1624517452488-04869289c4ca?auto=format&fit=crop&q=80&w=800',
-    isPopular: true,
+    image: 'https://res.cloudinary.com/dq8xegykm/image/upload/v1786701522/Fanta_vdlpvj.jpg',
     variants: [
-      { name: '0.5L', price: 1.50 },
-      { name: '1L', price: 2.50 },
-      { name: 'Ədəd Bankada', price: 2.20 }
+      { name: 'Fanta (0.5L)', price: 1.50 },
+      { name: 'Fanta (1L)', price: 2.50 },
+      { name: 'Fanta (Can)', price: 2.20 }
     ]
   },
   {
     id: 'ic-sprite',
     name: 'Sprite',
     category: 'icikil',
-    description: 'Limon və laym dadlı sərinləşdirici Sprite (həcm seçimi ilə)',
+    description: 'Limon və laym dadlı sərinləşdirici Sprite (həcm və qablaşdırma seçimi ilə)',
     price: 1.50,
-    image: 'https://images.unsplash.com/photo-1625772299848-391b6a87d7b3?auto=format&fit=crop&q=80&w=800',
+    image: 'https://res.cloudinary.com/dq8xegykm/image/upload/v1786701522/sprite_o5nr07.jpg',
     variants: [
-      { name: '0.5L', price: 1.50 },
-      { name: '1L', price: 2.00 },
-      { name: 'Ədəd Bankada', price: 2.20 }
+      { name: 'Sprite (0.5L)', price: 1.50 },
+      { name: 'Sprite (1L)', price: 2.00 },
+      { name: 'Sprite (Jar - Lemon Lime)', price: 2.20 }
     ]
   },
   {
@@ -584,10 +585,10 @@ export const MENU_ITEMS: MenuItem[] = [
     category: 'icikil',
     description: 'Təbii mineral Sirab suyu (şüşə qablaşdırma seçimi ilə)',
     price: 2.00,
-    image: 'https://images.unsplash.com/photo-1548839140-29a749e1bc4e?auto=format&fit=crop&q=80&w=800',
+    image: 'https://res.cloudinary.com/dq8xegykm/image/upload/v1786701521/qazliweb-s_dsnhom.webp',
     variants: [
-      { name: '0.5L Qazlı Şüşə', price: 2.00 },
-      { name: '0.5L Şüşə Qab', price: 2.00 }
+      { name: 'Sirab Qazlı (0.5L Şüşə)', price: 2.00 },
+      { name: 'Sirab (0.5L Şüşə)', price: 2.00 }
     ]
   },
   {
@@ -596,12 +597,11 @@ export const MENU_ITEMS: MenuItem[] = [
     category: 'icikil',
     description: 'Sərinlədici təbii ev ayranı (həcm və nanə seçimi ilə)',
     price: 1.50,
-    image: 'https://images.unsplash.com/photo-1528751014936-863e6e7a319c?auto=format&fit=crop&q=80&w=800',
-    isPopular: true,
+    image: 'https://res.cloudinary.com/dq8xegykm/image/upload/v1786701522/Ayran_qwborx.jpg',
     variants: [
-      { name: '0.5L', price: 1.50 },
-      { name: '0.5L Nanəli', price: 1.50 },
-      { name: '1L', price: 3.00 }
+      { name: 'Ayran (0.5L)', price: 1.50 },
+      { name: 'Ayran Nanəli (0.5L)', price: 1.50 },
+      { name: 'Ayran (1L)', price: 3.00 }
     ]
   },
   {
@@ -610,29 +610,28 @@ export const MENU_ITEMS: MenuItem[] = [
     category: 'icikil',
     description: 'Təbii çeşmə bulaq suyu (qazsız və qazlı seçimi ilə)',
     price: 1.50,
-    image: 'https://images.unsplash.com/photo-1548839140-29a749e1bc4e?auto=format&fit=crop&q=80&w=800',
+    image: 'https://res.cloudinary.com/dq8xegykm/image/upload/v1786701521/dgfdgfd_zywi6x.jpg',
     variants: [
-      { name: '0.5L Qazsız/Qazlı', price: 1.50 },
-      { name: '0.7L Qazsız/Qazlı', price: 2.00 }
+      { name: 'Çeşmə Qazsız/Qazlı (0.5L)', price: 1.50 },
+      { name: 'Çeşmə Qazsız/Qazlı (0.7L)', price: 2.00 }
     ]
   },
   {
     id: 'ic-qizilquyu',
     name: 'Qızıl Quyu',
     category: 'icikil',
-    description: 'Xüsusi milli limonad çeşidləri (Limon, Tərxun, Armud, Gül)',
+    description: 'Xüsusi milli limonad çeşidləri (Limon, Tərxun, Düşes, Qızıl Gül)',
     price: 2.00,
-    image: 'https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?auto=format&fit=crop&q=80&w=800',
-    isPopular: true,
+    image: 'https://res.cloudinary.com/dq8xegykm/image/upload/v1786701521/Gizil_Quyum_Lemon_u47nbv.jpg',
     variants: [
-      { name: '0.5L Limon', price: 2.00 },
-      { name: '0.5L Tərxun', price: 2.00 },
-      { name: '0.5L Armud', price: 2.00 },
-      { name: '0.5L Gül', price: 2.00 },
-      { name: '0.7L Limon', price: 2.50 },
-      { name: '0.7L Armud', price: 2.50 },
-      { name: '0.7L Tərxun', price: 2.50 },
-      { name: '0.7L Gül', price: 2.50 }
+      { name: 'Qızıl Quyu Limon (0.5L)', price: 2.00 },
+      { name: 'Qızıl Quyu Limon (0.7L)', price: 2.50 },
+      { name: 'Qızıl Quyu Tərxun (0.5L)', price: 2.00 },
+      { name: 'Qızıl Quyu Tərxun (0.7L)', price: 2.50 },
+      { name: 'Qızıl Quyu Düşes (0.5L)', price: 2.00 },
+      { name: 'Qızıl Quyu Düşes (0.7L)', price: 2.50 },
+      { name: 'Qızıl Quyu Qızıl Gül (0.5L)', price: 2.00 },
+      { name: 'Qızıl Quyu Qızıl Gül (0.7L)', price: 2.50 }
     ]
   },
   {
@@ -641,11 +640,10 @@ export const MENU_ITEMS: MenuItem[] = [
     category: 'icikil',
     description: 'Təbii meyvə şirələri',
     price: 2.50,
-    image: 'https://images.unsplash.com/photo-1613478223719-2ab802602423?auto=format&fit=crop&q=80&w=800',
-    isPopular: true,
+    image: 'https://res.cloudinary.com/dq8xegykm/image/upload/v1786701521/Fruit_Juice_vqsigx.jpg',
     variants: [
-      { name: '0.5L Şirə', price: 2.50 },
-      { name: 'Ümumi Şirə', price: 4.00 }
+      { name: 'Meyvə Şirəsi (Ümumi)', price: 4.00 },
+      { name: 'Meyvə Şirəsi (0.5L)', price: 2.50 }
     ]
   },
   {
@@ -654,8 +652,7 @@ export const MENU_ITEMS: MenuItem[] = [
     category: 'icikil',
     description: 'Təzə sıxılmış təbii portağal və qreypfrut şirəsi',
     price: 6.00,
-    image: 'https://images.unsplash.com/photo-1613478223719-2ab802602423?auto=format&fit=crop&q=80&w=800',
-    isPopular: true,
+    image: 'https://res.cloudinary.com/dq8xegykm/image/upload/v1786701522/Fresh_Juice_futlps.jpg',
     prepTime: '5 dəq'
   },
   {
@@ -664,11 +661,10 @@ export const MENU_ITEMS: MenuItem[] = [
     category: 'icikil',
     description: 'Təbii ev üsulu hazırlanan ləzzətli meyvə kompotları',
     price: 3.00,
-    image: 'https://images.unsplash.com/photo-1551024709-8f23befc6f87?auto=format&fit=crop&q=80&w=800',
-    isPopular: true,
+    image: 'https://res.cloudinary.com/dq8xegykm/image/upload/v1786701521/images_h8zmb6.jpg',
     variants: [
       { name: 'Heyva Kompotu', price: 3.00 },
-      { name: 'Gilas Kompotu', price: 3.00 },
+      { name: 'Vişnə Kompotu', price: 3.00 },
       { name: 'Zoğal Kompotu', price: 3.00 },
       { name: 'Feyxoa Kompotu', price: 3.00 }
     ]
@@ -679,7 +675,7 @@ export const MENU_ITEMS: MenuItem[] = [
     category: 'icikil',
     description: 'Uşaqlar üçün çöp borulu meyvə şirəsi (0.2L)',
     price: 1.00,
-    image: 'https://images.unsplash.com/photo-1613478223719-2ab802602423?auto=format&fit=crop&q=80&w=800',
+    image: 'https://res.cloudinary.com/dq8xegykm/image/upload/v1786701521/ChatGPT_Image_14_A%C4%9Fu_2026_13_57_44_wszeno.png',
     prepTime: '1 dəq'
   },
 
@@ -736,7 +732,7 @@ export const MENU_ITEMS: MenuItem[] = [
     description: 'Ənənəvi Olivier salatı: Bişmiş tərəvəzlər, toyuq file, yaşıl noxud və ev mayonezi',
     ingredients: 'Kartof, Yerkökü, Yumurta, Toyuq file, Turşu xiyar, Noxud, Mayonez',
     price: 3.00,
-    image: 'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&q=80&w=800',
+    image: 'https://res.cloudinary.com/dq8xegykm/image/upload/v1786598653/ChatGPT_Image_12_A%C4%9Fu_2026_14_43_54_iuhyrr.png',
     isPopular: true,
     prepTime: '5 dəq'
   },
@@ -747,7 +743,7 @@ export const MENU_ITEMS: MenuItem[] = [
     description: 'Qat-qat yumşaq salat: Toyuq file, kartof, yerkökü, pendir, yumurta və mayonez',
     ingredients: 'Toyuq file, Kartof, Yerkökü, Holland pendiri, Yumurta, Mayonez',
     price: 3.00,
-    image: 'https://images.unsplash.com/photo-1540420773420-3366772f4999?auto=format&fit=crop&q=80&w=800',
+    image: 'https://res.cloudinary.com/dq8xegykm/image/upload/v1786598652/ChatGPT_Image_12_A%C4%9Fu_2026_14_43_52_dfdh1p.png',
     prepTime: '5 dəq'
   },
   {
@@ -757,7 +753,7 @@ export const MENU_ITEMS: MenuItem[] = [
     description: 'Çıtır qızarmış badımcan dilimləri, şirin çili sousu, təzə pomidor və küncüt',
     ingredients: 'Xırçıltılı badımcan, Pomidor, Şirin çili sousu, Küncüt, Yeşillik',
     price: 6.00,
-    image: 'https://images.unsplash.com/photo-1540420773420-3366772f4999?auto=format&fit=crop&q=80&w=800',
+    image: 'https://res.cloudinary.com/dq8xegykm/image/upload/v1786598654/ChatGPT_Image_12_A%C4%9Fu_2026_14_43_47_geuldp.png',
     isPopular: true,
     prepTime: '10 dəq'
   },
@@ -768,7 +764,7 @@ export const MENU_ITEMS: MenuItem[] = [
     description: 'Xırçıltılı aysberq kahısı, qızardılmış toyuq file, krutonlar, Parmezan və Sezar sousu',
     ingredients: 'Aysberq marul, Toyuq file, Parmezan pendiri, Kruton, Sezar sousu',
     price: 6.00,
-    image: 'https://images.unsplash.com/photo-1550304943-4f24f54ddde9?auto=format&fit=crop&q=80&w=800',
+    image: 'https://res.cloudinary.com/dq8xegykm/image/upload/v1786598678/ChatGPT_Image_13_A%C4%9Fu_2026_09_15_08_gu4gip.png',
     isPopular: true,
     isHalal: true,
     prepTime: '8-10 dəq'
@@ -780,7 +776,7 @@ export const MENU_ITEMS: MenuItem[] = [
     description: 'Qızılı krevetkalar, Aysberq kahı, Çerri pomidor, Parmezan və Sezar sousu',
     ingredients: 'Qızartma Krevetka, Aysberq marul, Parmezan, Çerri pomidor, Kruton',
     price: 8.00,
-    image: 'https://images.unsplash.com/photo-1550304943-4f24f54ddde9?auto=format&fit=crop&q=80&w=800',
+    image: 'https://res.cloudinary.com/dq8xegykm/image/upload/v1786598679/ChatGPT_Image_13_A%C4%9Fu_2026_09_17_05_veqymn.png',
     isPopular: true,
     prepTime: '10 dəq'
   },
@@ -791,7 +787,7 @@ export const MENU_ITEMS: MenuItem[] = [
     description: 'Təzə xiyar, pomidor, göyərtilər, qırmızı soğan, zeytun yağı və limon sousu',
     ingredients: 'Xiyar, Pomidor, Keşniş, Şüyüd, Qırmızı soğan, Zeytun yağı, Limon',
     price: 3.00,
-    image: 'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&q=80&w=800',
+    image: 'https://res.cloudinary.com/dq8xegykm/image/upload/v1786598676/ChatGPT_Image_13_A%C4%9Fu_2026_09_17_47_pojenw.png',
     prepTime: '5 dəq'
   },
   {
@@ -801,7 +797,7 @@ export const MENU_ITEMS: MenuItem[] = [
     description: 'Közdə bişmiş badımcan, pomidor və acı bibərin sarımsaqlı xüsusi qarışığı',
     ingredients: 'Közlənmiş badımcan, Közlənmiş pomidor, Köz bibər, Sarımsaq, Göyərti',
     price: 3.00,
-    image: 'https://images.unsplash.com/photo-1540420773420-3366772f4999?auto=format&fit=crop&q=80&w=800',
+    image: 'https://res.cloudinary.com/dq8xegykm/image/upload/v1786598679/ChatGPT_Image_13_A%C4%9Fu_2026_09_18_44_qm6ddo.png',
     isPopular: true,
     prepTime: '5 dəq'
   },
@@ -812,7 +808,7 @@ export const MENU_ITEMS: MenuItem[] = [
     description: 'İri doğranmış xiyar, pomidor, Feta pendiri, qara zeytun, kekik və zeytun yağı',
     ingredients: 'Feta pendiri, Qara zeytun, Pomidor, Xiyar, Şirin bibər, Oreqano',
     price: 5.00,
-    image: 'https://images.unsplash.com/photo-1540420773420-3366772f4999?auto=format&fit=crop&q=80&w=800',
+    image: 'https://res.cloudinary.com/dq8xegykm/image/upload/v1786598671/ChatGPT_Image_13_A%C4%9Fu_2026_09_19_20_kfpqbk.png',
     prepTime: '5 dəq'
   },
 
@@ -925,7 +921,7 @@ export const MENU_ITEMS: MenuItem[] = [
     description: 'Xırçıltılı nazik yufka qatları arasında bol qoz ləpəsi və təbii şərbət',
     ingredients: 'Yufka, Qoz ləpəsi, Xüsusi şərbət, Kərə yağı',
     price: 6.00,
-    image: 'https://images.unsplash.com/photo-1519676867240-f03562e64548?auto=format&fit=crop&q=80&w=800',
+    image: 'https://res.cloudinary.com/dq8xegykm/image/upload/v1786705859/Turkish_Walnut_Baklava_qisqpe.jpg',
     isPopular: true,
     prepTime: '5 dəq'
   },
@@ -936,7 +932,7 @@ export const MENU_ITEMS: MenuItem[] = [
     description: 'Qaziantep üsulu bol Antep fıstıqlı xırçıltılı Türk paxlavası',
     ingredients: 'Antep fıstığı, Yufka, Kərə yağı, Təbii şərbət',
     price: 8.00,
-    image: 'https://images.unsplash.com/photo-1519676867240-f03562e64548?auto=format&fit=crop&q=80&w=800',
+    image: 'https://res.cloudinary.com/dq8xegykm/image/upload/v1786705861/Turkish_Pistachio_Baklava_svktmk.jpg',
     isPopular: true,
     prepTime: '5 dəq'
   },
@@ -947,7 +943,8 @@ export const MENU_ITEMS: MenuItem[] = [
     description: 'Böyük dilim Antep fıstıqlı havuç dilim paxlava',
     ingredients: 'Antep fıstığı, Yufka, Kərə yağı, Şərbət',
     price: 9.00,
-    image: 'https://images.unsplash.com/photo-1519676867240-f03562e64548?auto=format&fit=crop&q=80&w=800',
+    image: 'https://res.cloudinary.com/dq8xegykm/image/upload/v1786705859/Carrot_Slice_Baklava_gfq7di.jpg',
+    isPopular: true,
     prepTime: '5 dəq'
   },
   {
@@ -957,7 +954,7 @@ export const MENU_ITEMS: MenuItem[] = [
     description: 'Ənənəvi ev üsulu qozlu Azərbaycan paxlavası, zəfəranlı şərbətlə',
     ingredients: 'Qoz ləpəsi, Zəfəran, Xəmiri, Şərbət, Kərə yağı',
     price: 5.00,
-    image: 'https://images.unsplash.com/photo-1519676867240-f03562e64548?auto=format&fit=crop&q=80&w=800',
+    image: 'https://res.cloudinary.com/dq8xegykm/image/upload/v1786705862/ChatGPT_Image_14_A%C4%9Fu_2026_15_09_58_e8iim9.png',
     isPopular: true,
     prepTime: '5 dəq'
   },
@@ -968,7 +965,7 @@ export const MENU_ITEMS: MenuItem[] = [
     description: 'İspan üsulu kremsi yanmış karamelizə San Sebastian cheesecake',
     ingredients: 'Krem pendir, Təbii qaymaq, Yumurta, Şokolad sousu',
     price: 6.00,
-    image: 'https://images.unsplash.com/photo-1533134242443-d4fd215305ad?auto=format&fit=crop&q=80&w=800',
+    image: 'https://res.cloudinary.com/dq8xegykm/image/upload/v1786705859/San_Sebastian_Cheesecake_aqfkcz.jpg',
     isPopular: true,
     prepTime: '5 dəq'
   },
@@ -979,7 +976,8 @@ export const MENU_ITEMS: MenuItem[] = [
     description: 'Zərif çiyələk və ya giləmeyvə souslu kremsi klassik cheesecake',
     ingredients: 'Krem pendir, Biskvit tabanı, Çiyələk topping',
     price: 5.00,
-    image: 'https://images.unsplash.com/photo-1524351199678-941a58a3df50?auto=format&fit=crop&q=80&w=800',
+    image: 'https://res.cloudinary.com/dq8xegykm/image/upload/v1786705861/Cheesecake_r0kvwl.jpg',
+    isPopular: true,
     prepTime: '5 dəq'
   },
   {
@@ -989,7 +987,7 @@ export const MENU_ITEMS: MenuItem[] = [
     description: 'İtalyan resepti: Kofe şərbətli Savoiardi biskviti və Maskarpone kremi',
     ingredients: 'Maskarpone, Espresso kofe, Kakao, Savoiardi',
     price: 5.00,
-    image: 'https://images.unsplash.com/photo-1571877227200-a0d98ea607e9?auto=format&fit=crop&q=80&w=800',
+    image: 'https://res.cloudinary.com/dq8xegykm/image/upload/v1786705859/Tiramisu_frhrcy.jpg',
     prepTime: '5 dəq'
   },
   {
@@ -999,7 +997,7 @@ export const MENU_ITEMS: MenuItem[] = [
     description: 'Üç növ süd şərbəti ilə isladılmış yumşaq biskvit və karamel sousu',
     ingredients: 'Biskvit, Üç növ süd şərbəti, Karamel sousu',
     price: 5.00,
-    image: 'https://images.unsplash.com/photo-1587314168485-3236d6710814?auto=format&fit=crop&q=80&w=800',
+    image: 'https://res.cloudinary.com/dq8xegykm/image/upload/v1786705861/9d58abee35ef1a1f9b87b739a779f950_fojntf.jpg',
     prepTime: '5 dəq'
   },
   {
@@ -1009,7 +1007,7 @@ export const MENU_ITEMS: MenuItem[] = [
     description: 'İsti fırından çıxan ərimiş pendirli və şərbətli xırçıltılı Antep kədəifi',
     ingredients: 'Tel kadayıf, Xüsusi künəfə pendiri, Şərbət, Antep fıstığı',
     price: 7.00,
-    image: 'https://images.unsplash.com/photo-1551024709-8f23befc6f87?auto=format&fit=crop&q=80&w=800',
+    image: 'https://res.cloudinary.com/dq8xegykm/image/upload/v1786705861/Kunafeh_gzpdbe.jpg',
     isPopular: true,
     prepTime: '10 dəq'
   },
@@ -1020,7 +1018,7 @@ export const MENU_ITEMS: MenuItem[] = [
     description: 'Fırında üzəri qızardılmış kremsi ənənəvi sütlaç',
     ingredients: 'Xalis süd, Düyü, Vanil, Qızardılmış karamel üzlük',
     price: 4.00,
-    image: 'https://images.unsplash.com/photo-1541781774459-bb2af2f05b55?auto=format&fit=crop&q=80&w=800',
+    image: 'https://res.cloudinary.com/dq8xegykm/image/upload/v1786705861/Baked_Rice_Pudding_dte6ku.jpg',
     prepTime: '5 dəq'
   },
   {
@@ -1030,7 +1028,7 @@ export const MENU_ITEMS: MenuItem[] = [
     description: 'İsti xırçıltılı waffle, bol Nutella şokoladı və bəzək sousu',
     ingredients: 'Təzə waffle, Nutella şokolad, Qoz, Biskvit qırıntıları',
     price: 6.00,
-    image: 'https://images.unsplash.com/photo-1562376552-0d160a2f238d?auto=format&fit=crop&q=80&w=800',
+    image: 'https://res.cloudinary.com/dq8xegykm/image/upload/v1786705861/Chocolate_Waffle_ore3nx.jpg',
     prepTime: '10 dəq'
   },
   {
@@ -1040,7 +1038,7 @@ export const MENU_ITEMS: MenuItem[] = [
     description: 'Təzə banan, çiyələk, kivi və şokoladlı ləzzətli meyvəli waffle',
     ingredients: 'Waffle, Çiyələk, Banan, Kivi, Şokolad sousu',
     price: 7.00,
-    image: 'https://images.unsplash.com/photo-1562376552-0d160a2f238d?auto=format&fit=crop&q=80&w=800',
+    image: 'https://res.cloudinary.com/dq8xegykm/image/upload/v1786705860/Fruit_Waffle_gbabrc.jpg',
     isPopular: true,
     prepTime: '10 dəq'
   },
@@ -1051,73 +1049,8 @@ export const MENU_ITEMS: MenuItem[] = [
     description: 'Təbii bal qatları və zərif kremli ənənəvi ballı tort',
     ingredients: 'Təbii bal, Biskvit qatları, Zərif krem',
     price: 5.00,
-    image: 'https://images.unsplash.com/photo-1578985545062-69928b1d9587?auto=format&fit=crop&q=80&w=800',
+    image: 'https://res.cloudinary.com/dq8xegykm/image/upload/v1786705859/Honey_Cake_izd7ba.jpg',
     prepTime: '5 dəq'
-  },
-  {
-    id: 'des-19',
-    name: 'Dondurma',
-    category: 'desertler',
-    description: 'Sərinlədici təbii dondurma çeşidləri (Çiyələkli, Şokoladlı, Vanilli)',
-    ingredients: 'Süd, Qaymaq, Təbii vanil / çiyələk / kakao',
-    price: 3.00,
-    image: 'https://images.unsplash.com/photo-1501443762994-82bd5dace89a?auto=format&fit=crop&q=80&w=800',
-    variants: [
-      { name: 'Çiyələkli', price: 3.00 },
-      { name: 'Şokoladlı', price: 3.00 },
-      { name: 'Vanilli', price: 3.00 }
-    ],
-    prepTime: '3 dəq'
-  },
-  {
-    id: 'des-15',
-    name: 'Əncir Mürəbbəsi',
-    category: 'desertler',
-    description: 'Təbii kənd əncirindən hazırlanan ətirli ev mürəbbəsi',
-    ingredients: 'Təzə əncir, Şəkər şərbəti, Qoz ləpəsi',
-    price: 3.00,
-    image: 'https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?auto=format&fit=crop&q=80&w=800',
-    prepTime: '3 dəq'
-  },
-  {
-    id: 'des-16',
-    name: 'Çiyələk Mürəbbəsi',
-    category: 'desertler',
-    description: 'Şirin təzə çiyələk giləmeyvələrindən bişirilmiş ətirli mürəbbə',
-    ingredients: 'Təzə çiyələk, Şəkər',
-    price: 3.00,
-    image: 'https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?auto=format&fit=crop&q=80&w=800',
-    prepTime: '3 dəq'
-  },
-  {
-    id: 'des-17',
-    name: 'Ağ Gilas Mürəbbəsi',
-    category: 'desertler',
-    description: 'Qoz ləpəli ağ gilas mürəbbəsi',
-    ingredients: 'Ağ gilas, Qoz ləpəsi, Şəkər şərbəti',
-    price: 3.00,
-    image: 'https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?auto=format&fit=crop&q=80&w=800',
-    prepTime: '3 dəq'
-  },
-  {
-    id: 'des-18',
-    name: 'Ananas Mürəbbəsi',
-    category: 'desertler',
-    description: 'Eksotik ananas dilimlərindən hazırlanan xüsusi mürəbbə',
-    ingredients: 'Ananas dilimləri, Şəkər şərbəti',
-    price: 3.00,
-    image: 'https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?auto=format&fit=crop&q=80&w=800',
-    prepTime: '3 dəq'
-  },
-  {
-    id: 'des-14',
-    name: 'Qarışıq Çərəz',
-    category: 'desertler',
-    description: 'Seçilmiş təzə qoz, fındıq, badam, fıstıq və kişmiş assortisi',
-    ingredients: 'Qoz, Fındıq, Badam, Antep fıstığı, Kişmiş',
-    price: 8.00,
-    image: 'https://images.unsplash.com/photo-1536599018102-9f803c140fc1?auto=format&fit=crop&q=80&w=800',
-    prepTime: '3 dəq'
   },
 
   // ==================== 12. KOFE ====================
@@ -1128,39 +1061,40 @@ export const MENU_ITEMS: MenuItem[] = [
     description: 'Təzə çəkilmiş 100% Arabika dənələrindən tünd zəngin İtalyan espresso',
     ingredients: 'Arabika kofe dənələri, Qaynar su',
     price: 4.00,
-    image: 'https://images.unsplash.com/photo-1510591509098-f4fdc6d0ff04?auto=format&fit=crop&q=80&w=800',
+    image: 'https://res.cloudinary.com/dq8xegykm/image/upload/v1786703904/Espresso_nvrwgi.jpg',
     isPopular: true,
     prepTime: '3 dəq'
   },
   {
     id: 'kof-2',
-    name: 'Amerikano',
+    name: 'Americano',
     category: 'kofe',
     description: 'Zərif dadlı klassik espresso və isti su balansı',
     ingredients: 'Espresso shot, İsti su',
     price: 4.00,
-    image: 'https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&q=80&w=800',
+    image: 'https://res.cloudinary.com/dq8xegykm/image/upload/v1786703903/Americano_n5vr9b.jpg',
+    isPopular: true,
     prepTime: '3 dəq'
   },
   {
-    id: 'kof-3',
+    id: 'kof-4',
     name: 'Latte',
     category: 'kofe',
     description: 'Zərif buxarlanmış süd və kremsi köpüklü espresso',
     ingredients: 'Espresso shot, Buxarlanmış xalis süd, Süd köpüyü',
     price: 4.00,
-    image: 'https://images.unsplash.com/photo-1534778101976-62847782c213?auto=format&fit=crop&q=80&w=800',
+    image: 'https://res.cloudinary.com/dq8xegykm/image/upload/v1786703904/Latte_lmr2kg.jpg',
     isPopular: true,
     prepTime: '5 dəq'
   },
   {
-    id: 'kof-4',
-    name: 'Kappuçino',
+    id: 'kof-3',
+    name: 'Cappucino',
     category: 'kofe',
     description: 'Bərabər nisbətdə espresso, isti süd və sıx kadife süd köpüyü',
     ingredients: 'Espresso, Buxarlanmış süd, Qalın süd köpüyü',
     price: 4.00,
-    image: 'https://images.unsplash.com/photo-1572442388796-11668a67e53d?auto=format&fit=crop&q=80&w=800',
+    image: 'https://res.cloudinary.com/dq8xegykm/image/upload/v1786703903/Cappuccino_o93cw9.jpg',
     isPopular: true,
     prepTime: '5 dəq'
   },
@@ -1171,7 +1105,7 @@ export const MENU_ITEMS: MenuItem[] = [
     description: 'Qaymaq, vanil şəkəri və espressonun birgə buxarlanmasından yaranan yumşaq Raf kofe',
     ingredients: 'Espresso, Təbii qaymaq, Vanil şəkəri',
     price: 5.00,
-    image: 'https://images.unsplash.com/photo-1517256064527-09c73fc73e38?auto=format&fit=crop&q=80&w=800',
+    image: 'https://res.cloudinary.com/dq8xegykm/image/upload/v1786704587/Raf_dty7je.jpg',
     prepTime: '5 dəq'
   },
   {
@@ -1181,17 +1115,17 @@ export const MENU_ITEMS: MenuItem[] = [
     description: 'Espresso, tünd şokolad sousu, buxarlanmış süd və qaymaq köpüyü',
     ingredients: 'Espresso, Şokolad sousu, Süd, Krem qaymaq',
     price: 5.00,
-    image: 'https://images.unsplash.com/photo-1578314675249-a6910f80cc4e?auto=format&fit=crop&q=80&w=800',
+    image: 'https://res.cloudinary.com/dq8xegykm/image/upload/v1786704587/Mocha_cxpzt8.jpg',
     prepTime: '5 dəq'
   },
   {
     id: 'kof-7',
-    name: 'İspan Kappuçinosu',
+    name: 'Spanish Cappucino',
     category: 'kofe',
-    description: 'Qatılaşdırılmış şirin süd, espresso və darçın ətirli kapuçino',
+    description: 'Qatılaşdırılmış şirin süd, espresso və darçın ətirli xüsusi ispan kapuçinosu',
     ingredients: 'Espresso, Qatılaşdırılmış süd, Süd köpüyü, Darçın',
     price: 5.00,
-    image: 'https://images.unsplash.com/photo-1572442388796-11668a67e53d?auto=format&fit=crop&q=80&w=800',
+    image: 'https://res.cloudinary.com/dq8xegykm/image/upload/v1786704587/Spanish_Cappuccino_jhsn1v.jpg',
     prepTime: '5 dəq'
   },
   {
@@ -1201,28 +1135,7 @@ export const MENU_ITEMS: MenuItem[] = [
     description: 'Kreativ kremsi isti Belçika şokoladı',
     ingredients: 'Əridilmiş Belçika şokoladı, Süd, Vanil',
     price: 4.00,
-    image: 'https://images.unsplash.com/photo-1542990253-0d0f5be5f0ed?auto=format&fit=crop&q=80&w=800',
-    prepTime: '5 dəq'
-  },
-  {
-    id: 'kof-caylar',
-    name: 'Çaylar',
-    category: 'kofe',
-    description: 'Ətirli çay çeşidləri və dəstgah (seçim üçün tıklayın)',
-    ingredients: 'Lənkəran çayı, Kəklikotu, Jasmin, Meyvə qurusu',
-    price: 3.00,
-    image: 'https://images.unsplash.com/photo-1576092768241-dec231879fc3?auto=format&fit=crop&q=80&w=800',
-    isPopular: true,
-    variants: [
-      { name: '1 Fincan Çay', price: 1.00 },
-      { name: 'Sadə Çay', price: 3.00 },
-      { name: 'Limonlu Çay', price: 5.00 },
-      { name: 'Qarışıq Çay', price: 5.00 },
-      { name: 'Yaşıl Çay', price: 5.00 },
-      { name: 'Jasmin Çay', price: 5.00 },
-      { name: 'Meyvəli Çay', price: 6.00 },
-      { name: 'Çay Dəstgahı', price: 20.00 }
-    ],
+    image: 'https://res.cloudinary.com/dq8xegykm/image/upload/v1786704587/Hot_Chocolate_eqndwh.jpg',
     prepTime: '5 dəq'
   },
 

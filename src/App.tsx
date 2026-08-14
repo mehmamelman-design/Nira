@@ -50,22 +50,19 @@ export default function App() {
   const [activeSection, setActiveSection] = useState('hero');
   const [toastMessage, setToastMessage] = useState<string | null>(null);
 
-  const handleSelectSearchItem = (item: MenuItem) => {
-    setCurrentView('menu');
-    setSelectedMenuCategory((item.category as any) || 'all');
-    setHighlightedItemId(item.id);
-    setSearchQuery('');
-    setIsSetView(false);
-    setActiveSetTitle(null);
-    setTimeout(() => {
-      const el = document.getElementById(`food-card-${item.id}`);
-      if (el) {
-        el.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      } else {
-        window.scrollTo({ top: 300, behavior: 'smooth' });
-      }
-    }, 150);
-  };
+  // Track open states with ref so popstate event listener always accesses latest values without stale closures
+  const historyRef = React.useRef({
+    isCartOpen,
+    isAiModalOpen,
+    isAdminModalOpen,
+    isAuthModalOpen,
+    isSearchModalOpen,
+    isAdminEditOpen: false,
+    currentView,
+    selectedMenuCategory,
+    isSetView,
+    activeSetTitle,
+  });
 
   // Admin Quick Edit Modal State
   const [adminEditState, setAdminEditState] = useState<{
@@ -81,6 +78,99 @@ export default function App() {
     categoryCard: null,
     slideIndex: 0,
   });
+
+  useEffect(() => {
+    historyRef.current = {
+      isCartOpen,
+      isAiModalOpen,
+      isAdminModalOpen,
+      isAuthModalOpen,
+      isSearchModalOpen,
+      isAdminEditOpen: adminEditState.isOpen,
+      currentView,
+      selectedMenuCategory,
+      isSetView,
+      activeSetTitle,
+    };
+  });
+
+  // Setup initial history state and popstate listener for back/forward buttons
+  useEffect(() => {
+    if (!window.history.state) {
+      window.history.replaceState({ view: 'home' }, '');
+    }
+
+    const handlePopState = (event: PopStateEvent) => {
+      const state = event.state;
+      const cur = historyRef.current;
+
+      // 1. If any popup/modal was open, close it first without navigating away
+      if (cur.isAdminEditOpen) {
+        setAdminEditState((prev) => ({ ...prev, isOpen: false }));
+        return;
+      }
+      if (cur.isAdminModalOpen) {
+        setIsAdminModalOpen(false);
+        return;
+      }
+      if (cur.isAuthModalOpen) {
+        setIsAuthModalOpen(false);
+        return;
+      }
+      if (cur.isAiModalOpen) {
+        setIsAiModalOpen(false);
+        return;
+      }
+      if (cur.isSearchModalOpen) {
+        setIsSearchModalOpen(false);
+        return;
+      }
+      if (cur.isCartOpen) {
+        setIsCartOpen(false);
+        return;
+      }
+
+      // 2. Navigate based on history state
+      if (state && state.view === 'menu') {
+        setCurrentView('menu');
+        setSelectedMenuCategory(state.category || 'all');
+        setIsSetView(!!state.isSetView);
+        setActiveSetTitle(state.setTitle || null);
+        setActiveSection('menu');
+      } else {
+        // Return to home view
+        setCurrentView('home');
+        setSelectedMenuCategory('all');
+        setIsSetView(false);
+        setActiveSetTitle(null);
+        setActiveSection('hero');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    };
+
+    window.addEventListener('popstate', handlePopState);
+    return () => {
+      window.removeEventListener('popstate', handlePopState);
+    };
+  }, []);
+
+  const handleSelectSearchItem = (item: MenuItem) => {
+    window.history.pushState({ view: 'menu', category: item.category, isSetView: false, setTitle: null }, '');
+    setCurrentView('menu');
+    setSelectedMenuCategory((item.category as any) || 'all');
+    setHighlightedItemId(item.id);
+    setSearchQuery('');
+    setIsSetView(false);
+    setActiveSetTitle(null);
+    setTimeout(() => {
+      const el = document.getElementById(`food-card-${item.id}`);
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      } else {
+        window.scrollTo({ top: 300, behavior: 'smooth' });
+      }
+    }, 150);
+  };
 
   // Auth User state to check if mehmamelman@gmail.com is logged in
   const [authUser, setAuthUser] = useState<FirebaseUser | null>(null);
@@ -142,6 +232,7 @@ export default function App() {
   };
 
   const handleOpenMenuWithCategory = (catId: CategoryId = 'all') => {
+    window.history.pushState({ view: 'menu', category: catId, isSetView: false, setTitle: null }, '');
     setSelectedMenuCategory(catId);
     setSearchQuery('');
     setIsSetView(false);
@@ -154,6 +245,7 @@ export default function App() {
   const handleSearch = (query: string) => {
     setSearchQuery(query);
     if (query.trim() && currentView !== 'menu') {
+      window.history.pushState({ view: 'menu', category: 'all', isSetView: false, setTitle: null }, '');
       setSelectedMenuCategory('all');
       setIsSetView(false);
       setActiveSetTitle(null);
@@ -163,6 +255,7 @@ export default function App() {
   };
 
   const handleOpenMenuWithSet = (setObj: { id: string; title: string; categoryId: CategoryId; description: string; imageUrl: string }) => {
+    window.history.pushState({ view: 'menu', category: setObj.categoryId, isSetView: true, setTitle: setObj.title }, '');
     setSelectedMenuCategory(setObj.categoryId);
     setIsSetView(true);
     setActiveSetTitle(setObj.title);
@@ -250,13 +343,28 @@ export default function App() {
       {/* Sticky Top Navbar */}
       <Navbar
         cartItems={cartItems}
-        onOpenCart={() => setIsCartOpen(true)}
+        onOpenCart={() => {
+          window.history.pushState({ modal: 'cart' }, '');
+          setIsCartOpen(true);
+        }}
         activeSection={activeSection}
         onNavigate={scrollToSection}
-        onOpenAdminPanel={() => setIsAdminModalOpen(true)}
-        onOpenAuthModal={() => setIsAuthModalOpen(true)}
-        onOpenEditLogo={() => setAdminEditState({ isOpen: true, type: 'logo' })}
-        onOpenSearch={() => setIsSearchModalOpen(true)}
+        onOpenAdminPanel={() => {
+          window.history.pushState({ modal: 'admin' }, '');
+          setIsAdminModalOpen(true);
+        }}
+        onOpenAuthModal={() => {
+          window.history.pushState({ modal: 'auth' }, '');
+          setIsAuthModalOpen(true);
+        }}
+        onOpenEditLogo={() => {
+          window.history.pushState({ modal: 'adminEdit' }, '');
+          setAdminEditState({ isOpen: true, type: 'logo' });
+        }}
+        onOpenSearch={() => {
+          window.history.pushState({ modal: 'search' }, '');
+          setIsSearchModalOpen(true);
+        }}
         isAdmin={isAdmin}
       />
 
@@ -269,11 +377,15 @@ export default function App() {
               heroConfig={heroConfig}
               onOrderNow={() => handleOpenMenuWithCategory('all')}
               onOpenReviews={() => scrollToSection('reviews')}
-              onOpenAiAssistant={() => setIsAiModalOpen(true)}
+              onOpenAiAssistant={() => {
+                window.history.pushState({ modal: 'ai' }, '');
+                setIsAiModalOpen(true);
+              }}
               isAdmin={isAdmin}
-              onEditHero={(idx) =>
-                setAdminEditState({ isOpen: true, type: 'hero', slideIndex: idx ?? 0 })
-              }
+              onEditHero={(idx) => {
+                window.history.pushState({ modal: 'adminEdit' }, '');
+                setAdminEditState({ isOpen: true, type: 'hero', slideIndex: idx ?? 0 });
+              }}
             />
 
             {/* 2. Category Blocks with Hero Slider middle banner & Gallery */}
@@ -288,11 +400,18 @@ export default function App() {
               isAdmin={isAdmin}
               onOrderNow={() => handleOpenMenuWithCategory('all')}
               onOpenReviews={() => scrollToSection('reviews')}
-              onOpenAiAssistant={() => setIsAiModalOpen(true)}
-              onEditMiddleHero={(idx) => setAdminEditState({ isOpen: true, type: 'middleHero', slideIndex: idx ?? 0 })}
-              onEditCategory={(catCard) =>
-                setAdminEditState({ isOpen: true, type: 'categoryHero', categoryCard: catCard, slideIndex: 0 })
-              }
+              onOpenAiAssistant={() => {
+                window.history.pushState({ modal: 'ai' }, '');
+                setIsAiModalOpen(true);
+              }}
+              onEditMiddleHero={(idx) => {
+                window.history.pushState({ modal: 'adminEdit' }, '');
+                setAdminEditState({ isOpen: true, type: 'middleHero', slideIndex: idx ?? 0 });
+              }}
+              onEditCategory={(catCard) => {
+                window.history.pushState({ modal: 'adminEdit' }, '');
+                setAdminEditState({ isOpen: true, type: 'categoryHero', categoryCard: catCard, slideIndex: 0 });
+              }}
             />
 
             {/* 3. Customer Reviews Section */}
@@ -314,27 +433,34 @@ export default function App() {
             onSearchQueryChange={setSearchQuery}
             onAddToCart={handleAddToCart}
             onCategoryChange={(cat) => {
+              window.history.pushState({ view: 'menu', category: cat, isSetView: false, setTitle: null }, '');
               setSelectedMenuCategory(cat);
               setIsSetView(false);
               setActiveSetTitle(null);
             }}
             onBackToHome={() => {
-              setIsSetView(false);
-              setActiveSetTitle(null);
-              setCurrentView('home');
-              window.scrollTo({ top: 0, behavior: 'smooth' });
+              if (window.history.state && window.history.state.view === 'menu') {
+                window.history.back();
+              } else {
+                setIsSetView(false);
+                setActiveSetTitle(null);
+                setCurrentView('home');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+              }
             }}
             isAdmin={isAdmin}
-            onEditMenuItem={(item) =>
-              setAdminEditState({ isOpen: true, type: 'menuItem', menuItem: item })
-            }
+            onEditMenuItem={(item) => {
+              window.history.pushState({ modal: 'adminEdit' }, '');
+              setAdminEditState({ isOpen: true, type: 'menuItem', menuItem: item });
+            }}
             onDeleteMenuItem={async (itemId) => {
               await deleteMenuItem(itemId);
               showToast('Məhsul bazadan silindi.');
             }}
-            onAddNewMenuItem={() =>
-              setAdminEditState({ isOpen: true, type: 'menuItem', menuItem: null })
-            }
+            onAddNewMenuItem={() => {
+              window.history.pushState({ modal: 'adminEdit' }, '');
+              setAdminEditState({ isOpen: true, type: 'menuItem', menuItem: null });
+            }}
             isSetView={isSetView}
             setTitle={activeSetTitle || undefined}
             highlightedItemId={highlightedItemId}
@@ -349,6 +475,7 @@ export default function App() {
                 mobileImages: [],
                 description: ''
               };
+              window.history.pushState({ modal: 'adminEdit' }, '');
               setAdminEditState({
                 isOpen: true,
                 type: 'categoryHero',

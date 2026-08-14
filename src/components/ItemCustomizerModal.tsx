@@ -44,8 +44,8 @@ export const ItemCustomizerModal: React.FC<ItemCustomizerModalProps> = ({
   if (!item) return null;
 
   // Drink Variants State
-  const hasVariants = item.variants && item.variants.length > 0;
-  const [selectedVariant, setSelectedVariant] = useState(hasVariants ? item.variants![0] : null);
+  const hasVariants = Boolean(item.variants && item.variants.length > 0);
+  const [selectedVariant, setSelectedVariant] = useState<{ id?: string; name: string; price: number } | null>(null);
 
   const [selectedSize, setSelectedSize] = useState<SizeOption>(SIZE_OPTIONS[0]);
   const [selectedSauceIds, setSelectedSauceIds] = useState<string[]>([]);
@@ -67,9 +67,14 @@ export const ItemCustomizerModal: React.FC<ItemCustomizerModalProps> = ({
     );
   }, [selectedSauceIds, hasVariants]);
 
+  const activeVariant = useMemo(() => {
+    if (!hasVariants) return null;
+    return selectedVariant || (item.variants && item.variants.length > 0 ? item.variants[0] : null);
+  }, [hasVariants, selectedVariant, item.variants]);
+
   const unitCalculatedPrice = useMemo(() => {
-    if (hasVariants && selectedVariant) {
-      return selectedVariant.price;
+    if (hasVariants) {
+      return selectedVariant ? selectedVariant.price : item.price;
     }
     return item.price + selectedSize.extraPrice + saucesTotalPrice;
   }, [item.price, hasVariants, selectedVariant, selectedSize.extraPrice, saucesTotalPrice]);
@@ -81,8 +86,11 @@ export const ItemCustomizerModal: React.FC<ItemCustomizerModalProps> = ({
   const handleAdd = () => {
     let optionSummary = '';
 
-    if (hasVariants && selectedVariant) {
-      optionSummary = `Növ: ${selectedVariant.name}`;
+    if (hasVariants) {
+      const chosen = selectedVariant || (item.variants && item.variants.length > 0 ? item.variants[0] : null);
+      if (chosen) {
+        optionSummary = `Növ: ${chosen.name}`;
+      }
     } else {
       const selectedSauceNames = EXTRA_SAUCES.filter((s) =>
         selectedSauceIds.includes(s.id)
@@ -97,7 +105,7 @@ export const ItemCustomizerModal: React.FC<ItemCustomizerModalProps> = ({
 
     const customizedItem: MenuItem = {
       ...item,
-      price: unitCalculatedPrice,
+      price: hasVariants && selectedVariant ? selectedVariant.price : unitCalculatedPrice,
     };
 
     onAddToCart(customizedItem, optionSummary, notes, quantity);
@@ -105,8 +113,8 @@ export const ItemCustomizerModal: React.FC<ItemCustomizerModalProps> = ({
   };
 
   const ingredientsList = item.ingredients
-    ? item.ingredients.split(',').map((s) => s.trim())
-    : ['Mozzarella', 'Pomidor sousu', 'Xüsusi ədviyyatlar'];
+    ? item.ingredients.split(',').map((s) => s.trim()).filter(Boolean)
+    : [];
 
   return (
     <div className="fixed inset-0 z-50 overflow-y-auto bg-black/75 backdrop-blur-sm flex items-center justify-center p-2 sm:p-4 md:p-6 animate-fadeIn">
@@ -131,20 +139,6 @@ export const ItemCustomizerModal: React.FC<ItemCustomizerModalProps> = ({
           >
             <X className="w-4 h-4" />
           </button>
-
-          {/* Badges on Image */}
-          <div className="absolute top-3 left-3 flex items-center gap-1.5 z-10">
-            {item.isHalal !== false && (
-              <span className="px-2 py-0.5 rounded-md bg-emerald-600 text-white text-[10px] font-extrabold uppercase tracking-wider shadow flex items-center gap-1">
-                <ShieldCheck className="w-3 h-3" /> 100% Halal
-              </span>
-            )}
-            {item.isPopular && (
-              <span className="px-2 py-0.5 rounded-md bg-zinc-900 text-white text-[10px] font-extrabold uppercase tracking-wider shadow flex items-center gap-1">
-                <Sparkles className="w-3 h-3 text-amber-400" /> Populyar
-              </span>
-            )}
-          </div>
 
           {/* Title & Base Price Overlay */}
           <div className="absolute bottom-2 left-3 right-3 z-10 space-y-0.5">
@@ -180,16 +174,18 @@ export const ItemCustomizerModal: React.FC<ItemCustomizerModalProps> = ({
               </p>
 
               {/* Ingredients Pills */}
-              <div className="flex flex-wrap gap-1 pt-1">
-                {ingredientsList.map((ing, idx) => (
-                  <span
-                    key={idx}
-                    className="px-2 py-0.5 rounded-md bg-white border border-zinc-200 text-[10px] font-semibold text-zinc-800"
-                  >
-                    {ing}
-                  </span>
-                ))}
-              </div>
+              {ingredientsList.length > 0 && (
+                <div className="flex flex-wrap gap-1 pt-1">
+                  {ingredientsList.map((ing, idx) => (
+                    <span
+                      key={idx}
+                      className="px-2 py-0.5 rounded-md bg-white border border-zinc-200 text-[10px] font-semibold text-zinc-800"
+                    >
+                      {ing}
+                    </span>
+                  ))}
+                </div>
+              )}
             </div>
           )}
 
@@ -204,7 +200,10 @@ export const ItemCustomizerModal: React.FC<ItemCustomizerModalProps> = ({
               {/* Stacked vertically: flex flex-col gap-2 */}
               <div className="flex flex-col gap-2">
                 {item.variants!.map((variant) => {
-                  const isSelected = selectedVariant?.id === variant.id || selectedVariant?.name === variant.name;
+                  const isSelected = Boolean(
+                    selectedVariant &&
+                    (variant.id ? selectedVariant.id === variant.id : selectedVariant.name === variant.name)
+                  );
                   return (
                     <button
                       key={variant.id || variant.name}

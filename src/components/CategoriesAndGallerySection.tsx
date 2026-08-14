@@ -40,7 +40,7 @@ export const CATEGORY_GROUPS = [
     name: 'Fest & Food',
     icon: Pizza,
     subCategories: [
-      { id: 'fastfood' as CategoryId, label: 'Burger & Fast Food' },
+      { id: 'fastfood' as CategoryId, label: 'Burger və Nugget' },
       { id: 'pizza' as CategoryId, label: 'Pizza' },
       { id: 'pide' as CategoryId, label: 'Pide' },
     ]
@@ -50,7 +50,6 @@ export const CATEGORY_GROUPS = [
     name: 'İçkilər',
     icon: Coffee,
     subCategories: [
-      { id: 'ickiler' as CategoryId, label: 'İçkilər' },
       { id: 'icikil' as CategoryId, label: 'Soyuq İçkilər' },
       { id: 'kofe' as CategoryId, label: 'Kofe' },
       { id: 'kokteyl' as CategoryId, label: 'Kokteyl' },
@@ -160,23 +159,15 @@ export const CategoriesAndGallerySection: React.FC<CategoriesAndGallerySectionPr
           </button>
         )}
 
-        {/* Photo Frame Box - Enlarged photo frame preserving full original photo resolution */}
-        <div className="relative aspect-[4/3] sm:aspect-[16/11] w-full overflow-hidden rounded-xl sm:rounded-2xl bg-zinc-950 shadow-md flex items-center justify-center">
-          {/* Ambient blurred backdrop so any aspect ratio fills frame smoothly */}
-          <img
-            src={cat.image || (DEFAULT_CATEGORY_SLIDES[cat.id]?.[0]) || 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&q=80&w=600'}
-            alt=""
-            aria-hidden="true"
-            className="absolute inset-0 w-full h-full object-cover blur-xl opacity-40 scale-110 pointer-events-none"
-          />
-          {/* Main Category Image - object-contain ensures 100% of uploaded photo is shown without cropping or distortion */}
+        {/* Photo Frame Box - Matches 16:9 banner photo aspect ratio cleanly without any black borders */}
+        <div className="relative aspect-[16/9] w-full overflow-hidden rounded-xl sm:rounded-2xl bg-zinc-900 shadow-md flex items-center justify-center">
           <img
             src={cat.image || (DEFAULT_CATEGORY_SLIDES[cat.id]?.[0]) || 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&q=80&w=600'}
             alt={cat.name}
-            className="relative z-10 w-full h-full object-contain group-hover:scale-105 transition-transform duration-500"
+            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
             loading="lazy"
           />
-          <div className="absolute inset-0 z-10 bg-gradient-to-t from-black/50 via-transparent to-transparent opacity-40 group-hover:opacity-20 transition-opacity pointer-events-none" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent opacity-20 group-hover:opacity-0 transition-opacity pointer-events-none" />
 
           {/* Badge & Action Indicator */}
           <div className="absolute bottom-2 right-2 sm:bottom-3 sm:right-3 z-20 flex items-center gap-1 px-2.5 py-1 sm:px-3.5 sm:py-1.5 rounded-lg sm:rounded-xl bg-white text-black font-black text-[11px] sm:text-xs shadow-md group-hover:bg-amber-400 transition-colors">

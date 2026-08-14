@@ -14,10 +14,17 @@ interface HeroProps {
 }
 
 const DEFAULT_SLIDES = [
-  "https://images.unsplash.com/photo-1561758033-d89a9ad46330?auto=format&fit=crop&q=80&w=1600",
-  "https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&q=80&w=1600",
-  "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&q=80&w=1600",
-  "https://images.unsplash.com/photo-1550547660-d9450f859349?auto=format&fit=crop&q=80&w=1600"
+  "https://res.cloudinary.com/dq8xegykm/image/upload/v1786350674/ChatGPT_Image_10_A%C4%9Fu_2026_12_06_26_c6pwbt.png",
+  "https://res.cloudinary.com/dq8xegykm/image/upload/v1786350671/ChatGPT_Image_10_A%C4%9Fu_2026_11_57_20_yrph6f.png",
+  "https://res.cloudinary.com/dq8xegykm/image/upload/v1786350673/ChatGPT_Image_10_A%C4%9Fu_2026_12_04_24_zwwfvx.png",
+  "https://res.cloudinary.com/dq8xegykm/image/upload/v1786350672/ChatGPT_Image_10_A%C4%9Fu_2026_12_07_18_viesgt.png"
+];
+
+const DEFAULT_MIDDLE_SLIDES = [
+  "https://res.cloudinary.com/dq8xegykm/image/upload/v1786351544/ChatGPT_Image_9_A%C4%9Fu_2026_22_25_23_zcqmky.png",
+  "https://res.cloudinary.com/dq8xegykm/image/upload/v1786351502/ChatGPT_Image_9_A%C4%9Fu_2026_22_36_26_stqwzb.png",
+  "https://res.cloudinary.com/dq8xegykm/image/upload/v1786351567/ChatGPT_Image_9_A%C4%9Fu_2026_22_28_28_cfwplx.png",
+  "https://res.cloudinary.com/dq8xegykm/image/upload/v1786351517/ChatGPT_Image_9_A%C4%9Fu_2026_22_34_33_rltry0.png"
 ];
 
 export const Hero: React.FC<HeroProps> = ({
@@ -29,8 +36,9 @@ export const Hero: React.FC<HeroProps> = ({
   onEditHero,
   isMiddleHero = false,
 }) => {
-  const title = heroConfig?.title || "Qaynar İsti Ocaqdan Qapınıza Çatdırılan Ən Ləzzətli Fast Food";
-  const subtitle = heroConfig?.subtitle || "Təzə kəsilmiş halal ət, isti ocağın əvəzolunmaz qoxusu və xüsusi reseptlə hazırlanan çıtır qızarmış toyuqlar. Sifarişiniz xüsusi termo-qutularda 30 dəqiqəyə qaynar halda çatdırılır!";
+  const activeDefaults = isMiddleHero ? DEFAULT_MIDDLE_SLIDES : DEFAULT_SLIDES;
+  const title = heroConfig?.title || (isMiddleHero ? "Təzə Və Xüsusi Şirniyyatlar, İsti Və Soyuq İçkilər" : "Qaynar İsti Ocaqdan Qapınıza Çatdırılan Ən Ləzzətli Fast Food");
+  const subtitle = heroConfig?.subtitle || (isMiddleHero ? "Sizlər üçün xüsusi olaraq hazırlanan təbii içkilər və ləzzətli desertlər" : "Təzə kəsilmiş halal ət, isti ocağın əvəzolunmaz qoxusu və xüsusi reseptlə hazırlanan çıtır qızarmış toyuqlar. Sifarişiniz xüsusi termo-qutularda 30 dəqiqəyə qaynar halda çatdırılır!");
   const isVideoEnabled = heroConfig?.isVideoEnabled ?? false;
   const videoUrl = heroConfig?.videoUrl || "https://assets.mixkit.co/videos/preview/mixkit-chef-cooking-food-in-a-pan-40292-large.mp4";
 
@@ -42,7 +50,7 @@ export const Hero: React.FC<HeroProps> = ({
         .map((img, i) => {
           const raw = img ? img.trim() : '';
           if (raw) return formatImageUrl(raw);
-          return DEFAULT_SLIDES[i % DEFAULT_SLIDES.length] || '';
+          return activeDefaults[i % activeDefaults.length] || '';
         })
         .filter(Boolean);
       if (formatted.length > 0) return formatted;
@@ -50,8 +58,8 @@ export const Hero: React.FC<HeroProps> = ({
     if (heroConfig?.imageUrl && heroConfig.imageUrl.trim()) {
       return [formatImageUrl(heroConfig.imageUrl.trim())];
     }
-    return DEFAULT_SLIDES;
-  }, [heroConfig?.images, heroConfig?.imageUrl]);
+    return activeDefaults;
+  }, [heroConfig?.images, heroConfig?.imageUrl, activeDefaults]);
 
   // Build mobile slide images array (if specified, otherwise fallback to desktop image)
   const mobileSlideImages: string[] = React.useMemo(() => {

@@ -28,47 +28,47 @@ interface MenuSectionProps {
 const DEFAULT_CATEGORY_IMAGES: Record<string, { image: string; desc: string }> = {
   // DEFAULT_CATEGORY_IMAGES with Pide
   pide: {
-    image: 'https://images.unsplash.com/photo-1541529086526-db283c563270?auto=format&fit=crop&q=80&w=1200',
+    image: 'https://res.cloudinary.com/dq8xegykm/image/upload/v1786703193/ChatGPT_Image_14_A%C4%9Fu_2026_14_26_12_ed5ae0.png',
     desc: 'İsti daş fırında bişmiş bol kaşar pendirli, qiyməli və kuşbaşılı pidelər',
   },
   fastfood: {
-    image: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&q=80&w=1200',
+    image: 'https://res.cloudinary.com/dq8xegykm/image/upload/v1786550635/1_burger_f0ywic.png',
     desc: 'Xırçıltılı smash burgerlər, dadlı naggetslər və kartof fri',
   },
   pizza: {
-    image: 'https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&q=80&w=1200',
+    image: 'https://res.cloudinary.com/dq8xegykm/image/upload/v1786550631/1_pizza_rpifyv.png',
     desc: 'İsti daş fırında bişən bol xammallı pizzalar',
   },
   kabablar: {
-    image: 'https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&q=80&w=1200',
+    image: 'https://res.cloudinary.com/dq8xegykm/image/upload/v1786550631/isti_yemekler_1_oqleld.png',
     desc: 'Közdə bişən ləzzətli ət, tikə və lülə kabablar',
   },
   isti_yemekler: {
-    image: 'https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&q=80&w=1200',
+    image: 'https://res.cloudinary.com/dq8xegykm/image/upload/v1786550626/isti_yemkelr_2_ra3zpa.png',
     desc: 'Təzə bişmiş ləzzətli isti ana yeməklər və fırın yeməkləri',
   },
   icikil: {
-    image: 'https://images.unsplash.com/photo-1622483767028-3f66f32aef97?auto=format&fit=crop&q=80&w=1200',
+    image: 'https://res.cloudinary.com/dq8xegykm/image/upload/v1786701542/ChatGPT_Image_14_A%C4%9Fu_2026_13_50_07_yvegnm.png',
     desc: 'Buz kimi sərinləşdirici təbii içkilər və limonadlar',
   },
   sorbalar: {
-    image: 'https://images.unsplash.com/photo-1547592166-23ac45744acd?auto=format&fit=crop&q=80&w=1200',
+    image: 'https://res.cloudinary.com/dq8xegykm/image/upload/v1786530069/sorbalar_ww79co.png',
     desc: 'Xüsusi reseptlə hazırlanan isti ev şorbaları',
   },
   salat: {
-    image: 'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&q=80&w=1200',
+    image: 'https://res.cloudinary.com/dq8xegykm/image/upload/v1786599164/ChatGPT_Image_13_A%C4%9Fu_2026_09_32_13_iwghdq.png',
     desc: 'Təravətli tərəvəzlərdən hazırlanan xüsusi salatlar',
   },
   cig_kofte: {
-    image: 'https://images.unsplash.com/photo-1626777552726-4a6b54c97e46?auto=format&fit=crop&q=80&w=1200',
+    image: 'https://res.cloudinary.com/dq8xegykm/image/upload/v1786550623/cig_kofte_1_stkjib.png',
     desc: 'Xüsusi ədviyyatlı və acılı təzə çiy köftələr',
   },
   qelyanaltilar: {
-    image: 'https://images.unsplash.com/photo-1626082927389-6cd097cdc6ec?auto=format&fit=crop&q=80&w=1200',
+    image: 'https://res.cloudinary.com/dq8xegykm/image/upload/v1786550625/Asortmen_qelyuanatli_mbjfyb.png',
     desc: 'Çıtır toyuq kanatları, fri, soğan halqaları və souslar',
   },
   desertler: {
-    image: 'https://images.unsplash.com/photo-1551024709-8f23befc6f87?auto=format&fit=crop&q=80&w=1200',
+    image: 'https://res.cloudinary.com/dq8xegykm/image/upload/v1786706141/ChatGPT_Image_14_A%C4%9Fu_2026_15_15_19_olyytt.png',
     desc: 'Xüsusi paxlavalar, San Sebastian, cheesecake, sütlaç, künefe və leziz tortlar',
   },
   kofe: {
@@ -87,59 +87,53 @@ const DEFAULT_CATEGORY_IMAGES: Record<string, { image: string; desc: string }> =
 
 export const DEFAULT_CATEGORY_SLIDES: Record<string, string[]> = {
   fastfood: [
-    'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&q=80&w=1200',
-    'https://images.unsplash.com/photo-1550547660-d9450f859349?auto=format&fit=crop&q=80&w=1200',
-    'https://images.unsplash.com/photo-1561758033-d89a9ad46330?auto=format&fit=crop&q=80&w=1200',
-    'https://images.unsplash.com/photo-1586190848861-99aa4a171e90?auto=format&fit=crop&q=80&w=1200',
+    'https://res.cloudinary.com/dq8xegykm/image/upload/v1786550635/1_burger_f0ywic.png',
+    'https://res.cloudinary.com/dq8xegykm/image/upload/v1786550635/2_burger_cryiuu.png',
+    'https://res.cloudinary.com/dq8xegykm/image/upload/v1786550630/3_burger_mqveno.png',
   ],
   pizza: [
-    'https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&q=80&w=1200',
-    'https://images.unsplash.com/photo-1534308983496-4fabb1a015ee?auto=format&fit=crop&q=80&w=1200',
-    'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?auto=format&fit=crop&q=80&w=1200',
-    'https://images.unsplash.com/photo-1604382355076-af4b0eb60143?auto=format&fit=crop&q=80&w=1200',
+    'https://res.cloudinary.com/dq8xegykm/image/upload/v1786550631/1_pizza_rpifyv.png',
+    'https://res.cloudinary.com/dq8xegykm/image/upload/v1786550631/2_pizza_ekpewb.png',
   ],
   kabablar: [
-    'https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&q=80&w=1200',
+    'https://res.cloudinary.com/dq8xegykm/image/upload/v1786550631/isti_yemekler_1_oqleld.png',
     'https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&q=80&w=1200',
     'https://images.unsplash.com/photo-1529193591184-b1d58069ecdd?auto=format&fit=crop&q=80&w=1200',
     'https://images.unsplash.com/photo-1603360946369-dc9bb6258143?auto=format&fit=crop&q=80&w=1200',
   ],
   isti_yemekler: [
-    'https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&q=80&w=1200',
+    'https://res.cloudinary.com/dq8xegykm/image/upload/v1786550626/isti_yemkelr_2_ra3zpa.png',
     'https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&q=80&w=1200',
     'https://images.unsplash.com/photo-1565299585323-38d6b0865b47?auto=format&fit=crop&q=80&w=1200',
   ],
   icikil: [
-    'https://images.unsplash.com/photo-1622483767028-3f66f32aef97?auto=format&fit=crop&q=80&w=1200',
+    'https://res.cloudinary.com/dq8xegykm/image/upload/v1786701542/ChatGPT_Image_14_A%C4%9Fu_2026_13_50_07_yvegnm.png',
     'https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?auto=format&fit=crop&q=80&w=1200',
     'https://images.unsplash.com/photo-1556881286-fc6915169721?auto=format&fit=crop&q=80&w=1200',
   ],
   sorbalar: [
-    'https://images.unsplash.com/photo-1547592166-23ac45744acd?auto=format&fit=crop&q=80&w=1200',
+    'https://res.cloudinary.com/dq8xegykm/image/upload/v1786530069/sorbalar_ww79co.png',
     'https://images.unsplash.com/photo-1588566565463-180a5b2090d2?auto=format&fit=crop&q=80&w=1200',
     'https://images.unsplash.com/photo-1541832676-9b763b0239ab?auto=format&fit=crop&q=80&w=1200',
   ],
   salat: [
-    'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&q=80&w=1200',
+    'https://res.cloudinary.com/dq8xegykm/image/upload/v1786599164/ChatGPT_Image_13_A%C4%9Fu_2026_09_32_13_iwghdq.png',
     'https://images.unsplash.com/photo-1540420773420-3366772f4999?auto=format&fit=crop&q=80&w=1200',
     'https://images.unsplash.com/photo-1515543237350-b3eea1ec8082?auto=format&fit=crop&q=80&w=1200',
   ],
   cig_kofte: [
-    'https://images.unsplash.com/photo-1626777552726-4a6b54c97e46?auto=format&fit=crop&q=80&w=1200',
+    'https://res.cloudinary.com/dq8xegykm/image/upload/v1786550623/cig_kofte_1_stkjib.png',
     'https://images.unsplash.com/photo-1565299585323-38d6b0865b47?auto=format&fit=crop&q=80&w=1200',
   ],
   qelyanaltilar: [
-    'https://images.unsplash.com/photo-1626082927389-6cd097cdc6ec?auto=format&fit=crop&q=80&w=1200',
+    'https://res.cloudinary.com/dq8xegykm/image/upload/v1786550625/Asortmen_qelyuanatli_mbjfyb.png',
     'https://images.unsplash.com/photo-1562967914-608f82629710?auto=format&fit=crop&q=80&w=1200',
   ],
   pide: [
-    'https://images.unsplash.com/photo-1541529086526-db283c563270?auto=format&fit=crop&q=80&w=1200',
-    'https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&q=80&w=1200',
+    'https://res.cloudinary.com/dq8xegykm/image/upload/v1786703193/ChatGPT_Image_14_A%C4%9Fu_2026_14_26_12_ed5ae0.png',
   ],
   desertler: [
-    'https://images.unsplash.com/photo-1551024709-8f23befc6f87?auto=format&fit=crop&q=80&w=1200',
-    'https://images.unsplash.com/photo-1587314168485-3236d6710814?auto=format&fit=crop&q=80&w=1200',
-    'https://images.unsplash.com/photo-1563729784474-d77dbb933a9e?auto=format&fit=crop&q=80&w=1200',
+    'https://res.cloudinary.com/dq8xegykm/image/upload/v1786706141/ChatGPT_Image_14_A%C4%9Fu_2026_15_15_19_olyytt.png',
   ],
   kofe: [
     'https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&q=80&w=1200',
@@ -180,6 +174,19 @@ export const MenuSection: React.FC<MenuSectionProps> = ({
   const [searchQuery, setSearchQuery] = useState(initialSearchQuery);
   const [selectedCustomizerItem, setSelectedCustomizerItem] = useState<MenuItem | null>(null);
   const [deletingItem, setDeletingItem] = useState<MenuItem | null>(null);
+
+  useEffect(() => {
+    const handlePop = () => {
+      if (selectedCustomizerItem) {
+        setSelectedCustomizerItem(null);
+      }
+      if (deletingItem) {
+        setDeletingItem(null);
+      }
+    };
+    window.addEventListener('popstate', handlePop);
+    return () => window.removeEventListener('popstate', handlePop);
+  }, [selectedCustomizerItem, deletingItem]);
 
   useEffect(() => {
     if (highlightedItemId) {
@@ -229,7 +236,7 @@ export const MenuSection: React.FC<MenuSectionProps> = ({
   // All Requested Categories + "Hamsı"
   const categories: { id: CategoryId; name: string; icon: string }[] = [
     { id: 'all', name: 'Hamsı', icon: '' },
-    { id: 'fastfood', name: 'Fast food', icon: '' },
+    { id: 'fastfood', name: 'Burger və Nugget', icon: '' },
     { id: 'pizza', name: 'Pizza', icon: '' },
     { id: 'pide', name: 'Pidə', icon: '' },
     { id: 'kabablar', name: 'Kabablar', icon: '' },
@@ -302,8 +309,12 @@ export const MenuSection: React.FC<MenuSectionProps> = ({
         matchesCategory = ['kabablar', 'kabab', 'sorbalar', 'isti_yemekler', 'qelyanaltilar', 'qelyanalti', 'cig_kofte', 'salat'].includes(item.category);
       } else if (cat === 'festfood') {
         matchesCategory = ['fastfood', 'pizza', 'pide', 'calzone', 'doner'].includes(item.category);
-      } else if (cat === 'ickiler' || cat === 'icikil') {
-        matchesCategory = ['icikil', 'ickiler', 'kofe', 'kokteyl'].includes(item.category);
+      } else if (cat === 'icikil' || cat === 'ickiler') {
+        matchesCategory = item.category === 'icikil';
+      } else if (cat === 'kofe') {
+        matchesCategory = item.category === 'kofe';
+      } else if (cat === 'kokteyl') {
+        matchesCategory = item.category === 'kokteyl';
       } else if (cat === 'desertler_group' || cat === 'desertler') {
         matchesCategory = item.category === 'desertler';
       } else if (cat === 'qelyanaltilar' || cat === 'qelyanalti') {
@@ -359,11 +370,11 @@ export const MenuSection: React.FC<MenuSectionProps> = ({
               className="absolute inset-0 w-full h-full object-cover blur-2xl opacity-40 scale-105 pointer-events-none"
             />
 
-            {/* Main Sharp Image - object-contain ensures 100% of photo is visible without cropping sides */}
+            {/* Main Sharp Image - Cleanly covers banner without dark gaps */}
             <img
               src={imgUrl}
               alt={titleText}
-              className="relative z-10 w-full h-full object-contain object-center transition-transform duration-500 hover:scale-102"
+              className="relative z-10 w-full h-full object-cover object-center transition-transform duration-500 hover:scale-102"
             />
           </div>
         ))}
@@ -555,6 +566,7 @@ export const MenuSection: React.FC<MenuSectionProps> = ({
               const handleItemClick = () => {
                 if (item.isOutOfStock) return;
                 if (hasVariants) {
+                  window.history.pushState({ modal: 'customizer' }, '');
                   setSelectedCustomizerItem(item);
                 } else {
                   onAddToCart(item);
@@ -580,21 +592,6 @@ export const MenuSection: React.FC<MenuSectionProps> = ({
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                       loading="lazy"
                     />
-
-                    {/* Badges on Image (Halal & Populyar) */}
-                    <div className="absolute top-1.5 left-1.5 sm:top-2 sm:left-2 flex flex-col gap-1 z-10 max-w-[90%]">
-                      {item.isHalal !== false && (
-                        <span className="px-1.5 py-0.5 rounded-md bg-emerald-700 text-white text-[9px] sm:text-xs font-black tracking-wider shadow flex items-center gap-1 w-max">
-                          <ShieldCheck className="w-2.5 h-2.5 sm:w-3.5 sm:h-3.5 text-white" /> Halal
-                        </span>
-                      )}
-
-                      {item.isPopular && (
-                        <span className="px-1.5 py-0.5 rounded-md bg-amber-400 text-black text-[9px] sm:text-xs font-black uppercase tracking-wider shadow flex items-center gap-1 w-max">
-                          <Sparkles className="w-2.5 h-2.5 sm:w-3.5 sm:h-3.5 fill-black" /> POPULYAR
-                        </span>
-                      )}
-                    </div>
 
                     {/* Admin Edit & Delete Buttons over image */}
                     {isAdmin && (

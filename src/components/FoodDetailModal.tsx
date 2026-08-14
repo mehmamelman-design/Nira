@@ -23,7 +23,7 @@ export const FoodDetailModal: React.FC<FoodDetailModalProps> = ({
 
   const categoryNameMap: { [key: string]: string } = {
     pizza: 'Pizza seçimi',
-    fastfood: 'Fast food',
+    fastfood: 'Burger və Nugget',
     kabablar: 'Kabab seçimi',
     isti_yemekler: 'İsti yemək',
     salat: 'Təzə salat',
@@ -88,18 +88,6 @@ export const FoodDetailModal: React.FC<FoodDetailModalProps> = ({
               <span className="px-3 py-1 rounded-lg bg-amber-500 text-black text-[11px] font-black uppercase tracking-wider shadow">
                 {categoryNameMap[item.category] || 'NİRA LƏZZƏTİ'}
               </span>
-              
-              {item.isPopular && (
-                <span className="px-3 py-1 rounded-lg bg-emerald-950 border border-emerald-500/50 text-emerald-300 text-[11px] font-black uppercase tracking-wider flex items-center gap-1 shadow">
-                  <Sparkles className="w-3 h-3 text-emerald-400" /> POPULYAR TƏAM
-                </span>
-              )}
-
-              {item.isHalal !== false && (
-                <span className="px-3 py-1 rounded-lg bg-emerald-800/80 text-emerald-200 text-[11px] font-bold tracking-wider flex items-center gap-1 shadow">
-                  <ShieldCheck className="w-3 h-3 text-emerald-300" /> Halal Sertifikatlı
-                </span>
-              )}
 
               {item.isSpicy && (
                 <span className="px-3 py-1 rounded-lg bg-red-600/90 text-white text-[11px] font-bold tracking-wider shadow">

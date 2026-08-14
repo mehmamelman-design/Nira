@@ -1582,7 +1582,7 @@ export const AdminPanelModal: React.FC<AdminPanelModalProps> = ({
                     onChange={(e) => setNewMenuCategory(e.target.value)}
                     className="w-full px-3 py-2 rounded-xl bg-zinc-900 border border-zinc-700 text-white font-bold"
                   >
-                    <option value="fastfood">Fast food</option>
+                    <option value="fastfood">Burger və Nugget</option>
                     <option value="pizza">Pizza</option>
                     <option value="kabablar">Kabablar</option>
                     <option value="isti_yemekler">İsti yeməklər</option>

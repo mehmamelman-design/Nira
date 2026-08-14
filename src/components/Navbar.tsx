@@ -101,7 +101,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                 aria-label="Ana Səhifə"
               >
                 <img
-                  src={siteConfig?.logoUrl || 'https://res.cloudinary.com/dq8xegykm/image/upload/v1786184761/Ba%C5%9Fl%C4%B1qs%C4%B1z_dizayn-Photoroom_t4omj6.png'}
+                  src={siteConfig?.logoUrl || 'https://res.cloudinary.com/dq8xegykm/image/upload/v1786350661/Ba%C5%9Fl%C4%B1qs%C4%B1z_dizayn-Photoroom_1_l3cpaz.png'}
                   alt={siteConfig?.siteName || "NIRA-Fest&Food Restorani Logo"}
                   className="h-[52px] sm:h-[64px] w-auto object-contain max-w-[260px] sm:max-w-[340px] scale-[2.0] sm:scale-[2.2] origin-left group-hover:scale-[2.3] transition-transform duration-300"
                 />
