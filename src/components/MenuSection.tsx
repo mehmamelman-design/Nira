@@ -2,6 +2,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { Search, Star, Clock, ShieldCheck, Sparkles, ShoppingBag, ArrowLeft, Flame, FlameKindling, Pencil, Plus, Trash2 } from 'lucide-react';
 import { MenuItem, CategoryId, CategoryCard, HeroConfig } from '../types';
 import { MENU_ITEMS } from '../data/menuData';
+import { SPECIAL_SETS, SpecialSetDetail } from '../data/specialSetsData';
 import { ItemCustomizerModal } from './ItemCustomizerModal';
 import { FaqSection } from './FaqSection';
 import { CATEGORY_GROUPS } from './CategoriesAndGallerySection';
@@ -22,6 +23,7 @@ interface MenuSectionProps {
   onDeleteMenuItem?: (itemId: string) => void;
   onAddNewMenuItem?: () => void;
   isSetView?: boolean;
+  activeSetId?: string;
   setTitle?: string;
   middleHeroConfig?: HeroConfig;
   onOpenReviews?: () => void;
@@ -173,6 +175,7 @@ export const MenuSection: React.FC<MenuSectionProps> = ({
   onDeleteMenuItem,
   onAddNewMenuItem,
   isSetView = false,
+  activeSetId,
   setTitle,
   middleHeroConfig,
   onOpenReviews,
@@ -186,6 +189,7 @@ export const MenuSection: React.FC<MenuSectionProps> = ({
   const initialCat = selectedCategory && selectedCategory !== 'all' && !isCategoryTemporarilyHidden(selectedCategory) ? selectedCategory : 'fastfood';
   const [activeCategory, setActiveCategory] = useState<CategoryId>(initialCat);
   const [activeIsSet, setActiveIsSet] = useState<boolean>(isSetView);
+  const [currentSetId, setCurrentSetId] = useState<string>(activeSetId || 'set-1');
   const [searchQuery, setSearchQuery] = useState(initialSearchQuery);
   const [selectedCustomizerItem, setSelectedCustomizerItem] = useState<MenuItem | null>(null);
   const [deletingItem, setDeletingItem] = useState<MenuItem | null>(null);
@@ -193,6 +197,12 @@ export const MenuSection: React.FC<MenuSectionProps> = ({
   useEffect(() => {
     setActiveIsSet(isSetView);
   }, [isSetView]);
+
+  useEffect(() => {
+    if (activeSetId) {
+      setCurrentSetId(activeSetId);
+    }
+  }, [activeSetId]);
 
   useEffect(() => {
     const handlePop = () => {
@@ -243,7 +253,29 @@ export const MenuSection: React.FC<MenuSectionProps> = ({
     }
   };
 
+  // Active Special Set
+  const activeSpecialSet: SpecialSetDetail | null = useMemo(() => {
+    if (!activeIsSet) return null;
+    if (currentSetId) {
+      const found = SPECIAL_SETS.find((s) => s.id === currentSetId);
+      if (found) return found;
+    }
+    if (setTitle) {
+      const found = SPECIAL_SETS.find(
+        (s) =>
+          s.name.toLowerCase() === setTitle.toLowerCase() ||
+          s.name.toLowerCase().includes(setTitle.toLowerCase()) ||
+          setTitle.toLowerCase().includes(s.name.toLowerCase())
+      );
+      if (found) return found;
+    }
+    return SPECIAL_SETS[0];
+  }, [activeIsSet, currentSetId, setTitle]);
+
   const itemsToDisplay = useMemo(() => {
+    if (activeIsSet && activeSpecialSet) {
+      return activeSpecialSet.items;
+    }
     const list = menuItems && menuItems.length > 0 ? menuItems : MENU_ITEMS;
     const itemMap = new Map<string, MenuItem>(list.map((i) => [i.id, i]));
     MENU_ITEMS.forEach((defaultItem) => {
@@ -252,7 +284,7 @@ export const MenuSection: React.FC<MenuSectionProps> = ({
       }
     });
     return Array.from(itemMap.values()).filter(item => !isItemInHiddenCategory(item));
-  }, [menuItems]);
+  }, [menuItems, activeIsSet, activeSpecialSet]);
 
   // All Requested Categories (temporarily hidden ones filtered out)
   const allCategoriesList: { id: CategoryId; name: string; icon: string }[] = [
@@ -275,18 +307,20 @@ export const MenuSection: React.FC<MenuSectionProps> = ({
   // Resolve Category Image & Description
   const currentCard = categoryCards?.find((c) => c.id === activeCategory);
   const activeCatImage =
+    (activeIsSet && activeSpecialSet ? activeSpecialSet.image : null) ||
     currentCard?.image ||
     DEFAULT_CATEGORY_IMAGES[activeCategory]?.image ||
     DEFAULT_CATEGORY_IMAGES.fastfood?.image ||
     DEFAULT_CATEGORY_IMAGES.all.image;
   const activeCatDesc =
+    (activeIsSet && activeSpecialSet ? activeSpecialSet.description : null) ||
     currentCard?.description ||
     DEFAULT_CATEGORY_IMAGES[activeCategory]?.desc ||
     DEFAULT_CATEGORY_IMAGES.fastfood?.desc ||
     DEFAULT_CATEGORY_IMAGES.all.desc;
 
   const currentCatObj = categories.find((c) => c.id === activeCategory);
-  const titleText = currentCatObj ? currentCatObj.name : 'Menyu';
+  const titleText = activeIsSet && activeSpecialSet ? activeSpecialSet.name : (currentCatObj ? currentCatObj.name : 'Menyu');
 
   // Find which group contains the activeCategory
   const currentGroup = useMemo(() => {
@@ -309,6 +343,9 @@ export const MenuSection: React.FC<MenuSectionProps> = ({
   const [currentBannerSlide, setCurrentBannerSlide] = useState(0);
 
   const activeCatSlides = useMemo(() => {
+    if (activeIsSet && activeSpecialSet) {
+      return [activeSpecialSet.image];
+    }
     if (currentCard?.images && currentCard.images.length > 0) {
       return currentCard.images;
     }
@@ -316,11 +353,11 @@ export const MenuSection: React.FC<MenuSectionProps> = ({
       return DEFAULT_CATEGORY_SLIDES[activeCategory];
     }
     return [activeCatImage];
-  }, [currentCard, activeCategory, activeCatImage]);
+  }, [currentCard, activeCategory, activeCatImage, activeIsSet, activeSpecialSet]);
 
   useEffect(() => {
     setCurrentBannerSlide(0);
-  }, [activeCategory]);
+  }, [activeCategory, currentSetId, activeIsSet]);
 
   useEffect(() => {
     if (activeCatSlides.length <= 1) return;
@@ -332,6 +369,17 @@ export const MenuSection: React.FC<MenuSectionProps> = ({
 
   // Filtering Logic
   const filteredItems = useMemo(() => {
+    if (activeIsSet && activeSpecialSet) {
+      const query = searchQuery.trim().toLowerCase();
+      if (!query) return activeSpecialSet.items;
+      return activeSpecialSet.items.filter(
+        (item) =>
+          item.name.toLowerCase().includes(query) ||
+          item.description.toLowerCase().includes(query) ||
+          (item.ingredients && item.ingredients.toLowerCase().includes(query))
+      );
+    }
+
     return itemsToDisplay.filter((item) => {
       // Category matching
       let matchesCategory = false;
@@ -369,7 +417,7 @@ export const MenuSection: React.FC<MenuSectionProps> = ({
 
       return matchesCategory && matchesSearch;
     });
-  }, [itemsToDisplay, activeCategory, searchQuery]);
+  }, [itemsToDisplay, activeCategory, searchQuery, activeIsSet, activeSpecialSet]);
 
   // Extract or derive ingredients array
   // Preload visible and upcoming food item images in background
@@ -453,115 +501,183 @@ export const MenuSection: React.FC<MenuSectionProps> = ({
           )}
         </div>
 
-        {/* Category Title cleanly centered at bottom without dark frame box */}
-        <div className="relative z-20 mt-auto flex justify-center text-center pb-2">
-          <h1 className="text-xl sm:text-2xl md:text-3xl font-black text-white tracking-tight uppercase drop-shadow-[0_2px_10px_rgba(0,0,0,0.95)]">
-            {titleText.replace(/[\u{1F300}-\u{1F9FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}\u{1F600}-\u{1F64F}\u{1F680}-\u{1F6FF}\u{1F1E0}-\u{1F1FF}]/gu, '').trim()}
-          </h1>
-        </div>
+        {/* Category Title cleanly centered at bottom without dark frame box (hidden in Set View so top photo has no text) */}
+        {!activeIsSet && (
+          <div className="relative z-20 mt-auto flex justify-center text-center pb-2">
+            <h1 className="text-xl sm:text-2xl md:text-3xl font-black text-white tracking-tight uppercase drop-shadow-[0_2px_10px_rgba(0,0,0,0.95)]">
+              {titleText.replace(/[\u{1F300}-\u{1F9FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}\u{1F600}-\u{1F64F}\u{1F680}-\u{1F6FF}\u{1F1E0}-\u{1F1FF}]/gu, '').trim()}
+            </h1>
+          </div>
+        )}
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-6 space-y-8">
         
-        {/* Top Header & Category Navigation */}
-        <div className="space-y-4">
-          
-          {/* KATEQORİYALARIMIZ (Group Navigation Bar inside Menu view) */}
-          <div className="py-2 px-1 space-y-2.5 text-center">
-            <div className="flex items-center justify-center gap-2">
-              <span className="h-0.5 w-6 sm:w-10 bg-emerald-600 rounded-full" />
-              <h3 className="text-xs sm:text-sm font-black uppercase text-emerald-950 tracking-wider">
-                Kateqoriyalarımız
-              </h3>
-              <span className="h-0.5 w-6 sm:w-10 bg-emerald-600 rounded-full" />
+        {/* Top Header & Category Navigation (Shown only in normal menu view, hidden in Set View as requested) */}
+        {!activeIsSet && (
+          <div className="space-y-4">
+            
+            {/* KATEQORİYALARIMIZ (Group Navigation Bar inside Menu view) */}
+            <div className="py-2 px-1 space-y-2.5 text-center">
+              <div className="flex items-center justify-center gap-2">
+                <span className="h-0.5 w-6 sm:w-10 bg-emerald-600 rounded-full" />
+                <h3 className="text-xs sm:text-sm font-black uppercase text-emerald-950 tracking-wider">
+                  Kateqoriyalarımız
+                </h3>
+                <span className="h-0.5 w-6 sm:w-10 bg-emerald-600 rounded-full" />
+              </div>
+
+              <div className="flex items-center justify-center flex-wrap gap-1.5 sm:gap-2">
+                {CATEGORY_GROUPS.map((group) => {
+                  const IconComp = group.icon;
+                  const isGroupActive = activeCategory === group.id || group.subCategories.some(sc => sc.id === activeCategory);
+
+                  return (
+                    <button
+                      type="button"
+                      key={group.id}
+                      onClick={() => {
+                        if (group.subCategories && group.subCategories.length > 0) {
+                          handleCategoryChange(group.subCategories[0].id, false);
+                        } else {
+                          handleCategoryChange(group.id as CategoryId, false);
+                        }
+                      }}
+                      className={`px-3 py-1.5 sm:px-4 sm:py-2 rounded-xl font-black text-[11px] sm:text-xs md:text-sm transition-all duration-200 cursor-pointer flex items-center gap-1.5 shadow-2xs ${
+                        isGroupActive
+                          ? 'bg-emerald-800 text-white shadow-md ring-1 ring-emerald-900 scale-102'
+                          : 'bg-white hover:bg-emerald-50 text-zinc-800 border border-zinc-200'
+                      }`}
+                    >
+                      <IconComp className={`w-3.5 h-3.5 sm:w-4 sm:h-4 ${isGroupActive ? 'text-amber-300' : 'text-emerald-700'}`} />
+                      <span>{group.name}</span>
+                    </button>
+                  );
+                })}
+              </div>
             </div>
 
-            <div className="flex items-center justify-center flex-wrap gap-1.5 sm:gap-2">
-              {CATEGORY_GROUPS.map((group) => {
-                const IconComp = group.icon;
-                const isGroupActive = activeCategory === group.id || group.subCategories.some(sc => sc.id === activeCategory);
-
-                return (
-                  <button
-                    type="button"
-                    key={group.id}
-                    onClick={() => {
-                      if (group.subCategories && group.subCategories.length > 0) {
-                        handleCategoryChange(group.subCategories[0].id, false);
-                      } else {
-                        handleCategoryChange(group.id as CategoryId, false);
-                      }
-                    }}
-                    className={`px-3 py-1.5 sm:px-4 sm:py-2 rounded-xl font-black text-[11px] sm:text-xs md:text-sm transition-all duration-200 cursor-pointer flex items-center gap-1.5 shadow-2xs ${
-                      isGroupActive
-                        ? 'bg-emerald-800 text-white shadow-md ring-1 ring-emerald-900 scale-102'
-                        : 'bg-white hover:bg-emerald-50 text-zinc-800 border border-zinc-200'
-                    }`}
-                  >
-                    <IconComp className={`w-3.5 h-3.5 sm:w-4 sm:h-4 ${isGroupActive ? 'text-amber-300' : 'text-emerald-700'}`} />
-                    <span>{group.name}</span>
-                  </button>
-                );
-              })}
-            </div>
-
-
-          </div>
-
-          {/* Search Box below the Banner Header */}
-          <div className="relative w-full max-w-xl">
-            <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-emerald-700" />
-            <input
-              type="text"
-              placeholder={`${titleText.replace(/[\u{1F300}-\u{1F9FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}\u{1F600}-\u{1F64F}\u{1F680}-\u{1F6FF}\u{1F1E0}-\u{1F1FF}]/gu, '').trim()} daxilində axtar...`}
-              value={searchQuery}
-              onChange={(e) => {
-                setSearchQuery(e.target.value);
-                if (onSearchQueryChange) onSearchQueryChange(e.target.value);
-              }}
-              className="w-full pl-10 pr-10 py-2.5 sm:py-3 rounded-xl bg-white border-2 border-emerald-300 text-zinc-900 placeholder-zinc-500 text-xs sm:text-sm focus:outline-none focus:border-emerald-600 transition-all shadow-sm font-bold"
-            />
-            {searchQuery && (
-              <button
-                type="button"
-                onClick={() => {
-                  setSearchQuery('');
-                  if (onSearchQueryChange) onSearchQueryChange('');
+            {/* Search Box below the Banner Header */}
+            <div className="relative w-full max-w-xl mx-auto">
+              <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-emerald-700" />
+              <input
+                type="text"
+                placeholder={`${titleText.replace(/[\u{1F300}-\u{1F9FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}\u{1F600}-\u{1F64F}\u{1F680}-\u{1F6FF}\u{1F1E0}-\u{1F1FF}]/gu, '').trim()} daxilində axtar...`}
+                value={searchQuery}
+                onChange={(e) => {
+                  setSearchQuery(e.target.value);
+                  if (onSearchQueryChange) onSearchQueryChange(e.target.value);
                 }}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-xs font-bold text-emerald-700 hover:text-emerald-900 cursor-pointer"
-              >
-                Təmizlə
-              </button>
-            )}
-          </div>
-
-          {/* Sub-Category Quick-Link Shortcuts (e.g. Burger, Pizza, Pide / Qəlyanaltı, Salat / etc.) */}
-          {activeSubCategories && activeSubCategories.length > 1 && (
-            <div className="flex items-center justify-start flex-wrap gap-2 sm:gap-3 pt-1">
-              {activeSubCategories.map((subCat) => {
-                const isSubActive = activeCategory === subCat.id;
-                return (
-                  <button
-                    key={subCat.id}
-                    type="button"
-                    onClick={() => handleCategoryChange(subCat.id)}
-                    className={`px-5 py-2 sm:px-6 sm:py-2.5 rounded-full font-black text-xs sm:text-sm transition-all duration-200 cursor-pointer shadow-xs active:scale-95 whitespace-nowrap ${
-                      isSubActive
-                        ? 'bg-[#004D2C] hover:bg-[#003B22] text-white shadow-md ring-2 ring-[#004D2C]'
-                        : 'bg-white hover:bg-zinc-50 text-zinc-900 border border-zinc-300'
-                    }`}
-                  >
-                    {subCat.label}
-                  </button>
-                );
-              })}
+                className="w-full pl-10 pr-10 py-2.5 sm:py-3 rounded-xl bg-white border-2 border-emerald-300 text-zinc-900 placeholder-zinc-500 text-xs sm:text-sm focus:outline-none focus:border-emerald-600 transition-all shadow-sm font-bold"
+              />
+              {searchQuery && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setSearchQuery('');
+                    if (onSearchQueryChange) onSearchQueryChange('');
+                  }}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-xs font-bold text-emerald-700 hover:text-emerald-900 cursor-pointer"
+                >
+                  Təmizlə
+                </button>
+              )}
             </div>
-          )}
 
-        </div>
+            {/* Sub-Category Quick-Link Shortcuts (e.g. Burger, Pizza, Pide / Qəlyanaltı, Salat / etc.) */}
+            {activeSubCategories && activeSubCategories.length > 1 && (
+              <div className="flex items-center justify-start flex-wrap gap-2 sm:gap-3 pt-1">
+                {activeSubCategories.map((subCat) => {
+                  const isSubActive = activeCategory === subCat.id;
+                  return (
+                    <button
+                      key={subCat.id}
+                      type="button"
+                      onClick={() => handleCategoryChange(subCat.id)}
+                      className={`px-5 py-2 sm:px-6 sm:py-2.5 rounded-full font-black text-xs sm:text-sm transition-all duration-200 cursor-pointer shadow-xs active:scale-95 whitespace-nowrap ${
+                        isSubActive
+                          ? 'bg-[#004D2C] hover:bg-[#003B22] text-white shadow-md ring-2 ring-[#004D2C]'
+                          : 'bg-white hover:bg-zinc-50 text-zinc-900 border border-zinc-300'
+                      }`}
+                    >
+                      {subCat.label}
+                    </button>
+                  );
+                })}
+              </div>
+            )}
+
+          </div>
+        )}
+
+        {/* Grand Set Package Banner Card (When in Set View: Light background with green border, black text) */}
+        {activeIsSet && activeSpecialSet && (
+          <div className="bg-gradient-to-br from-emerald-50/90 via-white to-amber-50/60 rounded-3xl p-5 sm:p-7 text-zinc-950 shadow-xl border-3 border-emerald-600 relative overflow-hidden">
+            <div className="flex flex-col md:flex-row items-center gap-6 relative z-10">
+              <div className="w-full md:w-56 h-48 md:h-44 rounded-2xl overflow-hidden bg-white border-2 border-emerald-500/40 shrink-0 shadow-md flex items-center justify-center">
+                <img
+                  src={formatImageUrl(activeSpecialSet.image)}
+                  alt={activeSpecialSet.name}
+                  className="w-full h-full object-cover"
+                />
+              </div>
+
+              <div className="flex-1 space-y-2.5 text-center md:text-left">
+                <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-700 text-white font-black text-xs uppercase tracking-wider">
+                  <Sparkles className="w-3.5 h-3.5 fill-amber-300 text-amber-300" />
+                  <span>Xüsusi Kampaniya Seti</span>
+                </div>
+
+                <h2 className="text-xl sm:text-2xl lg:text-3xl font-black text-zinc-950 uppercase tracking-tight">
+                  {activeSpecialSet.name}
+                </h2>
+
+                <p className="text-xs sm:text-sm text-zinc-800 font-medium leading-relaxed max-w-2xl">
+                  {activeSpecialSet.detailedOffer}
+                </p>
+
+                <div className="flex items-center justify-center md:justify-start gap-3 pt-1">
+                  <span className="text-2xl sm:text-3xl font-black text-emerald-800 tracking-tight">
+                    {activeSpecialSet.price.toFixed(2)} ₼
+                  </span>
+                  {activeSpecialSet.oldPrice && (
+                    <span className="text-base sm:text-lg font-bold text-zinc-400 line-through">
+                      {activeSpecialSet.oldPrice.toFixed(2)} ₼
+                    </span>
+                  )}
+                  <span className="px-2.5 py-0.5 rounded-lg bg-emerald-800 text-white text-xs font-black">
+                    Endirimli Qiymət
+                  </span>
+                </div>
+              </div>
+
+              <div className="w-full md:w-auto shrink-0 flex flex-col items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => onAddToCart(activeSpecialSet.packageItem)}
+                  className="w-full md:w-auto px-6 py-3.5 rounded-2xl bg-amber-400 hover:bg-amber-300 active:scale-95 text-zinc-950 font-black text-xs sm:text-sm lg:text-base flex items-center justify-center gap-2 shadow-xl transition-all cursor-pointer uppercase tracking-wider"
+                >
+                  <ShoppingBag className="w-5 h-5 fill-zinc-950/20 shrink-0" />
+                  <span>Bütün Seti Səbətə Əlavə Et</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Set Items Section Subheading */}
+        {activeIsSet && (
+          <div className="flex items-center justify-center gap-2 pt-2">
+            <span className="h-0.5 w-6 sm:w-12 bg-emerald-600 rounded-full" />
+            <h3 className="text-xs sm:text-sm font-black uppercase text-emerald-950 tracking-wider">
+              - SETİN TƏRKİBİNDƏKİ YEMƏKLƏR -
+            </h3>
+            <span className="h-0.5 w-6 sm:w-12 bg-emerald-600 rounded-full" />
+          </div>
+        )}
 
         {/* Admin Action Bar for Adding / Editing Food Cards */}
-        {isAdmin && (
+        {isAdmin && !activeIsSet && (
           <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 p-4 rounded-2xl bg-amber-500/15 border-2 border-amber-400/60 backdrop-blur-md text-white shadow-xl animate-in fade-in">
             <div className="flex items-center gap-3">
               <div className="w-9 h-9 rounded-xl bg-amber-400 text-black flex items-center justify-center font-black shrink-0 shadow-lg">
@@ -599,12 +715,16 @@ export const MenuSection: React.FC<MenuSectionProps> = ({
             <button
               type="button"
               onClick={() => {
-                setActiveCategory('all');
-                setSearchQuery('');
+                if (activeIsSet) {
+                  setSearchQuery('');
+                } else {
+                  setActiveCategory('all');
+                  setSearchQuery('');
+                }
               }}
               className="px-5 py-2.5 rounded-xl bg-amber-400 text-black font-extrabold text-xs hover:bg-amber-500 transition-colors cursor-pointer"
             >
-              Bütün Menyunu Göstər
+              Menyunu Göstər
             </button>
           </div>
         ) : (
@@ -614,6 +734,7 @@ export const MenuSection: React.FC<MenuSectionProps> = ({
               const hasVariants = item.variants && item.variants.length > 0;
 
               const handleItemClick = () => {
+                if (activeIsSet) return;
                 if (item.isOutOfStock) return;
                 if (hasVariants) {
                   window.history.pushState({ modal: 'customizer' }, '');
@@ -628,13 +749,15 @@ export const MenuSection: React.FC<MenuSectionProps> = ({
                   key={item.id}
                   id={`food-card-${item.id}`}
                   onClick={handleItemClick}
-                  className={`rounded-2xl lg:rounded-3xl p-3.5 sm:p-5 lg:p-6 transition-all duration-300 group flex items-center gap-3.5 sm:gap-4 lg:gap-6 cursor-pointer relative ${
-                    item.id === highlightedItemId
-                      ? 'bg-amber-50/40 border-2 border-zinc-950 ring-2 ring-zinc-950 shadow-2xl scale-[1.01]'
-                      : 'bg-white border border-zinc-200 hover:border-emerald-600 shadow-xs hover:shadow-xl'
+                  className={`rounded-2xl lg:rounded-3xl p-3.5 sm:p-5 lg:p-6 transition-all duration-300 group flex items-center gap-3.5 sm:gap-4 lg:gap-6 relative ${
+                    activeIsSet
+                      ? 'bg-white border-2 border-emerald-600/80 shadow-sm cursor-default'
+                      : item.id === highlightedItemId
+                        ? 'bg-amber-50/40 border-2 border-zinc-950 ring-2 ring-zinc-950 shadow-2xl scale-[1.01] cursor-pointer'
+                        : 'bg-white border border-zinc-200 hover:border-emerald-600 shadow-xs hover:shadow-xl cursor-pointer'
                   }`}
                 >
-                  {/* Left Side: Photo Box - Enlarged Food Photo */}
+                  {/* Left Side: Photo Box - Food Photo */}
                   <div className="relative w-28 h-28 sm:w-36 sm:h-36 md:w-44 md:h-44 lg:w-52 lg:h-52 rounded-xl sm:rounded-2xl overflow-hidden bg-gradient-to-br from-zinc-100 via-amber-50/50 to-zinc-200 shrink-0 border border-zinc-200 shadow-xs flex items-center justify-center">
                     <img
                       src={formatImageUrl(item.image)}
@@ -650,7 +773,7 @@ export const MenuSection: React.FC<MenuSectionProps> = ({
                     />
 
                     {/* Admin Edit & Delete Buttons over image */}
-                    {isAdmin && (
+                    {isAdmin && !activeIsSet && (
                       <div className="absolute bottom-1.5 left-1.5 z-20 flex items-center gap-1">
                         <button
                           type="button"
@@ -689,13 +812,13 @@ export const MenuSection: React.FC<MenuSectionProps> = ({
 
                   {/* Right Side Details Column */}
                   <div className="flex-1 min-w-0 flex flex-col justify-between space-y-1.5 sm:space-y-2.5 py-0.5 h-full">
-                    {/* Top Header: Title on Left, Price on Right */}
+                    {/* Top Header: Title on Left, Price on Right (Hidden in Set View) */}
                     <div className="flex items-start justify-between gap-2">
                       <h3 className="text-sm sm:text-base lg:text-xl font-black text-emerald-950 uppercase group-hover:text-emerald-700 transition-colors line-clamp-2 leading-tight">
                         {item.name}
                       </h3>
 
-                      {!isSetView && (
+                      {!activeIsSet && (
                         <div className="text-right shrink-0">
                           <span className="text-sm sm:text-lg lg:text-2xl font-black text-emerald-950 tracking-tight whitespace-nowrap block">
                             {hasVariants ? `от ${item.price.toFixed(2)}` : `${item.price.toFixed(2)}`} ₼
@@ -726,13 +849,13 @@ export const MenuSection: React.FC<MenuSectionProps> = ({
                       ))}
                     </div>
 
-                    {/* Description Text & "Əlavə Et" Button side-by-side */}
+                    {/* Description Text & "Əlavə Et" Button (Button hidden in Set View) */}
                     <div className="flex items-end justify-between gap-2 pt-1">
                       <p className="text-[11px] sm:text-xs lg:text-sm text-zinc-600 font-medium line-clamp-2 sm:line-clamp-3 leading-snug flex-1 min-w-0">
                         {item.description}
                       </p>
 
-                      {!isSetView && (
+                      {!activeIsSet && (
                         <button
                           type="button"
                           disabled={item.isOutOfStock}

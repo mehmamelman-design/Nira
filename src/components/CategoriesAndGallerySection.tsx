@@ -201,12 +201,16 @@ export const CategoriesAndGallerySection: React.FC<CategoriesAndGallerySectionPr
   const startXRef = useRef(0);
   const startScrollLeftRef = useRef(0);
 
-  const pauseAutoScroll = () => {
+  const pauseAutoScroll = (resumeDelay = 1800) => {
     isInteractingRef.current = true;
     if (resumeTimerRef.current) clearTimeout(resumeTimerRef.current);
+    // Automatic safety resume so touch/hover never stops continuous scrolling indefinitely
+    resumeTimerRef.current = setTimeout(() => {
+      isInteractingRef.current = false;
+    }, resumeDelay);
   };
 
-  const resumeAutoScroll = (delay = 2500) => {
+  const resumeAutoScroll = (delay = 800) => {
     if (resumeTimerRef.current) clearTimeout(resumeTimerRef.current);
     resumeTimerRef.current = setTimeout(() => {
       isInteractingRef.current = false;
@@ -216,6 +220,8 @@ export const CategoriesAndGallerySection: React.FC<CategoriesAndGallerySectionPr
   useEffect(() => {
     const el = sliderRef.current;
     if (!el) return;
+
+    isInteractingRef.current = false;
 
     // Center the initial scroll position so scrolling left or right works seamlessly
     const singleLoopWidth = el.scrollWidth / 3;
@@ -242,25 +248,41 @@ export const CategoriesAndGallerySection: React.FC<CategoriesAndGallerySectionPr
     };
 
     reqId = requestAnimationFrame(step);
+
+    const handleVisibility = () => {
+      if (!document.hidden) {
+        isInteractingRef.current = false;
+      }
+    };
+
+    document.addEventListener('visibilitychange', handleVisibility);
+    window.addEventListener('focus', handleVisibility);
+
     return () => {
       cancelAnimationFrame(reqId);
       if (resumeTimerRef.current) clearTimeout(resumeTimerRef.current);
+      document.removeEventListener('visibilitychange', handleVisibility);
+      window.removeEventListener('focus', handleVisibility);
     };
   }, []);
 
   const handleTouchStart = () => {
-    pauseAutoScroll();
+    pauseAutoScroll(2000);
   };
 
   const handleTouchEnd = () => {
-    resumeAutoScroll(2000);
+    resumeAutoScroll(600);
+  };
+
+  const handleTouchCancel = () => {
+    resumeAutoScroll(400);
   };
 
   const handleMouseDown = (e: React.MouseEvent) => {
     const el = sliderRef.current;
     if (!el) return;
     setIsMouseDown(true);
-    pauseAutoScroll();
+    pauseAutoScroll(2500);
     startXRef.current = e.pageX - el.offsetLeft;
     startScrollLeftRef.current = el.scrollLeft;
   };
@@ -278,16 +300,16 @@ export const CategoriesAndGallerySection: React.FC<CategoriesAndGallerySectionPr
   const handleMouseUpOrLeave = () => {
     if (isMouseDown) {
       setIsMouseDown(false);
-      resumeAutoScroll(2000);
     }
+    resumeAutoScroll(600);
   };
 
   const scrollByAmount = (amount: number) => {
-    pauseAutoScroll();
+    pauseAutoScroll(2000);
     if (sliderRef.current) {
       sliderRef.current.scrollBy({ left: amount, behavior: 'smooth' });
     }
-    resumeAutoScroll(3000);
+    resumeAutoScroll(1200);
   };
 
   const renderCategoryCard = (cat: CategoryCard) => {
@@ -359,7 +381,20 @@ export const CategoriesAndGallerySection: React.FC<CategoriesAndGallerySectionPr
     return (
       <div
         key={`${set.id}-${index}`}
-        className="group relative flex flex-col bg-white rounded-xl sm:rounded-2xl p-1 sm:p-1.5 shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-1 shrink-0 w-[180px] sm:w-[210px] md:w-[230px]"
+        onClick={() => {
+          if (onSelectSet) {
+            onSelectSet({
+              id: set.id,
+              title: set.name,
+              categoryId: set.categoryId,
+              description: set.description,
+              imageUrl: set.image
+            });
+          } else if (onSelectCategory) {
+            onSelectCategory(set.categoryId);
+          }
+        }}
+        className="group relative flex flex-col bg-white rounded-xl sm:rounded-2xl p-1 sm:p-1.5 shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-1 shrink-0 w-[180px] sm:w-[210px] md:w-[230px] cursor-pointer"
       >
         {/* Photo Frame Box - Shrunk 1.5x with 16:9 banner aspect ratio */}
         <div className="relative aspect-[16/9] w-full overflow-hidden rounded-lg sm:rounded-xl bg-gradient-to-br from-zinc-100 via-amber-50/50 to-zinc-200 shadow-xs flex items-center justify-center">
@@ -434,11 +469,12 @@ export const CategoriesAndGallerySection: React.FC<CategoriesAndGallerySectionPr
             ref={sliderRef}
             onTouchStart={handleTouchStart}
             onTouchEnd={handleTouchEnd}
+            onTouchCancel={handleTouchCancel}
             onMouseDown={handleMouseDown}
             onMouseMove={handleMouseMove}
             onMouseUp={handleMouseUpOrLeave}
             onMouseLeave={handleMouseUpOrLeave}
-            onMouseEnter={pauseAutoScroll}
+            onMouseEnter={() => pauseAutoScroll(1500)}
             className={`flex items-center gap-3 sm:gap-4 overflow-x-auto select-none py-2 px-1 scrollbar-none touch-pan-x ${
               isMouseDown ? 'cursor-grabbing' : 'cursor-grab'
             }`}

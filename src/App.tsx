@@ -39,6 +39,7 @@ export default function App() {
   const [selectedMenuCategory, setSelectedMenuCategory] = useState<CategoryId>('all');
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [isSetView, setIsSetView] = useState<boolean>(false);
+  const [activeSetId, setActiveSetId] = useState<string | null>(null);
   const [activeSetTitle, setActiveSetTitle] = useState<string | null>(null);
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
   const [isCartOpen, setIsCartOpen] = useState(false);
@@ -90,6 +91,7 @@ export default function App() {
       currentView,
       selectedMenuCategory,
       isSetView,
+      activeSetId,
       activeSetTitle,
     };
   });
@@ -135,6 +137,7 @@ export default function App() {
         setCurrentView('menu');
         setSelectedMenuCategory(state.category || 'all');
         setIsSetView(!!state.isSetView);
+        setActiveSetId(state.setId || null);
         setActiveSetTitle(state.setTitle || null);
         setActiveSection('menu');
       } else {
@@ -142,6 +145,7 @@ export default function App() {
         setCurrentView('home');
         setSelectedMenuCategory('all');
         setIsSetView(false);
+        setActiveSetId(null);
         setActiveSetTitle(null);
         setActiveSection('hero');
         window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -236,6 +240,7 @@ export default function App() {
     setSelectedMenuCategory(catId);
     setSearchQuery('');
     setIsSetView(false);
+    setActiveSetId(null);
     setActiveSetTitle(null);
     setCurrentView('menu');
     setActiveSection('menu');
@@ -245,9 +250,10 @@ export default function App() {
   const handleSearch = (query: string) => {
     setSearchQuery(query);
     if (query.trim() && currentView !== 'menu') {
-      window.history.pushState({ view: 'menu', category: 'fastfood', isSetView: false, setTitle: null }, '');
+      window.history.pushState({ view: 'menu', category: 'fastfood', isSetView: false, setId: null, setTitle: null }, '');
       setSelectedMenuCategory('fastfood');
       setIsSetView(false);
+      setActiveSetId(null);
       setActiveSetTitle(null);
       setCurrentView('menu');
       setActiveSection('menu');
@@ -255,9 +261,10 @@ export default function App() {
   };
 
   const handleOpenMenuWithSet = (setObj: { id: string; title: string; categoryId: CategoryId; description: string; imageUrl: string }) => {
-    window.history.pushState({ view: 'menu', category: setObj.categoryId, isSetView: true, setTitle: setObj.title }, '');
+    window.history.pushState({ view: 'menu', category: setObj.categoryId, isSetView: true, setId: setObj.id, setTitle: setObj.title }, '');
     setSelectedMenuCategory(setObj.categoryId);
     setIsSetView(true);
+    setActiveSetId(setObj.id);
     setActiveSetTitle(setObj.title);
     setCurrentView('menu');
     setActiveSection('menu');
@@ -462,6 +469,7 @@ export default function App() {
               setAdminEditState({ isOpen: true, type: 'menuItem', menuItem: null });
             }}
             isSetView={isSetView}
+            activeSetId={activeSetId || undefined}
             setTitle={activeSetTitle || undefined}
             middleHeroConfig={middleHeroConfig}
             onOpenReviews={() => {
