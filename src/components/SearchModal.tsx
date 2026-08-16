@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Search, X, ShieldCheck, Sparkles, ChevronRight } from 'lucide-react';
 import { MenuItem } from '../types';
 import { MENU_ITEMS } from '../data/menuData';
+import { isItemInHiddenCategory } from '../lib/hiddenCategories';
 
 interface SearchModalProps {
   isOpen: boolean;
@@ -35,6 +36,7 @@ export const SearchModal: React.FC<SearchModalProps> = ({
   const results = query.trim() === '' 
     ? [] 
     : items.filter((item) => {
+        if (isItemInHiddenCategory(item)) return false;
         const q = query.toLowerCase();
         return (
           item.name.toLowerCase().includes(q) ||

@@ -1,12 +1,14 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { Search, Star, Clock, ShieldCheck, Sparkles, ShoppingBag, ArrowLeft, Flame, FlameKindling, Pencil, Plus, Trash2 } from 'lucide-react';
-import { MenuItem, CategoryId, CategoryCard } from '../types';
+import { MenuItem, CategoryId, CategoryCard, HeroConfig } from '../types';
 import { MENU_ITEMS } from '../data/menuData';
 import { ItemCustomizerModal } from './ItemCustomizerModal';
 import { FaqSection } from './FaqSection';
 import { CATEGORY_GROUPS } from './CategoriesAndGallerySection';
+import { Hero } from './Hero';
 import { formatImageUrl } from '../lib/imageUtils';
 import { preloadImages } from '../lib/imagePreloader';
+import { isCategoryTemporarilyHidden, isItemInHiddenCategory } from '../lib/hiddenCategories';
 
 interface MenuSectionProps {
   menuItems?: MenuItem[];
@@ -21,6 +23,10 @@ interface MenuSectionProps {
   onAddNewMenuItem?: () => void;
   isSetView?: boolean;
   setTitle?: string;
+  middleHeroConfig?: HeroConfig;
+  onOpenReviews?: () => void;
+  onOpenAiAssistant?: () => void;
+  onEditMiddleHero?: (slideIndex?: number) => void;
   initialSearchQuery?: string;
   onSearchQueryChange?: (query: string) => void;
   highlightedItemId?: string | null;
@@ -136,6 +142,7 @@ export const DEFAULT_CATEGORY_SLIDES: Record<string, string[]> = {
   ],
   desertler: [
     'https://res.cloudinary.com/dq8xegykm/image/upload/v1786706141/ChatGPT_Image_14_A%C4%9Fu_2026_15_15_19_olyytt.png',
+    'https://res.cloudinary.com/dq8xegykm/image/upload/v1786550638/ChatGPT_Image_9_A%C4%9Fu_2026_22_38_57_ep812j.png',
   ],
   kofe: [
     'https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&q=80&w=1200',
@@ -167,15 +174,25 @@ export const MenuSection: React.FC<MenuSectionProps> = ({
   onAddNewMenuItem,
   isSetView = false,
   setTitle,
+  middleHeroConfig,
+  onOpenReviews,
+  onOpenAiAssistant,
+  onEditMiddleHero,
   initialSearchQuery = '',
   onSearchQueryChange,
   highlightedItemId,
   onEditCategoryBanner,
 }) => {
-  const [activeCategory, setActiveCategory] = useState<CategoryId>(selectedCategory || 'all');
+  const initialCat = selectedCategory && selectedCategory !== 'all' && !isCategoryTemporarilyHidden(selectedCategory) ? selectedCategory : 'fastfood';
+  const [activeCategory, setActiveCategory] = useState<CategoryId>(initialCat);
+  const [activeIsSet, setActiveIsSet] = useState<boolean>(isSetView);
   const [searchQuery, setSearchQuery] = useState(initialSearchQuery);
   const [selectedCustomizerItem, setSelectedCustomizerItem] = useState<MenuItem | null>(null);
   const [deletingItem, setDeletingItem] = useState<MenuItem | null>(null);
+
+  useEffect(() => {
+    setActiveIsSet(isSetView);
+  }, [isSetView]);
 
   useEffect(() => {
     const handlePop = () => {
@@ -203,7 +220,8 @@ export const MenuSection: React.FC<MenuSectionProps> = ({
 
   useEffect(() => {
     if (selectedCategory) {
-      setActiveCategory(selectedCategory);
+      const targetCat = isCategoryTemporarilyHidden(selectedCategory) ? 'fastfood' : (selectedCategory === 'all' ? 'fastfood' : selectedCategory);
+      setActiveCategory(targetCat);
     }
   }, [selectedCategory]);
 
@@ -213,8 +231,9 @@ export const MenuSection: React.FC<MenuSectionProps> = ({
     }
   }, [initialSearchQuery]);
 
-  const handleCategoryChange = (catId: CategoryId) => {
+  const handleCategoryChange = (catId: CategoryId, isSet: boolean = false) => {
     setActiveCategory(catId);
+    setActiveIsSet(isSet);
     setSearchQuery('');
     if (onSearchQueryChange) {
       onSearchQueryChange('');
@@ -232,47 +251,60 @@ export const MenuSection: React.FC<MenuSectionProps> = ({
         itemMap.set(defaultItem.id, defaultItem);
       }
     });
-    return Array.from(itemMap.values());
+    return Array.from(itemMap.values()).filter(item => !isItemInHiddenCategory(item));
   }, [menuItems]);
 
-  // All Requested Categories + "Hamsı"
-  const categories: { id: CategoryId; name: string; icon: string }[] = [
-    { id: 'all', name: 'Hamsı', icon: '' },
-    { id: 'fastfood', name: 'Burger və Nugget', icon: '' },
-    { id: 'pizza', name: 'Pizza', icon: '' },
-    { id: 'pide', name: 'Pidə', icon: '' },
-    { id: 'kabablar', name: 'Kabablar', icon: '' },
-    { id: 'isti_yemekler', name: 'İsti yeməklər', icon: '' },
-    { id: 'icikil', name: 'Soyuq içkilər', icon: '' },
-    { id: 'sorbalar', name: 'Şorbalar', icon: '' },
-    { id: 'salat', name: 'Salat', icon: '' },
-    { id: 'cig_kofte', name: 'Çiy köftə', icon: '' },
-    { id: 'qelyanaltilar', name: 'Qəlyanaltılar', icon: '' },
-    { id: 'desertler', name: 'Desertlər', icon: '' },
-    { id: 'kofe', name: 'Kofe', icon: '' },
-    { id: 'kokteyl', name: 'Kokteyl', icon: '' },
+  // All Requested Categories (temporarily hidden ones filtered out)
+  const allCategoriesList: { id: CategoryId; name: string; icon: string }[] = [
+    { id: 'fastfood' as CategoryId, name: 'Burger və Nugget', icon: '' },
+    { id: 'pizza' as CategoryId, name: 'Pizza', icon: '' },
+    { id: 'pide' as CategoryId, name: 'Pidə', icon: '' },
+    { id: 'kabablar' as CategoryId, name: 'Kabablar', icon: '' },
+    { id: 'isti_yemekler' as CategoryId, name: 'İsti yeməklər', icon: '' },
+    { id: 'icikil' as CategoryId, name: 'Soyuq içkilər', icon: '' },
+    { id: 'sorbalar' as CategoryId, name: 'Şorbalar', icon: '' },
+    { id: 'salat' as CategoryId, name: 'Salat', icon: '' },
+    { id: 'cig_kofte' as CategoryId, name: 'Çiy köftə', icon: '' },
+    { id: 'qelyanaltilar' as CategoryId, name: 'Qəlyanaltılar', icon: '' },
+    { id: 'desertler' as CategoryId, name: 'Desertlər', icon: '' },
+    { id: 'kofe' as CategoryId, name: 'Kofe', icon: '' },
+    { id: 'kokteyl' as CategoryId, name: 'Kokteyl', icon: '' },
   ];
+  const categories = allCategoriesList.filter(cat => !isCategoryTemporarilyHidden(cat.id));
 
   // Resolve Category Image & Description
   const currentCard = categoryCards?.find((c) => c.id === activeCategory);
   const activeCatImage =
     currentCard?.image ||
     DEFAULT_CATEGORY_IMAGES[activeCategory]?.image ||
+    DEFAULT_CATEGORY_IMAGES.fastfood?.image ||
     DEFAULT_CATEGORY_IMAGES.all.image;
-  const activeCatDesc = isSetView
-    ? 'Xüsusi endirimli kombinasiyalar və doyurucu ailə setlərimiz'
-    : currentCard?.description ||
-      DEFAULT_CATEGORY_IMAGES[activeCategory]?.desc ||
-      DEFAULT_CATEGORY_IMAGES.all.desc;
+  const activeCatDesc =
+    currentCard?.description ||
+    DEFAULT_CATEGORY_IMAGES[activeCategory]?.desc ||
+    DEFAULT_CATEGORY_IMAGES.fastfood?.desc ||
+    DEFAULT_CATEGORY_IMAGES.all.desc;
 
   const currentCatObj = categories.find((c) => c.id === activeCategory);
-  const titleText = isSetView && setTitle
-    ? setTitle
-    : currentCatObj
-    ? currentCatObj.id === 'all'
-      ? 'Bütün Menyular'
-      : currentCatObj.name
-    : 'Menyu';
+  const titleText = currentCatObj ? currentCatObj.name : 'Menyu';
+
+  // Find which group contains the activeCategory
+  const currentGroup = useMemo(() => {
+    return CATEGORY_GROUPS.find(
+      (group) =>
+        group.id === activeCategory ||
+        group.subCategories.some((sub) => sub.id === activeCategory)
+    );
+  }, [activeCategory]);
+
+  const activeSubCategories = useMemo(() => {
+    if (currentGroup) {
+      return currentGroup.subCategories.filter((sub) => !isCategoryTemporarilyHidden(sub.id));
+    }
+    return CATEGORY_GROUPS.flatMap((g) => g.subCategories).filter(
+      (sub) => !isCategoryTemporarilyHidden(sub.id)
+    );
+  }, [currentGroup]);
 
   const [currentBannerSlide, setCurrentBannerSlide] = useState(0);
 
@@ -445,18 +477,6 @@ export const MenuSection: React.FC<MenuSectionProps> = ({
             </div>
 
             <div className="flex items-center justify-center flex-wrap gap-1.5 sm:gap-2">
-              <button
-                type="button"
-                onClick={() => handleCategoryChange('all')}
-                className={`px-3 py-1.5 sm:px-4 sm:py-2 rounded-xl font-black text-[11px] sm:text-xs md:text-sm transition-all duration-200 cursor-pointer flex items-center gap-1.5 shadow-2xs ${
-                  activeCategory === 'all'
-                    ? 'bg-emerald-800 text-white shadow-md ring-1 ring-emerald-900 scale-102'
-                    : 'bg-white hover:bg-emerald-50 text-zinc-800 border border-zinc-200'
-                }`}
-              >
-                <span>Hamsı</span>
-              </button>
-
               {CATEGORY_GROUPS.map((group) => {
                 const IconComp = group.icon;
                 const isGroupActive = activeCategory === group.id || group.subCategories.some(sc => sc.id === activeCategory);
@@ -467,9 +487,9 @@ export const MenuSection: React.FC<MenuSectionProps> = ({
                     key={group.id}
                     onClick={() => {
                       if (group.subCategories && group.subCategories.length > 0) {
-                        handleCategoryChange(group.subCategories[0].id);
+                        handleCategoryChange(group.subCategories[0].id, false);
                       } else {
-                        handleCategoryChange(group.id as CategoryId);
+                        handleCategoryChange(group.id as CategoryId, false);
                       }
                     }}
                     className={`px-3 py-1.5 sm:px-4 sm:py-2 rounded-xl font-black text-[11px] sm:text-xs md:text-sm transition-all duration-200 cursor-pointer flex items-center gap-1.5 shadow-2xs ${
@@ -515,6 +535,29 @@ export const MenuSection: React.FC<MenuSectionProps> = ({
             )}
           </div>
 
+          {/* Sub-Category Quick-Link Shortcuts (e.g. Burger, Pizza, Pide / Qəlyanaltı, Salat / etc.) */}
+          {activeSubCategories && activeSubCategories.length > 1 && (
+            <div className="flex items-center justify-start flex-wrap gap-2 sm:gap-3 pt-1">
+              {activeSubCategories.map((subCat) => {
+                const isSubActive = activeCategory === subCat.id;
+                return (
+                  <button
+                    key={subCat.id}
+                    type="button"
+                    onClick={() => handleCategoryChange(subCat.id)}
+                    className={`px-5 py-2 sm:px-6 sm:py-2.5 rounded-full font-black text-xs sm:text-sm transition-all duration-200 cursor-pointer shadow-xs active:scale-95 whitespace-nowrap ${
+                      isSubActive
+                        ? 'bg-[#004D2C] hover:bg-[#003B22] text-white shadow-md ring-2 ring-[#004D2C]'
+                        : 'bg-white hover:bg-zinc-50 text-zinc-900 border border-zinc-300'
+                    }`}
+                  >
+                    {subCat.label}
+                  </button>
+                );
+              })}
+            </div>
+          )}
+
         </div>
 
         {/* Admin Action Bar for Adding / Editing Food Cards */}
@@ -545,19 +588,9 @@ export const MenuSection: React.FC<MenuSectionProps> = ({
           </div>
         )}
 
-        {/* Setimizə Daxildir Section Header for Set View */}
-        {isSetView && (
-          <div className="flex items-center gap-2.5 pt-2 pb-1 border-b border-emerald-900/60">
-            <Sparkles className="w-5 h-5 text-amber-400 fill-amber-400/20 shrink-0" />
-            <h2 className="text-base sm:text-2xl font-black text-amber-400 uppercase tracking-wider drop-shadow-md">
-              Setimizə Daxildir
-            </h2>
-          </div>
-        )}
-
         {/* Search Box & Controls Header End */}
 
-        {/* 2. YEMƏK KARTLARI (Horizontal Food Cards - Image on left, details on right, 1 per row / list layout) */}
+        {/* 2. FOOD CARDS LIST */}
         {filteredItems.length === 0 ? (
           <div className="text-center py-16 bg-zinc-950/80 rounded-3xl border border-zinc-800 space-y-3">
             <p className="text-zinc-400 text-sm font-medium">

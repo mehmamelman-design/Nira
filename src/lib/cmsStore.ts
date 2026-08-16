@@ -126,6 +126,10 @@ export const DEFAULT_CATEGORIES: CategoryCard[] = [
     id: "desertler",
     name: "Desertlər",
     image: "https://res.cloudinary.com/dq8xegykm/image/upload/v1786706141/ChatGPT_Image_14_A%C4%9Fu_2026_15_15_19_olyytt.png",
+    images: [
+      "https://res.cloudinary.com/dq8xegykm/image/upload/v1786706141/ChatGPT_Image_14_A%C4%9Fu_2026_15_15_19_olyytt.png",
+      "https://res.cloudinary.com/dq8xegykm/image/upload/v1786550638/ChatGPT_Image_9_A%C4%9Fu_2026_22_38_57_ep812j.png"
+    ],
     description: "Xüsusi paxlavalar, San Sebastian, cheesecake, künefe və tortlar",
     order: 11,
     icon: ""
@@ -332,7 +336,7 @@ export function subscribeToMenu(callback: (items: MenuItem[]) => void) {
     const validColdDrinkIds = new Set(['ic-cola', 'ic-fanta', 'ic-sprite', 'ic-sirab', 'ic-ayran', 'ic-cesme', 'ic-qizilquyu', 'ic-meyvesiresi', 'ic-fresh', 'ic-kompotlar', 'ic-coplu']);
 
     const cleanList = list.filter(it => {
-      if (it.id === 'ff-7') return false;
+      if (it.id === 'ff-7' || it.id === 'sl-2' || it.id === 'sl-7') return false;
       // Filter dessert items to exactly the 13 valid items
       if (it.category === 'desertler' && !validDessertIds.has(it.id)) return false;
       // Remove any old/unauthorized pizza items
@@ -346,6 +350,8 @@ export function subscribeToMenu(callback: (items: MenuItem[]) => void) {
       // Filter out invalid/extra cold drinks so only the 11 official ones appear in icikil
       if (it.category === 'icikil' && !validColdDrinkIds.has(it.id)) return false;
       const lowerName = (it.name || '').toLowerCase();
+      if (lowerName.includes('calzone')) return false;
+      if (lowerName.includes('manqal salat') || lowerName.includes('mimosa salat') || lowerName.includes('mimoza salat')) return false;
       if (lowerName.includes('pitsa') && !validPizzaIds.has(it.id)) return false;
       if (
         lowerName.includes('alov special') ||

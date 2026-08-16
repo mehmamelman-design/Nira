@@ -737,16 +737,6 @@ export const MENU_ITEMS: MenuItem[] = [
     prepTime: '5 dəq'
   },
   {
-    id: 'sl-2',
-    name: 'Mimosa Salat',
-    category: 'salat',
-    description: 'Qat-qat yumşaq salat: Toyuq file, kartof, yerkökü, pendir, yumurta və mayonez',
-    ingredients: 'Toyuq file, Kartof, Yerkökü, Holland pendiri, Yumurta, Mayonez',
-    price: 3.00,
-    image: 'https://res.cloudinary.com/dq8xegykm/image/upload/v1786598652/ChatGPT_Image_12_A%C4%9Fu_2026_14_43_52_dfdh1p.png',
-    prepTime: '5 dəq'
-  },
-  {
     id: 'sl-3',
     name: 'Xırtıldayan Badımcan Salat',
     category: 'salat',
@@ -788,17 +778,6 @@ export const MENU_ITEMS: MenuItem[] = [
     ingredients: 'Xiyar, Pomidor, Keşniş, Şüyüd, Qırmızı soğan, Zeytun yağı, Limon',
     price: 3.00,
     image: 'https://res.cloudinary.com/dq8xegykm/image/upload/v1786598676/ChatGPT_Image_13_A%C4%9Fu_2026_09_17_47_pojenw.png',
-    prepTime: '5 dəq'
-  },
-  {
-    id: 'sl-7',
-    name: 'Manqal Salat',
-    category: 'salat',
-    description: 'Közdə bişmiş badımcan, pomidor və acı bibərin sarımsaqlı xüsusi qarışığı',
-    ingredients: 'Közlənmiş badımcan, Közlənmiş pomidor, Köz bibər, Sarımsaq, Göyərti',
-    price: 3.00,
-    image: 'https://res.cloudinary.com/dq8xegykm/image/upload/v1786598679/ChatGPT_Image_13_A%C4%9Fu_2026_09_18_44_qm6ddo.png',
-    isPopular: true,
     prepTime: '5 dəq'
   },
   {

@@ -1,11 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { CategoryCard, GalleryPhoto, CategoryId, HeroConfig } from '../types';
-import { ChevronRight, Coffee, Pizza, Flame, Package, Pencil } from 'lucide-react';
+import { ChevronRight, ChevronLeft, Coffee, Pizza, Flame, Pencil } from 'lucide-react';
 import { DessertLayerIcon } from './DessertLayerIcon';
 import { Hero } from './Hero';
 import { DEFAULT_CATEGORIES, formatAzTitle } from '../lib/cmsStore';
 import { DEFAULT_CATEGORY_SLIDES } from './MenuSection';
 import { formatImageUrl } from '../lib/imageUtils';
+import { isCategoryTemporarilyHidden } from '../lib/hiddenCategories';
 
 interface CategoriesAndGallerySectionProps {
   categories: CategoryCard[];
@@ -23,6 +24,68 @@ interface CategoriesAndGallerySectionProps {
   onEditCategory?: (category: CategoryCard) => void;
 }
 
+export interface SpecialSetItem {
+  id: string;
+  name: string;
+  categoryId: CategoryId;
+  description: string;
+  image: string;
+  price?: string;
+  oldPrice?: string;
+}
+
+export const SPECIAL_SETS_LIST: SpecialSetItem[] = [
+  {
+    id: 'set-1',
+    name: 'Dost Məclisi Seti',
+    categoryId: 'pizza',
+    description: '',
+    image: 'https://res.cloudinary.com/dq8xegykm/image/upload/v1786351502/ChatGPT_Image_9_A%C4%9Fu_2026_22_36_26_stqwzb.png',
+  },
+  {
+    id: 'set-2',
+    name: 'Xüsusi Endirimlər - Çay və Cheesecake',
+    categoryId: 'desertler',
+    description: '',
+    image: 'https://res.cloudinary.com/dq8xegykm/image/upload/v1786351531/ChatGPT_Image_9_A%C4%9Fu_2026_22_38_57_eqlnia.png',
+  },
+  {
+    id: 'set-3',
+    name: 'Ailəvi Şaurma Seti',
+    categoryId: 'isti_yemekler',
+    description: '',
+    image: 'https://res.cloudinary.com/dq8xegykm/image/upload/v1786351544/ChatGPT_Image_9_A%C4%9Fu_2026_22_25_23_zcqmky.png',
+  },
+  {
+    id: 'set-4',
+    name: 'Nira Set',
+    categoryId: 'fastfood',
+    description: '',
+    image: 'https://res.cloudinary.com/dq8xegykm/image/upload/v1786351562/ChatGPT_Image_9_A%C4%9Fu_2026_22_31_14_gv7uqw.png',
+  },
+  {
+    id: 'set-5',
+    name: 'Nira Delight Set',
+    categoryId: 'fastfood',
+    description: '',
+    image: 'https://res.cloudinary.com/dq8xegykm/image/upload/v1786351549/ChatGPT_Image_9_A%C4%9Fu_2026_22_43_18_uhon89.png',
+  },
+  {
+    id: 'set-6',
+    name: 'Ailə Süfrəsi Premium Set',
+    categoryId: 'isti_yemekler',
+    description: '',
+    image: 'https://res.cloudinary.com/dq8xegykm/image/upload/v1786351517/ChatGPT_Image_9_A%C4%9Fu_2026_22_34_33_rltry0.png',
+  },
+  {
+    id: 'set-7',
+    name: 'Nagets Kampaniyası',
+    categoryId: 'fastfood',
+    description: '',
+    image: 'https://res.cloudinary.com/dq8xegykm/image/upload/v1786351551/ChatGPT_Image_9_A%C4%9Fu_2026_22_41_31_shl1sk.png',
+  }
+];
+
 export const CATEGORY_GROUPS = [
   {
     id: 'esas_yemekler',
@@ -35,7 +98,7 @@ export const CATEGORY_GROUPS = [
       { id: 'qelyanaltilar' as CategoryId, label: 'Qəlyanaltı' },
       { id: 'cig_kofte' as CategoryId, label: 'Çiy Köftə' },
       { id: 'salat' as CategoryId, label: 'Salat' },
-    ]
+    ].filter(sub => !isCategoryTemporarilyHidden(sub.id))
   },
   {
     id: 'festfood',
@@ -45,7 +108,7 @@ export const CATEGORY_GROUPS = [
       { id: 'fastfood' as CategoryId, label: 'Burger və Nugget' },
       { id: 'pizza' as CategoryId, label: 'Pizza' },
       { id: 'pide' as CategoryId, label: 'Pide' },
-    ]
+    ].filter(sub => !isCategoryTemporarilyHidden(sub.id))
   },
   {
     id: 'ickiler',
@@ -55,7 +118,7 @@ export const CATEGORY_GROUPS = [
       { id: 'icikil' as CategoryId, label: 'Soyuq İçkilər' },
       { id: 'kofe' as CategoryId, label: 'Kofe' },
       { id: 'kokteyl' as CategoryId, label: 'Kokteyl' },
-    ]
+    ].filter(sub => !isCategoryTemporarilyHidden(sub.id))
   },
   {
     id: 'desertler_group',
@@ -63,15 +126,7 @@ export const CATEGORY_GROUPS = [
     icon: DessertLayerIcon,
     subCategories: [
       { id: 'desertler' as CategoryId, label: 'Desertlər' },
-    ]
-  },
-  {
-    id: 'setler_group',
-    name: 'Setlər',
-    icon: Package,
-    subCategories: [
-      { id: 'all' as CategoryId, label: 'Ailə və Endirimli Setlər' },
-    ]
+    ].filter(sub => !isCategoryTemporarilyHidden(sub.id))
   }
 ];
 
@@ -98,7 +153,8 @@ export const CategoriesAndGallerySection: React.FC<CategoriesAndGallerySectionPr
     const sourceList = (categories && categories.length > 0) ? categories : DEFAULT_CATEGORIES;
 
     if (activeGroup.id === 'esas_yemekler') {
-      const allowedIds = ['kabablar', 'sorbalar', 'isti_yemekler', 'qelyanaltilar', 'cig_kofte', 'salat'];
+      const allowedIds = ['kabablar', 'sorbalar', 'isti_yemekler', 'qelyanaltilar', 'cig_kofte', 'salat']
+        .filter(id => !isCategoryTemporarilyHidden(id));
       const result: CategoryCard[] = [];
       allowedIds.forEach(id => {
         const found = sourceList.find(c => c.id === id) || DEFAULT_CATEGORIES.find(dc => dc.id === id);
@@ -108,7 +164,7 @@ export const CategoriesAndGallerySection: React.FC<CategoriesAndGallerySectionPr
     }
 
     if (activeGroup.id === 'festfood') {
-      const allowedIds = ['fastfood', 'pizza', 'pide'];
+      const allowedIds = ['fastfood', 'pizza', 'pide'].filter(id => !isCategoryTemporarilyHidden(id));
       const result: CategoryCard[] = [];
       allowedIds.forEach(id => {
         const found = sourceList.find(c => c.id === id) || DEFAULT_CATEGORIES.find(dc => dc.id === id);
@@ -118,7 +174,7 @@ export const CategoriesAndGallerySection: React.FC<CategoriesAndGallerySectionPr
     }
 
     if (activeGroup.id === 'ickiler') {
-      const allowedIds = ['icikil', 'kofe', 'kokteyl'];
+      const allowedIds = ['icikil', 'kofe', 'kokteyl'].filter(id => !isCategoryTemporarilyHidden(id));
       const result: CategoryCard[] = [];
       allowedIds.forEach(id => {
         const found = sourceList.find(c => c.id === id) || DEFAULT_CATEGORIES.find(dc => dc.id === id);
@@ -128,13 +184,111 @@ export const CategoriesAndGallerySection: React.FC<CategoriesAndGallerySectionPr
     }
 
     if (activeGroup.id === 'desertler_group') {
+      if (isCategoryTemporarilyHidden('desertler')) return [];
       const found = sourceList.find(c => c.id === 'desertler') || DEFAULT_CATEGORIES.find(dc => dc.id === 'desertler');
       return found ? [found] : [];
     }
 
     const activeSubCatIds = activeGroup.subCategories.map(sc => sc.id);
-    return sourceList.filter(c => activeSubCatIds.includes(c.id as CategoryId));
+    return sourceList.filter(c => activeSubCatIds.includes(c.id as CategoryId) && !isCategoryTemporarilyHidden(c.id));
   }, [categories, activeGroup]);
+
+  // Interactive Draggable & Touch-swipeable Slider for 7 Special Sets
+  const sliderRef = useRef<HTMLDivElement>(null);
+  const isInteractingRef = useRef(false);
+  const resumeTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const [isMouseDown, setIsMouseDown] = useState(false);
+  const startXRef = useRef(0);
+  const startScrollLeftRef = useRef(0);
+
+  const pauseAutoScroll = () => {
+    isInteractingRef.current = true;
+    if (resumeTimerRef.current) clearTimeout(resumeTimerRef.current);
+  };
+
+  const resumeAutoScroll = (delay = 2500) => {
+    if (resumeTimerRef.current) clearTimeout(resumeTimerRef.current);
+    resumeTimerRef.current = setTimeout(() => {
+      isInteractingRef.current = false;
+    }, delay);
+  };
+
+  useEffect(() => {
+    const el = sliderRef.current;
+    if (!el) return;
+
+    // Center the initial scroll position so scrolling left or right works seamlessly
+    const singleLoopWidth = el.scrollWidth / 3;
+    if (el.scrollLeft === 0 && singleLoopWidth > 0) {
+      el.scrollLeft = singleLoopWidth;
+    }
+
+    let reqId: number;
+    const step = () => {
+      if (!isInteractingRef.current && el) {
+        // Soldan sağa axış: scrollLeft azalır
+        el.scrollLeft -= 0.65;
+
+        const loopWidth = el.scrollWidth / 3;
+        if (loopWidth > 0) {
+          if (el.scrollLeft <= 5) {
+            el.scrollLeft = loopWidth;
+          } else if (el.scrollLeft >= loopWidth * 2) {
+            el.scrollLeft = loopWidth;
+          }
+        }
+      }
+      reqId = requestAnimationFrame(step);
+    };
+
+    reqId = requestAnimationFrame(step);
+    return () => {
+      cancelAnimationFrame(reqId);
+      if (resumeTimerRef.current) clearTimeout(resumeTimerRef.current);
+    };
+  }, []);
+
+  const handleTouchStart = () => {
+    pauseAutoScroll();
+  };
+
+  const handleTouchEnd = () => {
+    resumeAutoScroll(2000);
+  };
+
+  const handleMouseDown = (e: React.MouseEvent) => {
+    const el = sliderRef.current;
+    if (!el) return;
+    setIsMouseDown(true);
+    pauseAutoScroll();
+    startXRef.current = e.pageX - el.offsetLeft;
+    startScrollLeftRef.current = el.scrollLeft;
+  };
+
+  const handleMouseMove = (e: React.MouseEvent) => {
+    if (!isMouseDown) return;
+    const el = sliderRef.current;
+    if (!el) return;
+    e.preventDefault();
+    const x = e.pageX - el.offsetLeft;
+    const walk = (x - startXRef.current) * 1.5;
+    el.scrollLeft = startScrollLeftRef.current - walk;
+  };
+
+  const handleMouseUpOrLeave = () => {
+    if (isMouseDown) {
+      setIsMouseDown(false);
+      resumeAutoScroll(2000);
+    }
+  };
+
+  const scrollByAmount = (amount: number) => {
+    pauseAutoScroll();
+    if (sliderRef.current) {
+      sliderRef.current.scrollBy({ left: amount, behavior: 'smooth' });
+    }
+    resumeAutoScroll(3000);
+  };
 
   const renderCategoryCard = (cat: CategoryCard) => {
     const descriptionText = cat.description || DEFAULT_CATEGORIES.find(dc => dc.id === cat.id)?.description;
@@ -201,19 +355,103 @@ export const CategoriesAndGallerySection: React.FC<CategoriesAndGallerySectionPr
     );
   };
 
+  const renderSpecialSetCard = (set: SpecialSetItem, index: number) => {
+    return (
+      <div
+        key={`${set.id}-${index}`}
+        className="group relative flex flex-col bg-white rounded-xl sm:rounded-2xl p-1 sm:p-1.5 shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-1 shrink-0 w-[180px] sm:w-[210px] md:w-[230px]"
+      >
+        {/* Photo Frame Box - Shrunk 1.5x with 16:9 banner aspect ratio */}
+        <div className="relative aspect-[16/9] w-full overflow-hidden rounded-lg sm:rounded-xl bg-gradient-to-br from-zinc-100 via-amber-50/50 to-zinc-200 shadow-xs flex items-center justify-center">
+          <img
+            src={formatImageUrl(set.image)}
+            alt={set.name}
+            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+            loading="lazy"
+            decoding="async"
+            onError={(e) => {
+              (e.currentTarget as HTMLImageElement).src = 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&q=80&w=600';
+            }}
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-30 group-hover:opacity-0 transition-opacity pointer-events-none" />
+
+          {/* Badge & Action Indicator */}
+          <div className="absolute bottom-1.5 right-1.5 sm:bottom-2 sm:right-2 z-20 flex items-center gap-0.5 px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-md sm:rounded-lg bg-white text-black font-black text-[10px] sm:text-[11px] shadow-sm group-hover:bg-amber-400 transition-colors">
+            <span className="text-black font-black">Baxın</span>
+            <ChevronRight className="w-3 h-3 sm:w-3.5 sm:h-3.5 stroke-[3] text-black" />
+          </div>
+        </div>
+
+        {/* Text directly under photo frame (Only title, no subtitle text or price) */}
+        <div className="mt-1.5 sm:mt-2 px-1 pb-0.5 text-left">
+          <h3 className="text-xs sm:text-sm font-black text-black group-hover:text-emerald-800 transition-colors line-clamp-1">
+            <span className="text-black font-black tracking-tight">{set.name}</span>
+          </h3>
+        </div>
+      </div>
+    );
+  };
+
   return (
     <section id="categories" className="py-8 sm:py-16 bg-white border-b border-zinc-200">
       {/* All Categories Container */}
       <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 space-y-6 sm:space-y-10">
         
         {/* Section Title & Heading */}
-        <div className="space-y-1.5 text-center sm:text-left">
+        <div className="space-y-1.5 text-center">
           <h2 className="text-xl sm:text-3xl md:text-4xl font-black text-zinc-900 tracking-tight">
             Menyu <span className="text-emerald-800">Bölmələrinə Daxil Olun</span>
           </h2>
-          <p className="text-zinc-800 text-xs sm:text-base font-bold">
-            Sifarişinizi Seçin
+          <p className="text-zinc-950 font-black text-xs sm:text-base md:text-lg tracking-wider uppercase">
+            -SETLERİMİZ VƏ XÜSUSİ ENDİRİMLƏR-
           </p>
+        </div>
+
+        {/* 7 Special Sets Single-Row Continuous Left-to-Right Scrolling Slider with Touch & Drag */}
+        <div className="relative w-full group/slider py-1">
+          {/* Left Arrow button (visible on hover / desktop) */}
+          <button
+            type="button"
+            onClick={() => scrollByAmount(-240)}
+            className="absolute left-1 top-1/2 -translate-y-1/2 z-30 w-8 h-8 rounded-full bg-white/95 shadow-md border border-zinc-200 text-zinc-800 flex items-center justify-center hover:bg-emerald-800 hover:text-white transition-all opacity-80 hover:opacity-100 cursor-pointer hidden sm:flex active:scale-95"
+            aria-label="Əvvəlki"
+          >
+            <ChevronLeft className="w-5 h-5 stroke-[2.5]" />
+          </button>
+
+          {/* Right Arrow button (visible on hover / desktop) */}
+          <button
+            type="button"
+            onClick={() => scrollByAmount(240)}
+            className="absolute right-1 top-1/2 -translate-y-1/2 z-30 w-8 h-8 rounded-full bg-white/95 shadow-md border border-zinc-200 text-zinc-800 flex items-center justify-center hover:bg-emerald-800 hover:text-white transition-all opacity-80 hover:opacity-100 cursor-pointer hidden sm:flex active:scale-95"
+            aria-label="Növbəti"
+          >
+            <ChevronRight className="w-5 h-5 stroke-[2.5]" />
+          </button>
+
+          {/* Interactive Touch and Drag Scroll Container */}
+          <div
+            ref={sliderRef}
+            onTouchStart={handleTouchStart}
+            onTouchEnd={handleTouchEnd}
+            onMouseDown={handleMouseDown}
+            onMouseMove={handleMouseMove}
+            onMouseUp={handleMouseUpOrLeave}
+            onMouseLeave={handleMouseUpOrLeave}
+            onMouseEnter={pauseAutoScroll}
+            className={`flex items-center gap-3 sm:gap-4 overflow-x-auto select-none py-2 px-1 scrollbar-none touch-pan-x ${
+              isMouseDown ? 'cursor-grabbing' : 'cursor-grab'
+            }`}
+            style={{
+              scrollbarWidth: 'none',
+              msOverflowStyle: 'none',
+              WebkitOverflowScrolling: 'touch',
+            }}
+          >
+            {SPECIAL_SETS_LIST.concat(SPECIAL_SETS_LIST).concat(SPECIAL_SETS_LIST).map((set, idx) =>
+              renderSpecialSetCard(set, idx)
+            )}
+          </div>
         </div>
 
         {/* KATEQORİYALARIMIZ (Category Navigation Bar - Centered) */}
@@ -226,7 +464,7 @@ export const CategoriesAndGallerySection: React.FC<CategoriesAndGallerySectionPr
             <span className="h-0.5 w-6 sm:w-10 bg-emerald-600 rounded-full" />
           </div>
 
-          {/* 5 Main Group Buttons without numbers (Centered & Tight Spacing) */}
+          {/* 4 Main Group Buttons without numbers (Centered & Tight Spacing) */}
           <div className="flex items-center justify-center flex-wrap gap-1.5 sm:gap-2">
             {CATEGORY_GROUPS.map((group) => {
               const isActive = selectedGroupId === group.id;
@@ -236,9 +474,7 @@ export const CategoriesAndGallerySection: React.FC<CategoriesAndGallerySectionPr
                 <button
                   type="button"
                   key={group.id}
-                  onClick={() => {
-                    setSelectedGroupId(group.id);
-                  }}
+                  onClick={() => setSelectedGroupId(group.id)}
                   className={`px-3 py-1.5 sm:px-4 sm:py-2 rounded-xl font-black text-[11px] sm:text-xs md:text-sm transition-all duration-200 cursor-pointer flex items-center gap-1.5 shadow-2xs active:scale-95 ${
                     isActive
                       ? 'bg-emerald-800 text-white shadow-md ring-1 ring-emerald-900 scale-102'
@@ -254,13 +490,15 @@ export const CategoriesAndGallerySection: React.FC<CategoriesAndGallerySectionPr
         </div>
 
         {/* All categories grid together (Compact 2-3 col layout) */}
-        <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-3.5 sm:gap-6 lg:gap-8">
-          {displayedCategories.map(renderCategoryCard)}
-        </div>
+        {displayedCategories.length > 0 && (
+          <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-3.5 sm:gap-6 lg:gap-8">
+            {displayedCategories.map(renderCategoryCard)}
+          </div>
+        )}
       </div>
 
       {/* Middle Hero Slider Banner - FULL SCREEN WIDTH EDGE-TO-EDGE */}
-      <div className="mt-10 sm:mt-16 w-full overflow-hidden">
+      <div id="middle-hero-section" className="mt-10 sm:mt-16 w-full overflow-hidden">
         <Hero
           heroConfig={middleHeroConfig}
           onOrderNow={onOrderNow}

@@ -231,7 +231,7 @@ export default function App() {
     }, 3500);
   };
 
-  const handleOpenMenuWithCategory = (catId: CategoryId = 'all') => {
+  const handleOpenMenuWithCategory = (catId: CategoryId = 'fastfood') => {
     window.history.pushState({ view: 'menu', category: catId, isSetView: false, setTitle: null }, '');
     setSelectedMenuCategory(catId);
     setSearchQuery('');
@@ -245,8 +245,8 @@ export default function App() {
   const handleSearch = (query: string) => {
     setSearchQuery(query);
     if (query.trim() && currentView !== 'menu') {
-      window.history.pushState({ view: 'menu', category: 'all', isSetView: false, setTitle: null }, '');
-      setSelectedMenuCategory('all');
+      window.history.pushState({ view: 'menu', category: 'fastfood', isSetView: false, setTitle: null }, '');
+      setSelectedMenuCategory('fastfood');
       setIsSetView(false);
       setActiveSetTitle(null);
       setCurrentView('menu');
@@ -375,7 +375,7 @@ export default function App() {
             {/* 1. Hero Banner */}
             <Hero
               heroConfig={heroConfig}
-              onOrderNow={() => handleOpenMenuWithCategory('all')}
+              onOrderNow={() => handleOpenMenuWithCategory('fastfood')}
               onOpenReviews={() => scrollToSection('reviews')}
               onOpenAiAssistant={() => {
                 window.history.pushState({ modal: 'ai' }, '');
@@ -398,7 +398,7 @@ export default function App() {
               searchQuery={searchQuery}
               middleHeroConfig={middleHeroConfig}
               isAdmin={isAdmin}
-              onOrderNow={() => handleOpenMenuWithCategory('all')}
+              onOrderNow={() => handleOpenMenuWithCategory('fastfood')}
               onOpenReviews={() => scrollToSection('reviews')}
               onOpenAiAssistant={() => {
                 window.history.pushState({ modal: 'ai' }, '');
@@ -463,6 +463,19 @@ export default function App() {
             }}
             isSetView={isSetView}
             setTitle={activeSetTitle || undefined}
+            middleHeroConfig={middleHeroConfig}
+            onOpenReviews={() => {
+              setCurrentView('home');
+              setTimeout(() => scrollToSection('reviews'), 100);
+            }}
+            onOpenAiAssistant={() => {
+              window.history.pushState({ modal: 'ai' }, '');
+              setIsAiModalOpen(true);
+            }}
+            onEditMiddleHero={(idx) => {
+              window.history.pushState({ modal: 'adminEdit' }, '');
+              setAdminEditState({ isOpen: true, type: 'middleHero', slideIndex: idx ?? 0 });
+            }}
             highlightedItemId={highlightedItemId}
             onEditCategoryBanner={(catId, slideIndex) => {
               const existingCat = categories.find((c) => c.id === catId);

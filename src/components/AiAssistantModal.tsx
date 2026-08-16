@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Sparkles, X, Flame, Check, RefreshCw, ShoppingBag } from 'lucide-react';
 import { MENU_ITEMS } from '../data/menuData';
 import { MenuItem } from '../types';
+import { isItemInHiddenCategory } from '../lib/hiddenCategories';
 
 interface AiAssistantModalProps {
   isOpen: boolean;
@@ -33,7 +34,7 @@ export const AiAssistantModal: React.FC<AiAssistantModalProps> = ({
   ];
 
   const handleGenerate = () => {
-    let filtered = [...MENU_ITEMS];
+    let filtered = MENU_ITEMS.filter(item => !isItemInHiddenCategory(item));
 
     if (selectedMood) {
       filtered = filtered.filter((i) => i.category === selectedMood);
