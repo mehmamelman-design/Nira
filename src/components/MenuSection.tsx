@@ -17,6 +17,7 @@ interface MenuSectionProps {
   onAddToCart: (item: MenuItem, option?: string, notes?: string, quantity?: number) => void;
   selectedCategory?: CategoryId;
   onCategoryChange?: (category: CategoryId) => void;
+  onSelectSet?: (setObj: { id: string; title: string; categoryId: CategoryId; description: string; imageUrl: string }) => void;
   onBackToHome?: () => void;
   isAdmin?: boolean;
   onEditMenuItem?: (item: MenuItem) => void;
@@ -169,6 +170,7 @@ export const MenuSection: React.FC<MenuSectionProps> = ({
   onAddToCart,
   selectedCategory,
   onCategoryChange,
+  onSelectSet,
   onBackToHome,
   isAdmin,
   onEditMenuItem,
@@ -250,6 +252,26 @@ export const MenuSection: React.FC<MenuSectionProps> = ({
     }
     if (onCategoryChange) {
       onCategoryChange(catId);
+    }
+  };
+
+  const handleSelectSetTab = (setObj: SpecialSetDetail) => {
+    setCurrentSetId(setObj.id);
+    setActiveCategory(setObj.categoryId);
+    setSearchQuery('');
+    if (onSelectSet) {
+      onSelectSet({
+        id: setObj.id,
+        title: setObj.name,
+        categoryId: setObj.categoryId,
+        description: setObj.description,
+        imageUrl: setObj.image
+      });
+    } else {
+      window.history.pushState(
+        { view: 'menu', category: setObj.categoryId, isSetView: true, setId: setObj.id, setTitle: setObj.name },
+        ''
+      );
     }
   };
 
@@ -609,6 +631,8 @@ export const MenuSection: React.FC<MenuSectionProps> = ({
 
           </div>
         )}
+
+
 
         {/* Grand Set Package Banner Card (When in Set View: Light background with green border, black text) */}
         {activeIsSet && activeSpecialSet && (

@@ -726,17 +726,6 @@ export const MENU_ITEMS: MenuItem[] = [
 
   // ==================== 8. SALAT ====================
   {
-    id: 'sl-1',
-    name: 'Paytaxt Salat',
-    category: 'salat',
-    description: 'Ənənəvi Olivier salatı: Bişmiş tərəvəzlər, toyuq file, yaşıl noxud və ev mayonezi',
-    ingredients: 'Kartof, Yerkökü, Yumurta, Toyuq file, Turşu xiyar, Noxud, Mayonez',
-    price: 3.00,
-    image: 'https://res.cloudinary.com/dq8xegykm/image/upload/v1786598653/ChatGPT_Image_12_A%C4%9Fu_2026_14_43_54_iuhyrr.png',
-    isPopular: true,
-    prepTime: '5 dəq'
-  },
-  {
     id: 'sl-3',
     name: 'Xırtıldayan Badımcan Salat',
     category: 'salat',

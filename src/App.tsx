@@ -17,6 +17,7 @@ import { SearchModal } from './components/SearchModal';
 import { SplashScreen } from './components/SplashScreen';
 import { CartItem, MenuItem, CategoryId, CategoryCard } from './types';
 import { auth } from './lib/firebase';
+import { trackPageView, trackAddToCartEvent } from './lib/analytics';
 import { onAuthStateChanged, User as FirebaseUser } from 'firebase/auth';
 import {
   useHeroConfig,
@@ -180,6 +181,10 @@ export default function App() {
   const [authUser, setAuthUser] = useState<FirebaseUser | null>(null);
 
   useEffect(() => {
+    trackPageView();
+  }, []);
+
+  useEffect(() => {
     const unsub = onAuthStateChanged(auth, (user) => {
       setAuthUser(user);
     });
@@ -272,6 +277,7 @@ export default function App() {
   };
 
   const handleAddToCart = (item: MenuItem, option?: string, notes?: string, quantity: number = 1) => {
+    trackAddToCartEvent();
     setCartItems((prev) => {
       const existingIndex = prev.findIndex(
         (ci) => ci.menuItem.id === item.id && ci.selectedOption === option && ci.notes === notes
@@ -351,6 +357,7 @@ export default function App() {
       <Navbar
         cartItems={cartItems}
         onOpenCart={() => {
+          trackAddToCartEvent();
           window.history.pushState({ modal: 'cart' }, '');
           setIsCartOpen(true);
         }}
@@ -445,6 +452,7 @@ export default function App() {
               setIsSetView(false);
               setActiveSetTitle(null);
             }}
+            onSelectSet={handleOpenMenuWithSet}
             onBackToHome={() => {
               if (window.history.state && window.history.state.view === 'menu') {
                 window.history.back();

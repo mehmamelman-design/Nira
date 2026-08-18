@@ -83,6 +83,13 @@
           "order": 3
         }
       ]
+    },
+    "config/analytics": {
+      "totalViews": 0,
+      "dailyVisitors": {},
+      "totalCartClicks": 0,
+      "dailyCartClicks": {},
+      "lastUpdated": ""
     }
   }
 }

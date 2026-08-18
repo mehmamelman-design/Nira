@@ -25,9 +25,15 @@ import {
   Search,
   ShieldAlert,
   ShieldCheck,
-  Clock
+  Clock,
+  BarChart3,
+  Users,
+  MousePointerClick,
+  TrendingUp,
+  Activity
 } from 'lucide-react';
 import { auth } from '../lib/firebase';
+import { useRealtimeAnalytics } from '../lib/analytics';
 import { HeroConfig, CategoryCard, MenuItem, Review, GalleryPhoto } from '../types';
 import { compressImageFile } from '../lib/imageCompressor';
 import {
@@ -63,7 +69,10 @@ export const AdminPanelModal: React.FC<AdminPanelModalProps> = ({
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [password, setPassword] = useState('');
   const [passwordError, setPasswordError] = useState(false);
-  const [activeTab, setActiveTab] = useState<'reviews' | 'gallery' | 'menu' | 'prices' | 'hero'>('reviews');
+  const [activeTab, setActiveTab] = useState<'analytics' | 'reviews' | 'gallery' | 'menu' | 'prices' | 'hero'>('analytics');
+
+  // Real-time analytics hook
+  const analytics = useRealtimeAnalytics();
 
   // Editable local states for form modifications
   const [localHero, setLocalHero] = useState<HeroConfig>(heroConfig);
@@ -474,6 +483,18 @@ export const AdminPanelModal: React.FC<AdminPanelModalProps> = ({
             {/* Sidebar Navigation Tabs */}
             <div className="w-full md:w-64 bg-[#090d16] p-3 border-b md:border-b-0 md:border-r border-zinc-800 flex md:flex-col gap-1.5 overflow-x-auto shrink-0">
               <button
+                onClick={() => setActiveTab('analytics')}
+                className={`w-full text-left px-3.5 py-3 rounded-xl font-bold text-xs sm:text-sm flex items-center gap-2.5 transition-all cursor-pointer whitespace-nowrap ${
+                  activeTab === 'analytics'
+                    ? 'bg-amber-400 text-black shadow-md font-black'
+                    : 'text-emerald-400 bg-emerald-950/40 border border-emerald-800/50 hover:bg-emerald-900/50'
+                }`}
+              >
+                <BarChart3 className="w-4 h-4 shrink-0" />
+                <span>📊 Canlı Analitika (360°)</span>
+              </button>
+
+              <button
                 onClick={() => setActiveTab('reviews')}
                 className={`w-full text-left px-3.5 py-3 rounded-xl font-bold text-xs sm:text-sm flex items-center gap-2.5 transition-all cursor-pointer whitespace-nowrap ${
                   activeTab === 'reviews'
@@ -537,6 +558,136 @@ export const AdminPanelModal: React.FC<AdminPanelModalProps> = ({
             {/* Main Content Area */}
             <div className="flex-1 p-4 sm:p-6 overflow-y-auto bg-[#0b1329] space-y-6">
               
+              {/* TAB 0: REAL-TIME ANALYTICS (NİRA 360°) */}
+              {activeTab === 'analytics' && (
+                <div className="space-y-6">
+                  {/* Visual Structure as Requested */}
+                  <div className="bg-[#f9f9f9] text-zinc-900 p-5 sm:p-7 rounded-2xl sm:rounded-3xl border border-zinc-200 shadow-xl space-y-6">
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b-2 border-zinc-300 pb-4">
+                      <div>
+                        <h2 className="text-xl sm:text-2xl font-black text-[#1a1a1a] flex items-center gap-2.5">
+                          <span>📊 NİRA 360° - Real Canlı Analitika</span>
+                        </h2>
+                        <p className="text-xs sm:text-sm text-zinc-600 font-medium mt-1">
+                          100% real istifadəçi hərəkətləri və Firestore real-time sinxronizasiyası ilə işləyir.
+                        </p>
+                      </div>
+                      <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-100 text-emerald-800 border border-emerald-300 text-xs font-black shrink-0">
+                        <span className="w-2.5 h-2.5 rounded-full bg-emerald-600 animate-ping" />
+                        <span>Canlı Rejim Aktivdir</span>
+                      </div>
+                    </div>
+
+                    {/* 3 Main Highlight Cards */}
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-5">
+                      {/* Card 1: Total Views */}
+                      <div className="bg-white p-5 sm:p-6 rounded-xl shadow-xs border-l-5 border-[#27ae60] border-y border-r border-zinc-200">
+                        <div className="flex items-center justify-between">
+                          <p className="text-sm font-bold text-[#7f8c8d]">Ümumi Baxış / Ziyarət</p>
+                          <Users className="w-5 h-5 text-[#27ae60]" />
+                        </div>
+                        <h3 className="text-3xl sm:text-4xl font-black text-[#2c3e50] mt-3 tracking-tight">
+                          {analytics.totalViews.toLocaleString()}
+                        </h3>
+                        <p className="text-[11px] text-zinc-500 font-medium mt-2">
+                          Sayta edilən ümumi səhifə baxışları və ziyarətlər
+                        </p>
+                      </div>
+
+                      {/* Card 2: Daily Visitors */}
+                      <div className="bg-white p-5 sm:p-6 rounded-xl shadow-xs border-l-5 border-[#2980b9] border-y border-r border-zinc-200">
+                        <div className="flex items-center justify-between">
+                          <p className="text-sm font-bold text-[#7f8c8d]">Bugünkü Ziyarətçi ({analytics.todayDate})</p>
+                          <Activity className="w-5 h-5 text-[#2980b9]" />
+                        </div>
+                        <h3 className="text-3xl sm:text-4xl font-black text-[#2c3e50] mt-3 tracking-tight">
+                          {analytics.todayVisitors.toLocaleString()}
+                        </h3>
+                        <p className="text-[11px] text-zinc-500 font-medium mt-2">
+                          Bugün sayta daxil olan canlı unikal şəxslər
+                        </p>
+                      </div>
+
+                      {/* Card 3: Cart Interactions */}
+                      <div className="bg-white p-5 sm:p-6 rounded-xl shadow-xs border-l-5 border-[#e67e22] border-y border-r border-zinc-200">
+                        <div className="flex items-center justify-between">
+                          <p className="text-sm font-bold text-[#7f8c8d]">Səbətə Basanlar (Cəmi / Günlük)</p>
+                          <MousePointerClick className="w-5 h-5 text-[#e67e22]" />
+                        </div>
+                        <h3 className="text-3xl sm:text-4xl font-black text-[#2c3e50] mt-3 tracking-tight flex items-baseline gap-2">
+                          <span>{analytics.totalCartClicks.toLocaleString()}</span>
+                          <span className="text-xl sm:text-2xl font-bold text-[#e67e22]">
+                            / {analytics.todayCartClicks.toLocaleString()}
+                          </span>
+                        </h3>
+                        <p className="text-[11px] text-zinc-500 font-medium mt-2">
+                          Məhsulu səbətə əlavə edən və ya səbəti açan kliklər
+                        </p>
+                      </div>
+                    </div>
+
+                    {/* Detailed History Table by Days */}
+                    <div className="bg-white p-5 rounded-xl border border-zinc-200 shadow-xs space-y-3">
+                      <h4 className="text-sm font-black text-zinc-900 flex items-center gap-2">
+                        <TrendingUp className="w-4 h-4 text-emerald-700" />
+                        <span>Son Günlər Üzrə Dəqiq İstifadəçi Statistikası</span>
+                      </h4>
+
+                      <div className="overflow-x-auto">
+                        <table className="w-full text-left text-xs">
+                          <thead>
+                            <tr className="border-b border-zinc-200 text-zinc-500 font-black uppercase">
+                              <th className="py-2.5 px-3">Tarix</th>
+                              <th className="py-2.5 px-3">Unikal Ziyarətçi</th>
+                              <th className="py-2.5 px-3">Səbət Klikləri</th>
+                              <th className="py-2.5 px-3 text-right">Aktivlik Səviyyəsi</th>
+                            </tr>
+                          </thead>
+                          <tbody className="divide-y divide-zinc-100 font-semibold text-zinc-800">
+                            {Object.keys({ ...analytics.dailyVisitors, ...analytics.dailyCartClicks })
+                              .sort((a, b) => b.localeCompare(a))
+                              .slice(0, 10)
+                              .map((dateKey) => {
+                                const visitors = analytics.dailyVisitors[dateKey] || 0;
+                                const cartClicks = analytics.dailyCartClicks[dateKey] || 0;
+                                const isToday = dateKey === analytics.todayDate;
+                                return (
+                                  <tr key={dateKey} className={isToday ? 'bg-amber-50/60 font-black' : 'hover:bg-zinc-50'}>
+                                    <td className="py-2.5 px-3 flex items-center gap-2">
+                                      <span>{dateKey}</span>
+                                      {isToday && (
+                                        <span className="px-2 py-0.5 rounded-full bg-emerald-600 text-white text-[10px] font-black">
+                                          Bugün
+                                        </span>
+                                      )}
+                                    </td>
+                                    <td className="py-2.5 px-3 text-emerald-700 font-bold">
+                                      {visitors} nəfər
+                                    </td>
+                                    <td className="py-2.5 px-3 text-amber-700 font-bold">
+                                      {cartClicks} klik
+                                    </td>
+                                    <td className="py-2.5 px-3 text-right text-zinc-500 font-mono">
+                                      {visitors > 0 ? `${((cartClicks / visitors) * 100).toFixed(0)}% səbət nisbəti` : '-'}
+                                    </td>
+                                  </tr>
+                                );
+                              })}
+                            {Object.keys(analytics.dailyVisitors).length === 0 && (
+                              <tr>
+                                <td colSpan={4} className="py-6 text-center text-zinc-400">
+                                  Hələlik heç bir tarix qeydə alınmayıb. İlk ziyarətçilər saytı açdıqca burada canlı əks olunacaq.
+                                </td>
+                              </tr>
+                            )}
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+
               {/* TAB 1: REVIEWS MANAGEMENT */}
               {activeTab === 'reviews' && (
                 <div className="space-y-6">

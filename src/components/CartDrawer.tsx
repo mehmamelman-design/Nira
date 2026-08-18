@@ -110,6 +110,16 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
       if (item.selectedOption) {
         text += ` [${item.selectedOption}]`;
       }
+      // Include set contents/ingredients when ordering a special set package
+      const setContents = item.menuItem.description || item.menuItem.ingredients;
+      if (
+        setContents &&
+        (item.menuItem.id.startsWith('pkg-set') ||
+         item.menuItem.id.includes('set') ||
+         item.menuItem.name.toLowerCase().includes('set'))
+      ) {
+        text += ` - ${setContents}`;
+      }
       text += ` - ${(item.menuItem.price * item.quantity).toFixed(2)} ₼\n`;
     });
 
