@@ -193,35 +193,22 @@ export const CategoriesAndGallerySection: React.FC<CategoriesAndGallerySectionPr
     return sourceList.filter(c => activeSubCatIds.includes(c.id as CategoryId) && !isCategoryTemporarilyHidden(c.id));
   }, [categories, activeGroup]);
 
-  // Interactive Draggable & Touch-swipeable Slider for 7 Special Sets
+  // Interactive Smooth Continuous Slider for 7 Special Sets
   const sliderRef = useRef<HTMLDivElement>(null);
-  const isInteractingRef = useRef(false);
-  const resumeTimerRef = useRef<NodeJS.Timeout | null>(null);
   const [isMouseDown, setIsMouseDown] = useState(false);
+  const isMouseDownRef = useRef(false);
+  const isTouchDraggingRef = useRef(false);
+  const touchDirectionRef = useRef<'horizontal' | 'vertical' | null>(null);
   const startXRef = useRef(0);
   const startScrollLeftRef = useRef(0);
-
-  const pauseAutoScroll = (resumeDelay = 1800) => {
-    isInteractingRef.current = true;
-    if (resumeTimerRef.current) clearTimeout(resumeTimerRef.current);
-    // Automatic safety resume so touch/hover never stops continuous scrolling indefinitely
-    resumeTimerRef.current = setTimeout(() => {
-      isInteractingRef.current = false;
-    }, resumeDelay);
-  };
-
-  const resumeAutoScroll = (delay = 800) => {
-    if (resumeTimerRef.current) clearTimeout(resumeTimerRef.current);
-    resumeTimerRef.current = setTimeout(() => {
-      isInteractingRef.current = false;
-    }, delay);
-  };
+  const touchStartXRef = useRef(0);
+  const touchStartYRef = useRef(0);
+  const touchStartScrollLeftRef = useRef(0);
+  const isSwipingRef = useRef(false);
 
   useEffect(() => {
     const el = sliderRef.current;
     if (!el) return;
-
-    isInteractingRef.current = false;
 
     // Center the initial scroll position so scrolling left or right works seamlessly
     const singleLoopWidth = el.scrollWidth / 3;
@@ -231,16 +218,16 @@ export const CategoriesAndGallerySection: React.FC<CategoriesAndGallerySectionPr
 
     let reqId: number;
     const step = () => {
-      if (!isInteractingRef.current && el) {
-        // Soldan sağa axış: scrollLeft azalır
+      if (el && !isMouseDownRef.current && !isTouchDraggingRef.current) {
+        // Soldan sağa fasiləsiz axış: scrollLeft azalır
         el.scrollLeft -= 0.65;
 
         const loopWidth = el.scrollWidth / 3;
         if (loopWidth > 0) {
           if (el.scrollLeft <= 5) {
-            el.scrollLeft = loopWidth;
+            el.scrollLeft += loopWidth;
           } else if (el.scrollLeft >= loopWidth * 2) {
-            el.scrollLeft = loopWidth;
+            el.scrollLeft -= loopWidth;
           }
         }
       }
@@ -249,67 +236,121 @@ export const CategoriesAndGallerySection: React.FC<CategoriesAndGallerySectionPr
 
     reqId = requestAnimationFrame(step);
 
-    const handleVisibility = () => {
-      if (!document.hidden) {
-        isInteractingRef.current = false;
-      }
-    };
-
-    document.addEventListener('visibilitychange', handleVisibility);
-    window.addEventListener('focus', handleVisibility);
-
     return () => {
       cancelAnimationFrame(reqId);
-      if (resumeTimerRef.current) clearTimeout(resumeTimerRef.current);
-      document.removeEventListener('visibilitychange', handleVisibility);
-      window.removeEventListener('focus', handleVisibility);
     };
   }, []);
 
-  const handleTouchStart = () => {
-    pauseAutoScroll(2000);
+  const handleTouchStart = (e: React.TouchEvent) => {
+    if (e.touches.length > 0) {
+      touchStartXRef.current = e.touches[0].clientX;
+      touchStartYRef.current = e.touches[0].clientY;
+      if (sliderRef.current) {
+        touchStartScrollLeftRef.current = sliderRef.current.scrollLeft;
+      }
+      isTouchDraggingRef.current = false;
+      touchDirectionRef.current = null;
+      isSwipingRef.current = false;
+    }
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    if (e.touches.length > 0 && sliderRef.current) {
+      const currentX = e.touches[0].clientX;
+      const currentY = e.touches[0].clientY;
+      const deltaX = currentX - touchStartXRef.current;
+      const deltaY = currentY - touchStartYRef.current;
+      const absDeltaX = Math.abs(deltaX);
+      const absDeltaY = Math.abs(deltaY);
+
+      if (!touchDirectionRef.current) {
+        if (absDeltaX > 5 && absDeltaX > absDeltaY) {
+          touchDirectionRef.current = 'horizontal';
+          isTouchDraggingRef.current = true;
+          isSwipingRef.current = true;
+        } else if (absDeltaY > 5) {
+          touchDirectionRef.current = 'vertical';
+          isTouchDraggingRef.current = false;
+          isSwipingRef.current = true;
+        }
+      }
+
+      if (touchDirectionRef.current === 'horizontal') {
+        isTouchDraggingRef.current = true;
+        isSwipingRef.current = true;
+        const newScrollLeft = touchStartScrollLeftRef.current - deltaX * 1.25;
+        sliderRef.current.scrollLeft = newScrollLeft;
+
+        // Loop bounds safety during finger dragging
+        const loopWidth = sliderRef.current.scrollWidth / 3;
+        if (loopWidth > 0) {
+          if (sliderRef.current.scrollLeft <= 5) {
+            sliderRef.current.scrollLeft += loopWidth;
+            touchStartScrollLeftRef.current += loopWidth;
+          } else if (sliderRef.current.scrollLeft >= loopWidth * 2) {
+            sliderRef.current.scrollLeft -= loopWidth;
+            touchStartScrollLeftRef.current -= loopWidth;
+          }
+        }
+      }
+    }
   };
 
   const handleTouchEnd = () => {
-    resumeAutoScroll(600);
-  };
-
-  const handleTouchCancel = () => {
-    resumeAutoScroll(400);
+    isTouchDraggingRef.current = false;
+    touchDirectionRef.current = null;
+    setTimeout(() => {
+      isSwipingRef.current = false;
+    }, 150);
   };
 
   const handleMouseDown = (e: React.MouseEvent) => {
     const el = sliderRef.current;
     if (!el) return;
     setIsMouseDown(true);
-    pauseAutoScroll(2500);
+    isMouseDownRef.current = true;
     startXRef.current = e.pageX - el.offsetLeft;
     startScrollLeftRef.current = el.scrollLeft;
+    isSwipingRef.current = false;
   };
 
   const handleMouseMove = (e: React.MouseEvent) => {
-    if (!isMouseDown) return;
+    if (!isMouseDownRef.current) return;
     const el = sliderRef.current;
     if (!el) return;
-    e.preventDefault();
     const x = e.pageX - el.offsetLeft;
     const walk = (x - startXRef.current) * 1.5;
+    if (Math.abs(walk) > 5) {
+      isSwipingRef.current = true;
+    }
     el.scrollLeft = startScrollLeftRef.current - walk;
+
+    const loopWidth = el.scrollWidth / 3;
+    if (loopWidth > 0) {
+      if (el.scrollLeft <= 5) {
+        el.scrollLeft += loopWidth;
+        startScrollLeftRef.current += loopWidth;
+      } else if (el.scrollLeft >= loopWidth * 2) {
+        el.scrollLeft -= loopWidth;
+        startScrollLeftRef.current -= loopWidth;
+      }
+    }
   };
 
   const handleMouseUpOrLeave = () => {
-    if (isMouseDown) {
+    if (isMouseDownRef.current) {
       setIsMouseDown(false);
+      isMouseDownRef.current = false;
+      setTimeout(() => {
+        isSwipingRef.current = false;
+      }, 150);
     }
-    resumeAutoScroll(600);
   };
 
   const scrollByAmount = (amount: number) => {
-    pauseAutoScroll(2000);
     if (sliderRef.current) {
       sliderRef.current.scrollBy({ left: amount, behavior: 'smooth' });
     }
-    resumeAutoScroll(1200);
   };
 
   const renderCategoryCard = (cat: CategoryCard) => {
@@ -382,6 +423,7 @@ export const CategoriesAndGallerySection: React.FC<CategoriesAndGallerySectionPr
       <div
         key={`${set.id}-${index}`}
         onClick={() => {
+          if (isSwipingRef.current) return;
           if (onSelectSet) {
             onSelectSet({
               id: set.id,
@@ -401,7 +443,7 @@ export const CategoriesAndGallerySection: React.FC<CategoriesAndGallerySectionPr
           <img
             src={formatImageUrl(set.image)}
             alt={set.name}
-            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 pointer-events-none"
             loading="lazy"
             decoding="async"
             onError={(e) => {
@@ -411,14 +453,14 @@ export const CategoriesAndGallerySection: React.FC<CategoriesAndGallerySectionPr
           <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-30 group-hover:opacity-0 transition-opacity pointer-events-none" />
 
           {/* Badge & Action Indicator */}
-          <div className="absolute bottom-1.5 right-1.5 sm:bottom-2 sm:right-2 z-20 flex items-center gap-0.5 px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-md sm:rounded-lg bg-white text-black font-black text-[10px] sm:text-[11px] shadow-sm group-hover:bg-amber-400 transition-colors">
+          <div className="absolute bottom-1.5 right-1.5 sm:bottom-2 sm:right-2 z-20 flex items-center gap-0.5 px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-md sm:rounded-lg bg-white text-black font-black text-[10px] sm:text-[11px] shadow-sm group-hover:bg-amber-400 transition-colors pointer-events-none">
             <span className="text-black font-black">Baxın</span>
             <ChevronRight className="w-3 h-3 sm:w-3.5 sm:h-3.5 stroke-[3] text-black" />
           </div>
         </div>
 
         {/* Text directly under photo frame (Only title, no subtitle text or price) */}
-        <div className="mt-1.5 sm:mt-2 px-1 pb-0.5 text-left">
+        <div className="mt-1.5 sm:mt-2 px-1 pb-0.5 text-left pointer-events-none">
           <h3 className="text-xs sm:text-sm font-black text-black group-hover:text-emerald-800 transition-colors line-clamp-1">
             <span className="text-black font-black tracking-tight">{set.name}</span>
           </h3>
@@ -464,21 +506,22 @@ export const CategoriesAndGallerySection: React.FC<CategoriesAndGallerySectionPr
             <ChevronRight className="w-5 h-5 stroke-[2.5]" />
           </button>
 
-          {/* Interactive Touch and Drag Scroll Container */}
+          {/* Interactive Touch and Drag Scroll Container - touch-pan-y enables native smooth vertical page scrolling */}
           <div
             ref={sliderRef}
             onTouchStart={handleTouchStart}
+            onTouchMove={handleTouchMove}
             onTouchEnd={handleTouchEnd}
-            onTouchCancel={handleTouchCancel}
+            onTouchCancel={handleTouchEnd}
             onMouseDown={handleMouseDown}
             onMouseMove={handleMouseMove}
             onMouseUp={handleMouseUpOrLeave}
             onMouseLeave={handleMouseUpOrLeave}
-            onMouseEnter={() => pauseAutoScroll(1500)}
-            className={`flex items-center gap-3 sm:gap-4 overflow-x-auto select-none py-2 px-1 scrollbar-none touch-pan-x ${
+            className={`flex items-center gap-3 sm:gap-4 overflow-x-auto select-none py-2 px-1 scrollbar-none touch-pan-y ${
               isMouseDown ? 'cursor-grabbing' : 'cursor-grab'
             }`}
             style={{
+              touchAction: 'pan-y',
               scrollbarWidth: 'none',
               msOverflowStyle: 'none',
               WebkitOverflowScrolling: 'touch',
